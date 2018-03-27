@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      > 
+
+    <head th:include="fragments/scripts :: header" ></head>
+
+    <body class="fixed-left" >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div   th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->                   
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+
+                        <div class="row" >
+                            <div class="col-md-12">
+
+                                <div class="row">
+
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno'}}">
+                                        <div class="col-md-4 col-sm-4 col-lg-4">
+                                            <div class="mini-stat clearfix bx-shadow ">
+                                                <div class="mini-stat-info text-left text-muted"><h4>Cadastrar Alunos</h4></div>
+
+                                                <span class="mini-stat-icon bg-primary "><i class="ion-android-contacts"></i></span>
+                                                <div class="mini-stat-info text-right text-muted">
+
+                                                    Total Alunos
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </a>                             
+
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/checkin/relatorio/0/0'}}">
+                                        <div class="col-md-4 col-sm-4 col-lg-4 ">
+                                            <!--<div class="mini-stat clearfix bx-shadow">class="mini-stat-info text-left text-muted"><h4>Checkins</h4></div>
+                                                <span class="mini-stat-icon bg-success "><i class="fa fa-check-square "></i></span>
+                                                <div cla+++++65465++++++++++++++++++++++++++++++++++++++++++++++++++3
+                                            2++ss="mini-stat-info text-right text-muted">
+                                                <span class="counter" th:text="${totalCheckins}"></span>
+                                                Total Checkins
+                                                </div>
+                                            </div>-->
+                                        </div>
+                                    </a>
+
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno2'}}">
+                                        <div class="col-md-4 col-sm-4 col-lg-4">
+                                            <div class="mini-stat clearfix bx-shadow">
+                                                <div class="mini-stat-info text-left text-muted"><h4>Consultar Alunos </h4></div>
+                                                <span class="mini-stat-icon bg-primary"><i class="ion-android-contacts"></i></span>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div> <!-- End Row Representante Checkin-->
+                        </div> <!-- End Row Representante Checkin-->
+                    </div> <!-- container -->
+                </div> <!-- content -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== --> 
+        </div> <!--Navbar-->
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <!--Scripts-->
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+        <!--Scripts Específicos-->
+        <script th:src="@{/assets/datatables/jquery.dataTables.min.js}"></script>
+        <script th:src="@{/assets/datatables/dataTables.bootstrap.js}"></script>
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#datatable').dataTable();
+            });
+        </script>
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <!-- sweet alerts -->
+        <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
+        <script th:src="@{/assets/sweet-alert/sweet-alert.init.js}"></script>
+
+        <!-- Counter-up -->
+        <script th:src="@{/assets/counterup/waypoints.min.js}" type="text/javascript"></script>
+        <script th:src="@{/assets/counterup/jquery.counterup.min.js}" type="text/javascript"></script>
+
+
+
+    </body>
+</html>

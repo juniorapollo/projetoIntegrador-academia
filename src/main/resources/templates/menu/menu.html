@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      sec:authorize="isAuthenticated()">
+
+
+    <head> </head>
+    <body class="fixed-left bg-dark" th:fragment="menu">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left side-menu ">
+                <div class="sidebar-inner slimscrollleft">
+                    <div class="user-details">
+                        <div class="pull-left">
+                           
+                        </div>
+                        
+                    </div>
+                    <!--- Divider -->
+                    <div id="sidebar-menu">
+                        <ul>
+                            <li>
+                                <a href="/sistema" class="waves-effect"><i class="md md-home"></i><span> Início </span></a>
+                            </li>
+                            
+                            <li>
+                                <a href="/sistema/cadastro/aluno" class="waves-effect"><i class="md md-group-add"></i><span> Cadastrar Aluno </span></a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        <!-- Left Sidebar End --> 
+        
+    </body>
+</html>
