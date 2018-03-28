@@ -1,0 +1,31 @@
+
+.login-senha{
+    border: none;
+    width: 350px;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-grid;
+    text-align: center;
+    background-color: rgba(255,255,255,.3);
+
+}
+.conteiner-fluid{
+    margin-top: 180px;
+    width: 100%;
+    text-align: center;
+}
+.form-login{
+    text-align: left !important;
+    font-weight: 600;
+
+}
+.form-senha{
+    text-align: left !important;
+    font-weight: 600;
+}
+.btn-black{
+    color: white;
+    background-color: rgba(150,150,150,.5);
+    border: none;
+}

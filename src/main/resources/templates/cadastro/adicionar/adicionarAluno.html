@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >      
+
+    <head th:include="fragments/scripts :: header"></head>
+
+    <body class="fixed-left">
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== --> 
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" ><h3 class="panel-title">Cadastrar Alunos</h3> </div>
+                                    <div class="panel-body">
+
+                                        <form th:if="${aluno.idAluno} == null " class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${aluno}" th:action="@{${@environment.getProperty('baseUrl')+'/academia/api/aluno'}}" th:method="POST">
+
+                                            <div class="row"> 
+                                                <div class="col-md-12"> 
+                                                    <div class="form-group no-margin"> 
+                                                        <label for="field-7" class="control-label">Antecendentes Pessoais</label> 
+                                                        <textarea name="ap" class="form-control autogrow"   style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;">                                                        </textarea> 
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+
+                                            <div class="row"> 
+                                                <div class="col-md-12"> 
+                                                    <div class="form-group no-margin"> 
+                                                        <label for="field-7" class="control-label">Queixa Principal</label> 
+                                                        <textarea name="qp" class="form-control autogrow"   style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;">                                                        </textarea> 
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+
+                                            <div class="row"> 
+                                                <div class="col-md-12"> 
+                                                    <div class="form-group no-margin"> 
+                                                        <label for="field-7" class="control-label">Anamnese</label> 
+                                                        <textarea name="anamnese" class="form-control autogrow"   style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;">                                                        </textarea> 
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+
+                                            <div class="row"> 
+                                                <div class="col-md-12"> 
+                                                    <div class="form-group no-margin"> 
+                                                        <label for="field-7" class="control-label">Exames Complementares</label> 
+                                                        <textarea name="diagnostico" class="form-control autogrow"  placeholder="Diagnóstico" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea> 
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+
+                                            <div class="row"> 
+                                                <div class="col-md-12"> 
+                                                    <div class="form-group no-margin"> 
+                                                        <label for="field-7" class="control-label">Objetivo</label> 
+                                                        <textarea name="objetivo" class="form-control autogrow"  placeholder="Diagnóstico" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"> </textarea> 
+                                                    </div> 
+                                                </div> 
+                                            </div>                                             
+
+                                            <th:block th:include="fragments/mensagemErro :: mensagemErro"></th:block>
+                                            <input type="hidden" class="form-control"  th:field="*{login}"/>    
+                                            <input type="hidden" class="form-control"  th:field="*{ativo}"/>
+
+                                            <div class="form-group jr-required" th:classappend="${#fields.hasErrors('nome')} ? has-error">
+                                                <label class="col-md-2 control-label" >Nome</label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group col-md-12">
+                                                        <input type="text"   autofocus="autofocus" class="form-control" th:required="required" th:field="*{nome}"/>
+                                                    </div>
+                                                </div>
+                                            </div><!-- form-group -->
+
+
+                                        </form>
+
+                                    </div> <!-- panel-body -->
+                                </div> <!-- panel -->
+                            </div> <!-- col -->
+                        </div> <!-- End row -->
+                    </div> <!-- container -->
+                </div> <!-- content -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End right Content here -->
+            <!-- ============================================================== --> 
+        </div> <!--Navbar-->
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+
+    </body>
+</html>

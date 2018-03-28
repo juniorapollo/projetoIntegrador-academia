@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head>
+        <meta charset="utf-8"/>
+        <meta name ="viewport" content="width=device-width,initial-scale=1.0"/>
+
+        <title>Pilates Bruna Andrade</title>
+        <meta name="Daniel Junior" content="Jr System"/> 
+        <!--Base Css Files--> 
+        <link href="../../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+        <link href="../../static/css/login.css" rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+        <link href="../../static/css/style.css" rel="stylesheet" type="text/css"  th:href="@{/css/style.css}"/>
+        <link rel="icon" type="imagem/png" href="/images/favicon.ico" th:href="@{/imagem/png}"/>
+
+        <style>
+            body{
+                background:  url("/images/small/back3.jpeg") no-repeat center fixed;
+                background-size: cover;
+
+                -webkit-background-size: cover; /* SAFARI / CHROME */
+
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="wrapper-page">
+
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">Usuário e/ou senha inválidos!</div>
+            </div>
+
+            <div th:if="${param.logout}">
+                <div class="alert alert-info">Até logo!</div>
+            </div>
+
+            <div class="conteiner-fluid">
+                <form class="login-senha" th:action="@{${@environment.getProperty('baseUrl')+'/entrar'}}" method="post">
+                    <div class="form-group form-login">
+                        <input name="username" type="text" class="form-control "   placeholder="Login"/>
+                    </div>
+                    <div class="form-group form-senha">
+                        <input name="password" type="password" class="form-control"  placeholder="Senha"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-black"> ENTRAR</button>
+                </form>
+            </div>
+        </div>
+
+    </body>
+
+</html>
