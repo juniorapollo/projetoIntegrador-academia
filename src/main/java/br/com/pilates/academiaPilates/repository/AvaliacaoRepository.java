@@ -6,6 +6,8 @@
 package br.com.pilates.academiaPilates.repository;
 
 import br.com.pilates.academiaPilates.models.Avaliacao;
+import br.com.pilates.academiaPilates.models.Cliente;
+import java.util.ArrayList;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,5 +15,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author junior
  */
 public interface AvaliacaoRepository extends CrudRepository<Avaliacao, Long> {
+    
+    public ArrayList<Avaliacao> findByCliente(Cliente cliente);
     
 }

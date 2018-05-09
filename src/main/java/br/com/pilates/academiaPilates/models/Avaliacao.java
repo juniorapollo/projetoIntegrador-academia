@@ -5,17 +5,21 @@
  */
 package br.com.pilates.academiaPilates.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -23,36 +27,47 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "avaliacao")
-public class Avaliacao implements Serializable{
-    
-    private static final long serialVersionUID = 1L;    
-     
+public class Avaliacao implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-   
-    private LocalDateTime data;
-    
+
+    private String dataAvaliacao;
+
+    private String hora;
+
+    @Lob
+    @NotBlank(message = "ANAMNESE EM BRANCO")
     private String anamnese;
-    
+
     private String diagnostico;
-    
-    private String ap;   
-    
-    //Perguntar oque é
+
+    private String ap;
+
     private String qp;
+
+    private String examesComplementares; 
     
-    private String examesComplementares;       
-    
+    private String proximaAvaliacao;
+
+    @NotNull
     @ManyToOne()
-    @JoinColumn(name = "idAluno")
-    private Aluno aluno; 
-     
-   @OneToMany()
-   private List<GaleriaFoto> fotos;
-    
+    @JoinColumn(name = "idCliente")
+    private Cliente cliente;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "avaliacao", fetch = FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    private GaleriaFoto fotos;
+ 
     //Getters e Setters
+    public Avaliacao() {
+    }
+
+    
+
     public Long getId() {
         return id;
     }
@@ -61,7 +76,34 @@ public class Avaliacao implements Serializable{
         this.id = id;
     }
 
-      
+    public String getDataAvaliacao() {
+        return dataAvaliacao;
+    }
+
+    public void setDataAvaliacao(String dataAvaliacao) {
+        this.dataAvaliacao = dataAvaliacao;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    
+   
+    
+    public String getProximaAvaliacao() {
+        return proximaAvaliacao; 
+    }
+
+    public void setProximaAvaliacao(String proximaAvaliacao) {
+        this.proximaAvaliacao = proximaAvaliacao;
+    }
+
+
     public String getAnamnese() {
         return anamnese;
     }
@@ -102,35 +144,30 @@ public class Avaliacao implements Serializable{
         this.examesComplementares = examesComplementares;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public GaleriaFoto getFotos() {
+        return fotos;
+    } 
+
+    public void setFotos(GaleriaFoto fotos) {
+        this.fotos = fotos;
     }
 
     
-
-    @ManyToOne
-    @JoinColumn(name="id_aluno", nullable=false)
-    public Aluno getAluno() {
-        return aluno;
-    }
-
-    public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
-    }
-    
-    public Avaliacao() {
-    }
 
     @Override
     public String toString() {
-        return "Avaliacao{" + "id=" + id + ", data=" + data + ", anamnese=" + anamnese + ", diagnostico=" + diagnostico + ", ap=" + ap + ", qp=" + qp + ", examesComplementares=" + examesComplementares + ", aluno=" + aluno + ", fotos=" + fotos + '}';
+        return "Avaliacao{" + "id: " + id + ",\n dataAvaliacao=" + dataAvaliacao + ",\n hora=" + hora + ",\n anamnese=" + anamnese + ",\n diagnostico=" + diagnostico + ",\n ap=" + ap + ",\n qp=" + qp + ",\n examesComplementares=" + examesComplementares + ",\n cliente=" + cliente + ",\n fotos=" + fotos + '}';
     }
-    
-    
 
-  
+    
+    
+    
 }

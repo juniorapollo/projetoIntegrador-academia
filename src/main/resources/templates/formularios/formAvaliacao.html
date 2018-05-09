@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head th:replace="fragments/scripts :: header"></head> 
+    <body class="fixed-left"  >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <th:block th:fragment="formAvaliacao">
+
+                <fieldset>
+                    <legend th:if="${avaliacao} != null" style="color:red; background-color: #e5e5e5;" >Data: <span th:text="${avaliacao.dataAvaliacao}"> </span></legend>
+
+                    <h5>Anamnese:</h5>                                            
+                    <textarea  name="anamnese"  rows="5" class="col-sm-12" ></textarea>
+                    <h5>Antecedentes Pessoais:</h5>
+                    <textarea name="ap" rows="2" class="col-sm-12"></textarea> 
+                    <h5>Exames  Complementares:</h5>
+                    <textarea name="examesComplementares" rows="2" class="col-sm-12" ></textarea>
+                    <h5>Queixa Principal:</h5>
+                    <textarea name="qp"  rows="2" class="col-sm-12"></textarea>
+                    <h5>Diagnóstico:</h5>
+                    <textarea name="diagnostico"  rows="5" class="col-sm-12" style="border-bottom: 1px;"></textarea>
+
+                    <input name="foto1"  type="hidden" id="foto1"/>
+                    <input name="foto2"  type="hidden" id="foto2"/>
+                    <input name="foto3"  type="hidden" id="foto3"/>
+                    <input name="foto4"  type="hidden" id="foto4"/>
+                    <input name="foto5"  type="hidden" id="foto5"/>
+                    <input name="foto6"  type="hidden" id="foto6"/>
+                    <input name="foto7"  type="hidden" id="foto7"/>
+                    <input name="foto8"  type="hidden" id="foto8"/>
+                    <input name="foto9"  type="hidden" id="foto9"/>
+                    <input name="foto10" type="hidden" id="foto10"/>
+                    <input name="foto11" type="hidden" id="foto11"/>
+                    <input name="foto12" type="hidden" id="foto12"/>
+                    <input name="foto13" type="hidden" id="foto13"/>
+                    <input name="foto14" type="hidden" id="foto14"/>
+                    <input name="foto15" type="hidden" id="foto15"/>
+
+
+
+                    <div class="row">
+                        <div class="col-md-12 portlets">
+                            <!-- Your awesome content goes here -->
+                            Fotos da Avaliação:
+                            <div class="m-b-30 dropzone" type="hidden" id="meuPrimeiroDropzone">
+                                <div class="fallback"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5>Descrição Fotos:</h5>                                            
+                        <textarea  name="descricao"  rows="2" class="col-sm-12" ></textarea>
+
+                    </div>
+                </fieldset>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-success waves-effect">Salvar</button>
+                    <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
+                </div>
+
+
+
+            </th:block>
+        </div>
+
+    </body>
+</html>

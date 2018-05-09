@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head th:replace="fragments/scripts :: header"></head> 
+    <body class="fixed-left"  >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" ><h3 class="panel-title">Cadastrar Clientes</h3> </div>
+                                    <div class="panel-body">                                        
+                                        <!-- Formulário de cadastro de Profissional -->
+                                        <div class="container-fluid" >
+                                            <form  class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${cliente}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/cliente'}}" th:method="POST"> <!-- Formulário -->
+                                                <th:block th:fragment="formCliente">  
+                                                    <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block> 
+                                                    <th:block th:include="fragments/mensagemErro :: mensagemErro"></th:block> 
+                                                    <input type="hidden" name="id"  th:readonly="#{readonly}" th:field="*{id}"/>
+                                                    <input type="checkbox" name="ativo" style="display: none" th:field="*{ativo}"/>
+                                                    
+                                                   
+                                                    <!-- Nome -->
+                                                    <div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? has-error">                                                    
+                                                        <div class="col-md-12 ">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-addon "><i class="fa col-md-5"><b>Nome</b></i></span>
+                                                                <input type="text" autofocus="autofocus" class="form-control" th:required="required" name="nome" th:field="*{nome}"/>
+                                                            </div>
+                                                        </div>    
+                                                    </div><!-- form-group -->
+
+                                                    <!-- Nivel Cliente -->
+                                                    <div class="form-group" th:classappend="${#fields.hasErrors('nivelCliente')} ? has-error">          
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"><i class="fa"><b>Nível</b></i></span>
+                                                                <select class="form-control" name="nivelCliente" th:field="*{nivelCliente}">
+                                                                    <option value=''></option>
+                                                                    <option value='INICIANTE'>Iniciante</option>
+                                                                    <option value="INTERMEDIARIO">Intermediário</option>
+                                                                    <option value="AVANCADO">Avançado</option>                                                            
+                                                                </select>                                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- CPF -->
+                                                    <div class="form-group" th:classappend="${#fields.hasErrors('cpf')} ? has-error">   
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>CPF</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text" name="cpf" th:field="*{cpf}" data-mask="999.999.999-99"  class="form-control" th:required="required" />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    <!-- E-mail -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('email')} ? has-error">        
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>E-mail</b></i></span>
+                                                                <input type="email"  name="email"   th:field="*{email}" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    <!-- Sexo -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('sexo')} ? has-error">          
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"><i class="fa"><b>Sexo</b></i></span>
+                                                                <select class="form-control" name="sexo"  th:field="*{sexo}">
+                                                                    <option value=''></option>
+                                                                    <option value='M'>Masculino</option>
+                                                                    <option value="F">Feminino</option>
+                                                                </select>                                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Telefone -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('telefone')} ? has-error">        
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Tel</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="telefone"  th:field="*{telefone}" data-mask="(99) 9999-9999"  class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Celular -->
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('celular')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Cel</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="celular" th:field="*{celular}" data-mask="(99) 9 9999-9999"  class="form-control" th:required="required" />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    <!-- Data Nascimento-->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('dataNasc')} ? has-error">                                         
+                                                        <div class="col-md-6">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-addon "><i class="fa col-md-5"><b>Data</b></i></span>
+                                                                <input type="date" class="form-control" name="dataNasc" th:field="*{dataNasc}"/>
+                                                            </div>
+                                                        </div>    
+
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('idade')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Idade</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="number" name="idade" th:field="*{idade}" min="1" max="100" class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group -->                                                
+
+                                                    <!-- Cep -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('cep')} ? has-error">                                                    
+                                                        <div class="col-md-12">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-addon "><i class="fa "><b>Cep</b></i></span>
+                                                                <input type="tel"  id="cep" onblur="pesquisacep(this.value);" class="form-control" data-mask="99999-999" th:required="required" name="cep" th:field="*{cep}"/>
+                                                            </div>
+                                                        </div>    
+                                                    </div><!-- form-group -->
+
+                                                    <!-- Cidade-->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('cidade')} ? has-error">                                         
+                                                        <div class="col-md-6">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-addon "><i class="fa col-md-5"><b>Cidade</b></i></span>
+                                                                <input type="text" id="cidade" class="form-control" name="cidade" th:field="*{cidade}"/>
+                                                            </div>
+                                                        </div>    
+
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('uf')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Uf</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text" maxlength="2" name="uf"  th:field="*{uf}" id="uf"  class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group -->  
+
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('bairro')} ? has-error">     
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Bairro</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text"  name="bairro"  th:field="*{bairro}" id="bairro"  class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('logradouro')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Rua</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text"  name="logradouro" th:field="*{logradouro}" id="logradouro"  class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>                                             
+                                                    </div>
+
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('numeroEnd')} ? has-error">     
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Num</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text" maxlength="5" name="numeroEnd" th:field="*{numeroEnd}" class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('complemento')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Compl</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text"  maxlength="50" name="complemento" th:field="*{complemento}" class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>                         
+                                                    </div>
+
+                                                    <!-- PEso -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('peso')} ? has-error">        
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Peso Kg</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="peso" th:field="*{peso}" class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Altura -->
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('altura')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Altura</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="altura" th:field="*{altura}" class="form-control" th:required="required" />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    <div class="form-group" th:classappend="${#fields.hasErrors('praticaAtividade')} ? has-error">
+                                                        <label class="col-sm-3 control-label"> Pratica Atividade </label>
+                                                        <div class="col-md-5 checkbox checkbox-primary">                                                      
+                                                            <input  type="radio" value="true" name="praticaAtividade" th:field="*{praticaAtividade}"/>
+                                                            <span >Sim</span>
+                                                            <input  type="radio" value="false"  name="praticaAtividade" th:field="*{praticaAtividade}"/>
+                                                            <span >Não</span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="modal-footer"> 
+                                                        <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancelar</button> 
+                                                        <button type="submit" class="btn btn-info waves-effect waves-light">Salvar</button> 
+                                                    </div>
+                                                </th:block>
+                                            </form> 
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+    </body>
+</html>

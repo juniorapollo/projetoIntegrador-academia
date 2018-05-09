@@ -4,7 +4,26 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
       sec:authorize="isAuthenticated()">
 
-    <head th:include="fragments/scripts :: header" ></head>
+    <head> 
+        <th:block th:include="fragments/scripts :: header" ></th:block>
+        <link th:href="@{/css/components.css}" rel="stylesheet"/>
+        <link th:href="@{/css/core.css}" rel="stylesheet"/>
+        <style>
+
+            .jr-button{
+                background:#48799e;
+                color:#fff;
+                box-shadow:0 5px 0 #355873;
+            }
+            .jr-button:hover{
+                background: #355873;
+                box-shadow:0 5px 0 #b000;
+            }
+
+        </style>
+
+    </head>    
+
 
     <body class="fixed-left" >
 
@@ -23,57 +42,193 @@
                     <div class="container">
 
                         <div class="row" >
+
+
                             <div class="col-md-12">
 
-                                <div class="row">
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon "><i class="fa fa-calendar"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Agenda </h5></div>
 
-                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno'}}">
-                                        <div class="col-md-4 col-sm-4 col-lg-4">
-                                            <div class="mini-stat clearfix bx-shadow ">
-                                                <div class="mini-stat-info text-left text-muted"><h4>Cadastrar Alunos</h4></div>
+                                        </div>
+                                    </div>
+                                </a>
 
-                                                <span class="mini-stat-icon bg-primary "><i class="ion-android-contacts"></i></span>
-                                                <div class="mini-stat-info text-right text-muted">
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/consultar'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Clientes</h5></div>
 
-                                                    Total Alunos
-                                                </div>
+                                        </div>
+                                    </div>
+                                </a>
 
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/servico/cadastro'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon  "><i class="md md-developer-mode"></i></span>
+                                            <div class="m-t-20">
+                                                <h5 class="text-uppercase text-white m-0">Serviços</h5>
                                             </div>
                                         </div>
-                                    </a>                             
+                                    </div>
+                                </a>   
 
-                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/checkin/relatorio/0/0'}}">
-                                        <div class="col-md-4 col-sm-4 col-lg-4 ">
-                                            <!--<div class="mini-stat clearfix bx-shadow">class="mini-stat-info text-left text-muted"><h4>Checkins</h4></div>
-                                                <span class="mini-stat-icon bg-success "><i class="fa fa-check-square "></i></span>
-                                                <div cla+++++65465++++++++++++++++++++++++++++++++++++++++++++++++++3
-                                            2++ss="mini-stat-info text-right text-muted">
-                                                <span class="counter" th:text="${totalCheckins}"></span>
-                                                Total Checkins
-                                                </div>
-                                            </div>-->
+
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon"><i class="md-book"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Relatório  Diário </h5></div>
+
                                         </div>
-                                    </a>
+                                    </div>
+                                </a>
 
-                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno2'}}">
-                                        <div class="col-md-4 col-sm-4 col-lg-4">
-                                            <div class="mini-stat clearfix bx-shadow">
-                                                <div class="mini-stat-info text-left text-muted"><h4>Consultar Alunos </h4></div>
-                                                <span class="mini-stat-icon bg-primary"><i class="ion-android-contacts"></i></span>
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro'}}" >
+                                    <div class="col-sm-6 col-lg-3 ">
+                                        <div class=" text-center mini-stat clearfix bx-shadow jr-button">
+                                            <span class="mini-stat-icon"><i class="ion-eye "></i></span>
+                                            <div class="m-t-20">
+                                                <h5 class="text-uppercase text-white m-0">Cadastrar Clientes</h5>
                                             </div>
-                                        </div>
-                                    </a>
 
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <a  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/cadastro'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon "><i class="ion-android-contacts"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0"> Profissional</h5></div>
+
+                                        </div>
+                                    </div>
+                                </a>   
+
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/relatorio'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Relatório de  Profissionais </h5></div>
+
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/atividades/cadastro'}}">
+                                    <div class="col-sm-6 col-lg-3">
+                                        <div class="text-center mini-stat clearfix  bx-shadow jr-button">
+                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Cadastro Atividades</h5></div>
+
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </div> <!-- End Row -->
+
+
+
+                        <br></br><br></br>
+                        <div class="col-lg-8">
+
+                            <div class="portlet"><!-- /portlet heading -->
+                                <div class="portlet-heading">
+                                    <h3 class="portlet-title text-dark text-uppercase">
+                                        Gráfico Agenda
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#portlet1"><i class="ion-minus-round"></i></a>
+                                        <span class="divider"></span>
+                                        <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
-                            </div> <!-- End Row Representante Checkin-->
-                        </div> <!-- End Row Representante Checkin-->
+                                <div id="portlet1" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="website-stats" style="position: relative;height: 320px"></div>
+                                                <div class="row text-center m-t-30">
+                                                    <div class="col-sm-4">
+
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- /Portlet -->
+                        </div> <!-- end col -->
+
+                        <div class="col-lg-4">
+                            <div class="portlet"><!-- /portlet heading -->
+                                <div class="portlet-heading">
+                                    <h3 class="portlet-title text-dark text-uppercase">
+                                        Alunos
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i class="ion-minus-round"></i></a>
+                                        <span class="divider"></span>
+                                        <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="portlet2" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="pie-chart">
+                                                    <div id="pie-chart-container" class="flot-chart" style="height: 320px">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row text-center m-t-30">
+                                                    <div class="col-sm-6">
+
+                                                    </div>
+                                                    <div class="col-sm-6">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- /Portlet -->
+                        </div> <!-- end col -->
+
+
+
+
+
+
+
+
                     </div> <!-- container -->
                 </div> <!-- content -->
             </div>
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== --> 
-        </div> <!--Navbar-->
+        </div>
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== --> 
+
 
         <script>
             var resizefunc = [];
@@ -82,20 +237,6 @@
         <!--Scripts-->
         <th:block th:include="fragments/scripts :: scripts"></th:block> 
 
-        <!--Scripts Específicos-->
-        <script th:src="@{/assets/datatables/jquery.dataTables.min.js}"></script>
-        <script th:src="@{/assets/datatables/dataTables.bootstrap.js}"></script>
-
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#datatable').dataTable();
-            });
-        </script>
-
-        <script>
-            var resizefunc = [];
-        </script>
 
         <!-- sweet alerts -->
         <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
@@ -105,7 +246,36 @@
         <script th:src="@{/assets/counterup/waypoints.min.js}" type="text/javascript"></script>
         <script th:src="@{/assets/counterup/jquery.counterup.min.js}" type="text/javascript"></script>
 
+        <!--Graficos -->
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.js}" type="text/javascript"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.time.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.tooltip.min.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.resize.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.pie.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.selection.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.stack.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.crosshair.js}"></script>
+        <!-- dashboard  -->
+        <script th:src="@{/assets/plugins/flot-chart/jquery.dashboard.js}"></script>
 
+        <!-- <script type="text/javascript">
+             d1 = [[0, 3], [1, 3], [2, 5], [3, 7], [4, 8], [5, 10], [6, 11], [7, 9], [8, 5], [9, 13]];
+ 
+             $(document).ready(function () {
+                 $.plot($("#portlet1"),
+                         [{data: d1,
+                                 label: labels[0],
+                                 color: colors[0]
+                             },
+                             {data: d1,
+                                 label: labels[1],
+                                 color: colors[1]
+                             }
+                         ],
+                         );
+ 
+             });
+         </script>-->
 
     </body>
 </html>

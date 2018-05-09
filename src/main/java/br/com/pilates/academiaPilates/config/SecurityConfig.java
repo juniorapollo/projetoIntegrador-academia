@@ -68,7 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/css/**", "/images/** " ,"/armorcred/** " , "/js/** ", "/assets/** ", "/fonts/** ").permitAll()
                 .antMatchers("/assets/**" , "/css/**" , "/js/**" , "/images/**" , "/fonts/**").permitAll()
                 .antMatchers(POST, baseUrl+"/login/**").permitAll() // libera esse endPoint sem autenticacao
-                .antMatchers(GET, baseUrl+"/**").permitAll() // libera esse endPoint sem autenticacao
+                .antMatchers(GET, baseUrl+"/sistema/criarUsuario").permitAll() // libera esse endPoint sem autenticacao
+           
+                // libera esse endPoint sem autenticacao
                 
                 .anyRequest() // para todo o resto 
                 .authenticated()// vc exige autenticacao

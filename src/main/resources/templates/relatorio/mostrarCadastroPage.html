@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head th:replace="fragments/scripts :: header"></head> 
+    <body class="fixed-left"  >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->    
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <!-- Right Sidebar -->
+                    <div class="col-md-12 col-lg-12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Clientes</h3>
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <table id="datatable" class="table  table-hover table-bordered"  style="width: 10%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nivel</th> 
+                                                        <th>Cod</th>
+                                                        <th>Nome</th>
+                                                        <th>Celular</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr  th:each=" cliente : ${listaClientes}" th:if="${cliente.isAtivo()}" >
+                                                        <td><a th:if="${cliente.nivelCliente} == INICIANTE" class="fa fa-circle text-warning " title="Iniciante" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">1 Iniciante</a>
+                                                            <a th:if="${cliente.nivelCliente} == INTERMEDIARIO" class="fa fa-circle text-success " title="Intermediario" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">2 Intermediario</a>
+                                                            <a th:if="${cliente.nivelCliente} == AVANCADO" class="fa fa-circle text-danger " title="Avançado" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">3 Avancado</a></td>  
+                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" th:text="${cliente.id}"></a></td>
+                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" href="#" th:text="${cliente.nome}"></a></td>    
+                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" href="#" th:text="${cliente.celular}"></a></td> 
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="inputs"></div>
+                                <th:block th:if="${cliente}" th:include="fragments/painelCadastro :: painelCadastro"></th:block> 
+
+                            </div>
+                        </div>
+                    </div> <!-- container -->
+                </div> <!-- content -->
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== --> 
+
+        <script>
+
+            var resizefunc = [];
+        </script>
+
+
+
+        <!--Scripts-->
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+        <script type="text/javascript">
+            $('#datatable').dataTable({
+                "ordering": false
+            });
+
+        </script>
+       
+
+        <script>
+            var base64 = "";
+            var cont = 0;
+            Dropzone.options.myDropzone = {
+                paramName: "fotos",
+                dictDefaultMessage: "Clique ou arraste as imagens  ( + )",
+                dictMaxFilesExceeded: "Não foi Possível carregar imagem , você só pode carregar 15 por vez;",
+                dictRemoveFile: "Remover imagem",
+                dictRemoveFileConfirmation: 'Deseja Remover a Imagem?',
+                maxFilesize: 300,
+                url: "#",
+                method: "post",
+                withCredentials: false,
+                parallelUploads: 2,
+                uploadMultiple: true,
+                acceptedFiles: 'image/*',
+                maxFiles: 10,
+                autoProcessQueue: false,
+                autoQueue: false,
+                addRemoveLinks: true,
+
+                accept: function (file, done) {
+                    done();
+                }
+            }
+            Dropzone.prototype.createThumbnail = function (file, callback) {
+                cont++;
+                var fileReader;
+
+                fileReader = new FileReader;
+
+                fileReader.onload = (function (_this) {
+
+                    return function () {
+
+                        if (file.type === "image/svg+xml") {
+
+                            _this.emit("thumbnail", file, fileReader.result);
+
+                            if (callback !== null) {
+                                callback();
+                            }
+                            return;
+                        }
+                        var base64 = fileReader.result;
+                        //$("#imagem").append('<div><input type="hidden" id="foto' + cont + '" value="' + base64 + '"/></div> ');
+                        var id = "foto" + cont;
+                        var input = document.getElementById(id).value;
+
+                        if (input === "") {
+
+                            document.getElementById(id).value = base64;
+
+                        } else {
+                            document.getElementById(id).value = "";
+                        }
+
+                        return _this.createThumbnailFromUrl(file, fileReader.result, callback);
+                    };
+                })(this);
+
+                return fileReader.readAsDataURL(file);
+            };
+            /* th:field="*{descricao}" */
+            $("#imagem").append('<div><textarea type="hidden" id="descricao" name="descricao" rows="5" /></div> ');
+
+            
+         
+        </script>
+
+    </body>
+</html>
+

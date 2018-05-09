@@ -18,10 +18,9 @@ import javax.persistence.Table;
 public class Professor extends Pessoa {    
 
     private static final long serialVersionUID = 1L;
-  
-    
+      
     public String dataAdmissao;
-
+    
     public Professor() {
     }
 

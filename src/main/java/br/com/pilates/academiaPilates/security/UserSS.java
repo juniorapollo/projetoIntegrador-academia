@@ -21,19 +21,19 @@ public class UserSS implements UserDetails {
     private String nome;
     private String login;
     private String senha;
-    private String nivelUsuario;
+    private String nivelProfissional;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserSS() {
     }
 
-    public UserSS(Long id, String nome, String login, String senha,String nivelUsuario, Set<Perfil> perfis) {
+    public UserSS(Long id, String nome, String login, String senha,String nivelProfissional, Set<Perfil> perfis) {
         this.id = id;
         this.nome = nome;
         this.login = login;
         this.senha = senha;
-        this.nivelUsuario = nivelUsuario;
+        this.nivelProfissional = nivelProfissional;
    
         this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
     }
@@ -50,8 +50,8 @@ public class UserSS implements UserDetails {
         return login;
     }
     
-    public String getNivelUsuario() {
-        return nivelUsuario;
+    public String getNivelProfissional() {
+        return nivelProfissional;
     }
     
 
@@ -89,7 +89,7 @@ public class UserSS implements UserDetails {
         return true;
     }
 
-    // Os Usuarios estão Ativos?
+    // Os Profissionals estão Ativos?
     @Override
     public boolean isEnabled() {
         return true;

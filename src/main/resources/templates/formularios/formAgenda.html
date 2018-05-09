@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" >
+
+    <head></head>
+    <body>
+        <th:block th:fragment="formAgenda">
+           
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 th:if="${abrirModal}" class="modal-title"><strong>Reagendamento</strong> </h4>
+                            <h4 th:if="not ${abrirModal}" class="modal-title"><strong>Cadastrar Agenda</strong> </h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formAgenda" role="form" enctype="application/x-www-form-urlencodeds" th:object="${agenda}"  th:action="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" th:method="POST">
+                                <th:block th:include="fragments/mensagemErro :: mensagemErro"></th:block> 
+
+                                <div class="row">
+
+                                    <div><input type="hidden" th:field="*{idAgenda}" id="idAgenda"/></div>
+                                    <div><input type="hidden" th:field="*{end}" id="end"/></div>
+                                    <div><input type="hidden" th:field="*{dataRealizouCadastro}" id="dataRealizouCadastro" /></div>
+                                    <div><input type="hidden" th:field="*{horaRealizouCadastro}" id="horaRealizouCadastro" /></div>
+
+
+                                    <div class="col-md-6 ">
+                                        <label class="control-label">Profissional</label>
+                                        <select class="form-control" th:name="${profissional}" th:field="*{profissional}" required="required" id="profissional">
+                                            <option value=''></option>
+                                            <option th:each=" profissional : ${listaProfissional}"  th:value="${profissional.id}"  th:text="${profissional.nome}"  ></option>
+                                        </select>
+                                    </div> 
+
+
+                                    <div class="col-md-6">
+                                        <label class="control-label">Cliente</label>
+                                        <select class="form-control" th:name="${cliente}" th:field="*{cliente}" required="required" id="cliente">
+                                            <option value=''></option>
+                                            <option th:each=" cliente : ${listaCliente}"  th:value="${cliente.id}" th:text="${cliente.nome}" ></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="control-label">Serviço</label>
+                                        <select class="form-control" th:name="${servico}" th:field="*{servico}" required="required" id="servico" name="servico">
+                                            <option value=''></option>
+                                            <option th:each=" servico : ${listaServico}"  th:value="${servico.descricao}" th:text="${servico.descricao +' - ' + servico.tempo+' hr'}"  ></option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-6 ">
+
+                                        <label class="control-label">Horário</label>
+                                        <div class=" bootstrap-timepicker ">
+                                            <input class="form-control " id="horario" readonly="readonly" type="text" name="horaInicio"  th:field="*{start}" required="required" />
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="maisSemanas" type="checkbox"/>
+                                        <label for="checkbox1">
+                                            Agendar para mais semanas?
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10 input-group" id="qtdSemanas" style="display: none;">
+                                    <div class="dataTables_length input-group" >
+                                        
+                                        <label class="col-sm-4">Quero agenda no horario por mais   
+                                           
+                                            <input id="inputQtdSemanas" name="qtdSemanas" type="number" class="form-control"  min='1' max='60' style="width: 50px;" value="0"/> 
+
+                                            semanas </label>
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default waves-effect " data-dismiss="modal" th:if="not ${abrirModal}">Voltar</button>
+                                    <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" class="btn btn-default waves-effect" th:if="${abrirModal}" >Voltar</a>
+                                    <i  onclick="submeterForm();" class="btn btn-success waves-effect waves-light save-category" id="btnAgendar"><span th:if="${agenda.idAgenda}">Reagendar</span><span th:if="not ${agenda.idAgenda}">Agendar</span></i>
+                                </div>
+                            </form>
+
+                            <div th:if="${agenda.idAgenda}">
+                                <hr></hr>
+                                <p><b><span>Agendado por : </span></b><span th:text="${nomeRealizouCadastro}"></span></p>
+                                <p><b><span>Data  : </span></b><span th:text="${dataRealizouCadastro}"></span></p>
+                                <p><b><span>Hora  : </span></b><span th:text="${horaRealizouCadastro}"></span></p>
+                                <form  th:action="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/'+{agenda.idAgenda}}}" th:method="DELETE" >                                                                         
+                                    <hr></hr>
+                                    <a  class="btn btn-danger pull-right" th:href="@{'#'+${agenda.idAgenda}}" th:title="'Cancelar agenda  ' + ${agenda.cliente.nome}"  data-toggle="modal" >Cancelar Agendamento    </a>
+
+                                    <!--Modal Para confirmar Exclusão-->
+                                    <div th:id="${agenda.idAgenda}" th:class="@{'modal fade bs-example-modal-sm '+${agenda.idAgenda}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="mySmallModalLabel"><span class="modal-title fa  fa-exclamation-circle" style="color:#a11"></span> Atenção</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Deseja realmente cancelar o agendamento de  <span th:text="${agenda.cliente.nome}"></span>?</p>
+                                                    <p><b>Motivo:</b></p>
+
+
+                                                    <input required="required" title="Descreva o motivo do cancelamento" class="form-control" type="text"  minlength="10"  maxlength="100" name="motivoCancelamento"/>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" class="btn btn-default waves-effect" th:if="${abrirModal}" >Não</a>
+                                                    <button type="submit"  class="btn btn-success waves-effect">Sim, cancelar agendamento</button>
+
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                                </form><!-- Fim Form -->  
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+        </th:block>
+    </body>
+</html>

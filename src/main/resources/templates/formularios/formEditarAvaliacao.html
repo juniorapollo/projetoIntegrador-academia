@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head th:replace="fragments/scripts :: header"></head> 
+    <body class="fixed-left"  >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <th:block th:fragment="formEditarAvaliacao" >
+                <div id="formEditarAvaliacao">               
+                    <input type='text' name='id' th:value='${avaliacao.id}'/>
+                    <input type="text" name="dataAvaliacao" th:value='${avaliacao.dataAvaliacao}'/>
+                    <input type="text" name="hora" th:value='${avaliacao.hora}'/>
+                    
+                    
+                    
+                    <h5>Anamnese:</h5>                                            
+                    <textarea  name="anamnese"  rows="5" class="col-sm-12" ><th:block th:text="${avaliacao.anamnese}"> </th:block></textarea>
+                    <h5>Antecedentes Pessoais:</h5>
+                    <textarea name="ap" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.ap}"> </th:block></textarea> 
+                    <h5>Exames  Complementares:</h5>
+                    <textarea name="examesComplementares" rows="2" class="col-sm-12" ><th:block th:text="${avaliacao.examesComplementares}"> </th:block></textarea>
+                    <h5>Queixa Principal:</h5>
+                    <textarea name="qp"  rows="2" class="col-sm-12"><th:block th:text="${avaliacao.qp}"> </th:block></textarea>
+                    <h5>Diagnóstico:</h5>
+                    <textarea name="diagnostico"  rows="2" class="col-sm-12" style="border-bottom: 0px;"><th:block th:text="${avaliacao.diagnostico}"> </th:block></textarea>
+                </div> 
+                
+      
+                    
+          
+                <br></br>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-success waves-effect">Salvar</button>
+                    <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
+                </div>
+
+
+
+            </th:block>
+        </div>
+    </body>
+</html>

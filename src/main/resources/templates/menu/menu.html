@@ -5,44 +5,82 @@
       sec:authorize="isAuthenticated()">
 
 
-    <head> </head>
-    <body class="fixed-left bg-dark" th:fragment="menu">
+    <head th:include="fragments/scripts :: header" ></head>
+    
+    <body class="fixed-left" th:fragment="menu">
         <!-- ========== Left Sidebar Start ========== -->
         <div class="left side-menu ">
-                <div class="sidebar-inner slimscrollleft">
-                    <div class="user-details" style="padding: 2px; margin-top: 30px;">
+            <div class="sidebar-inner slimscrollleft">
+                <div class="user-details" style="padding: 2px; margin-top: 30px;">
                     <div class="user-info" >                          
                         <span th:text="${@environment.getProperty('prod.url')}"></span> 
                         <a sec:authentication="principal.nome" class="dropdown-toggle"  ></a>   
                         <div th:if="${#authorization.url('/')}"></div>                       
-                        <p sec:authentication="principal.nivelUsuario" class="text-muted m-0"></p> 
+                        <p sec:authentication="principal.nivelProfissional" class="text-muted m-0"></p> 
                         <p sec:authorize="hasRole('SYSTEM_ADMIN')"  class="text-muted m-0">Nome Fantasia</p>
                     </div>
                 </div><hr></hr>
-                    <!--- Divider -->
-                    <div id="sidebar-menu">
-                        <ul>
-                            <li>
-                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}" class="waves-effect"><i class="md md-home"></i><span> Início </span></a>
-                            </li>
-                            
-                            <li>
-                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno'}}" class="waves-effect"><i class="md md-group-add"></i><span> Cadastrar Aluno </span></a>
-                            </li>
-                            
-                            <li>
-                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno'}}" class="waves-effect"><i class="md md-group-add"></i><span> Alunos Ativos </span></a>
-                            </li>
-                            
-                            <li>
-                                <a sec:authorize="hasRole('ADMINISTRADOR')" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/aluno'}}" class="waves-effect"><i class="md md-group-add"></i><span> Alunos Inativos </span></a>
-                            </li>
-                            
-                             <li>
-                                <a sec:authorize="hasRole('ADMINISTRADOR')" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cadastro/usuario-adicionar'}}" class="waves-effect"><i class="md-account-balance"></i><span> Cadastrar Usuários </span></a>
-                            </li>
-                            
-                            <!--Botão Logout-->
+                <!--- Divider -->
+                <div id="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}" class="waves-effect"><i class="md md-home"></i><span> Início </span></a>
+                        </li>
+                        <li class="has_sub">
+                            <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Clientes </span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro'}}" class="waves-effect"><i class="md md-group"></i><span>Cadastrar</span></a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/ativos'}}" class="waves-effect"><i class="md md-group"></i><span> Ativos</span></a>
+                                </li>
+
+                                <li>
+                                    <a  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/inativos'}}" class="waves-effect"><i class="md md-group-add"></i><span> Inativos </span></a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/cadastro'}}" class="waves-effect"><i class="md-account-balance"></i><span> Profissional </span></a>
+                        </li>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/servico/cadastro'}}" class="waves-effect"><i class="fa fa-anchor"></i><span> Serviços </span></a>
+                        </li>
+                        
+                        
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/atividades/cadastro'}}" class="waves-effect"><i class="md-account-balance"></i><span> Atividades </span></a>
+                        </li>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> Agenda </span></a>
+                        </li>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}" class="waves-effect"><i class="md-account-balance"></i><span> Relatório Diário </span></a>
+                        </li>
+                        
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/teste'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> TEste </span></a>
+                        </li>
+                        
+                        <li sec:authorize="hasRole('ADMINISTRADOR')" class="has_sub">
+                            <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Relatórios </span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span> Clientes </span></a>
+                                </li>
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span> Profissionais </span></a>
+                                </li>
+
+
+
+                            </ul>
+                        </li>
+                        <!--Botão Logout-->
                         <li class="has_sub">
                             <form th:action="@{${@environment.getProperty('baseUrl')+'/logout'}}" method="post"  id="logout_form" style="margin-left: 13%; font-size: 100% ; margin-top: 6%">
                                 <a href="#"  class="waves-effect" onclick="document.getElementById('logout_form').submit();" style=" color: #505458">
@@ -52,13 +90,13 @@
                                 <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                             </form>
                         </li>
-                            
-                        </ul>
-                    </div>
-                    <div class="clearfix"></div>
+
+                    </ul>
                 </div>
+                <div class="clearfix"></div>
             </div>
+        </div>
         <!-- Left Sidebar End --> 
-        
+
     </body>
 </html>

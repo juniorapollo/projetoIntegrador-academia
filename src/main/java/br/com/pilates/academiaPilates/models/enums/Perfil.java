@@ -10,7 +10,7 @@ public enum Perfil {
     ADMINISTRADOR(2,"ROLE_ADMINISTRADOR"),
     PROFESSOR(3,"ROLE_PROFESSOR"),
     OPERADOR(4,"ROLE_OPERADOR"),
-    ALUNO(5,"ROLE_ALUNO");
+    ALUNO(5,"ROLE_CLIENTE");
     
     private int cod;
     private String descricao;
@@ -46,7 +46,7 @@ public enum Perfil {
         for(Perfil x : Perfil.values()){
             if(cod.equals(x.getCod())){
                 return x;
-            }
+            } 
         }
         
         throw new IllegalArgumentException("Id Inválido: " + cod);

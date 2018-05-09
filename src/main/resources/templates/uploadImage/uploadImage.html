@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      sec:authorize="isAuthenticated()">
+
+   <head> 
+        <th:block th:include="fragments/scripts :: header" ></th:block>
+        <!-- Dropzone css -->
+        <link th:href="@{/assets/dropzone/dropzone.css/}" rel="stylesheet" type="text/css" />
+
+
+    </head>    
+
+    <body>
+        <th:block th:fragment="uploadImage">
+            <div class="container">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">Carregar Fotos</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 portlets">
+                            <!-- Your awesome content goes here -->
+                            <div class="m-b-30 dropzone" type="hidden" id="meuPrimeiroDropzone">
+                                <div class="fallback"></div>                        
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+               
+                  <form   class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${galeriaFoto}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/galeriaFoto'}}" th:method="POST"> <!-- Formulário -->
+                      <input name="foto1" type="hidden" id="foto1"/>
+                      <input name="foto2" type="hidden" id="foto2"/>
+                      <input name="foto3" type="hidden" id="foto3"/>
+                      <input name="foto4" type="hidden" id="foto4"/>
+                      <input name="foto5" type="hidden" id="foto5"/>
+                      <input name="foto6" type="hidden" id="foto6"/>
+                      <input name="foto7" type="hidden" id="foto7"/>
+                      <input name="foto8" type="hidden" id="foto8"/>
+                      <input name="foto9" type="hidden" id="foto9"/>
+                      <input name="foto10" type="hidden" id="foto10"/>
+                      <input name="foto11" type="hidden" id="foto11"/>
+                      <input name="foto12" type="hidden" id="foto12"/>
+                      <input name="foto13" type="hidden" id="foto13"/>
+                      <input name="foto14" type="hidden" id="foto14"/>
+                      <input name="foto15" type="hidden" id="foto15"/>
+                      
+                      <input name="descricao" type="text" rows="5"  placeholder="DESCRICAOs"></input>
+                     
+                    
+                      
+                      <div class="modal-footer"> 
+                        <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancelar</button> 
+                        <button type="submit" class="btn btn-info waves-effect waves-light">Salvar</button> 
+                    </div>
+                </form>
+
+
+            </div>
+            <!-- end container -->
+
+
+            <script>
+
+                var resizefunc = [];
+            </script>
+
+
+
+            <!-- jQuery  -->
+        </th:block>
+
+       <th:block th:include="fragments/scripts :: scripts"></th:block> 
+        <!-- Page Specific JS Libraries -->
+        <script th:src="@{/assets/dropzone/dropzone.min.js}"></script>
+
+
+        <script>
+            var base64 = "";
+            var cont = 0;
+            Dropzone.options.meuPrimeiroDropzone = {
+                paramName: "fotos",
+                dictDefaultMessage: "Arraste seus arquivos para cá!",
+                dictMaxFilesExceeded: "Não foi Possível carregar imagem , você só pode carregar 15 por vez;",
+                dictRemoveFile: "Remover imagem",
+                maxFilesize: 300,
+                url: "#",
+                method: "post",
+                withCredentials: false,
+                parallelUploads: 2,
+                uploadMultiple: true,
+                acceptedFiles: 'image/*',
+                maxFiles: 10,
+                autoProcessQueue: false,
+                autoQueue: false,
+                addRemoveLinks: true,
+
+                accept: function (file, done) {
+                    done();
+                }
+            }
+            Dropzone.prototype.createThumbnail = function (file, callback) {
+                cont++;
+                var fileReader;
+
+                fileReader = new FileReader;
+
+                fileReader.onload = (function (_this) {
+
+                    return function () {
+
+                        if (file.type === "image/svg+xml") {
+
+                            _this.emit("thumbnail", file, fileReader.result);
+
+                            if (callback !== null) {
+                                callback();
+                            }
+                            return;
+                        }
+                        var base64 = fileReader.result;
+        //$("#imagem").append('<div><input type="hidden" id="foto' + cont + '" value="' + base64 + '"/></div> ');
+                var id = "foto"+cont;
+                 document.getElementById(id).value = base64;
+
+                        return _this.createThumbnailFromUrl(file, fileReader.result, callback);
+                    };
+                })(this);
+                
+                return fileReader.readAsDataURL(file);
+            };
+/* th:field="*{descricao}" */
+        $("#imagem").append('<div><textarea type="hidden" id="descricao" name="descricao" rows="5" /></div> ');
+
+        </script>
+
+    </body>
+    <!-- Mirrored from moltran.coderthemes.com/menu_2/form-uploads.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 23 Mar 2018 17:50:05 GMT -->
+</html>

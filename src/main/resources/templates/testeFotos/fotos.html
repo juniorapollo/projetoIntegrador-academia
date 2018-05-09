@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head> 
+        <th:block th:include="fragments/scripts :: header" ></th:block>
+        <!-- Dropzone css -->
+        <link th:href="@{/assets/dropzone/dropzone.css/}" rel="stylesheet" type="text/css" />
+
+
+    </head>    
+    <body class="fixed-left"  >
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->                   
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+
+                        <div id="fotos"></div>
+
+
+
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Carregar Fotos</h4>
+                            </div>
+                            <form id="form" action="/fotos/enviar" enctype="multipart/form-data" method="post">
+                                <input name="nome"/>
+                                
+                                
+                                <div class="row">
+                                <div class="col-md-12 portlets">
+                                    <!-- Your awesome content goes here -->
+                                    <div class="m-b-30 dropzone"  id="meuPrimeiroDropzone">
+                                        <div class="fallback"></div>                        
+
+                                    </div>
+
+                                </div>
+                            </div>
+                                <button type="submit" id="enviarForm">Enviar</button>
+                            </form>
+                            
+                            
+                            
+                        </div>
+
+
+
+
+
+
+
+                    </div> <!-- container -->
+                </div> <!-- content -->
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== --> 
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <!--Scripts-->
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+        <!-- Page Specific JS Libraries -->
+        <script th:src="@{/assets/dropzone/dropzone.js}"></script>
+
+        <script>
+              $(document).ready(function () {
+                Dropzone.autoDiscover = false;
+                
+                $("#meuPrimeiroDropzone").dropzone({
+                    url: ""+"/fotos/enviar",
+                    paramName: "uploadfile",
+                    addRemoveLinks: true,
+                    autoProcessQueue: false,
+                    uploadMultiple: true,
+                    parallelUploads: 15,
+                    maxFiles: 15,
+                    maxFilesize: 5,
+                    acceptedFiles: 'image/*',
+                    init: function () {
+                        dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
+
+                        // for Dropzone to process the queue (instead of default form behavior):
+                        document.getElementById("enviarForm").addEventListener("click", function (e) {
+                            // Make sure that the form isn't actually being sent.
+                            e.preventDefault();
+                            e.stopPropagation();
+                            dzClosure.processQueue();
+                        });
+                        //send all the form data along with the files:
+                        this.on("sendingmultiple", function (data, xhr, formData) {
+                            formData.append("nome", jQuery("#nome").val());
+                           // formData.append("lastname", jQuery("#lastname").val());
+                        });
+                    },
+
+                    success: function (file, response) {
+                        var imgName = response;
+                        file.previewElement.classList.add("dz-success");
+                        console.log("Successfully uploaded :" + imgName);
+                    },
+                    error: function (file, response) {
+                        file.previewElement.classList.add("dz-error");
+                    }
+                });
+            });
+
+
+
+        </script>
+
+    </body>
+</html>

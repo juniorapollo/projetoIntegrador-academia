@@ -506,9 +506,9 @@ Licensed under the MIT license.
                     labelBoxBorderColor: "#ccc", // border color for the little label boxes
                     container: null, // container (as jQuery object) to put legend in, null means default on top of graph
                     position: "ne", // position of default legend container within plot
-                    margin: 5, // distance from grid edge to default legend container within plot
+                    margin: 320, // distance from grid edge to default legend container within plot
                     backgroundColor: null, // null means auto-detect
-                    backgroundOpacity: 0.85, // set to 0 to avoid background
+                    backgroundOpacity: 0, // set to 0 to avoid background
                     sorted: null    // default to no legend sorting
                 },
                 xaxis: {
@@ -2687,7 +2687,7 @@ Licensed under the MIT license.
                 }
 
                 fragments.push(
-                    '<td class="legendColorBox"><div style="border:1px solid ' + options.legend.labelBoxBorderColor + ';padding:1px"><div style="width:4px;height:0;border:5px solid ' + entry.color + ';overflow:hidden"></div></div></td>' +
+                    '<td class="legendColorBox" style="width: 1px;"><div  ' + options.legend.labelBoxBorderColor + ';padding:1px"><div style="width:4px;border:5px solid ' + entry.color + '"></div></div></td>' +
                     '<td class="legendLabel">' + entry.label + '</td>'
                 );
             }
@@ -2698,7 +2698,7 @@ Licensed under the MIT license.
             if (fragments.length == 0)
                 return;
 
-            var table = '<table style="font-size:smaller;color:' + options.grid.color + '">' + fragments.join("") + '</table>';
+            var table = '<table style="font-size:smaller;color:"' + options.grid.color + '">' + fragments.join("") + '</table>';
             if (options.legend.container != null)
                 $(options.legend.container).html(table);
             else {

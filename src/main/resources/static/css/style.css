@@ -724,10 +724,10 @@ a:focus {
     top: 0;
 }
 .nav.nav-tabs+.tab-content,.tabs-vertical-env .tab-content {
-    background: #FFF;
+    background: white;
     padding: 30px;
     margin-bottom: 30px;
-}
+  }
 .nav.nav-tabs>li.active>a,.tabs-vertical-env .nav.tabs-vertical li.active>a {
     border: 0;
     background-color: #fff;
@@ -1215,7 +1215,7 @@ lesshat-selector {
     position: relative;
     z-index: 1;
     width: 240px;
-    
+
 }
 .logo h1 {
     margin: 0px auto;
@@ -1732,7 +1732,7 @@ body.fixed-left .side-menu.left {
     cursor: move;
 }
 .external-event {
-    cursor: move;
+    cursor: default ;
     margin: 10px 0;
     padding: 6px 10px;
     color: #ffffff;

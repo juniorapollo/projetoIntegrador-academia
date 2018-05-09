@@ -85,32 +85,7 @@ table {
     border-color:black!important;
 }
 
-#jr-marcaDagua:after {
-    opacity:0.1;
-    filter:     alpha(opacity=40); /* For IE8 and earlier */
-    content: url(http://www.armorcred.com.br/imagens/logo_cores.png); 
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    -webkit-pointer-events: none;
-    -moz-pointer-events: none;
-    -ms-pointer-events: none;
-    -o-pointer-events: none;
-    pointer-events: none;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
 
 span#timer {
     color: white;
@@ -228,4 +203,16 @@ textarea.col-sm-12 {
   display:block;
   }
   
+  img.fotoAvaliacaoMiniatura {
+    width: 200px;
+    height: 230px;
+    padding: 10px;
+}
   
+.mini-stat{
+    border-radius: 10px;
+}
+
+.content {
+    background-color: #f5f5f5;
+}

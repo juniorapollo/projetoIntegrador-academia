@@ -4,51 +4,10 @@
 
     <!--<head th:include="fragments/header :: header"></head>-->
 
-    <head></head>
+    <head th:include="fragments/scripts :: header" ></head>
     <body id="no-print" class="fixed-left " th:fragment="navbar" >
 
-        <script type="text/javascript" th:inline="javascript">
-            function TotalNotificacoes() {
-                /*<![CDATA[*/
-
-                var baseUrl = /*[[@{${@environment.getProperty('baseSetIntervalNotificao')}}]]*/ 'User Name';
-
-                /*]]>*/
-
-
-                //document.getElementById('audio').play();
-
-                var totalClientes;
-                $.ajax({
-                    type: 'GET',
-                    url: baseUrl+"/sistema/hellohi/api/pedidos/notificacoes",
-                    success: function (total) {
-                        if (total === 0) {
-                            $("#totalNotificacoes").html(total);
-                            return;
-
-                        } else {
-
-                            $.ajax({
-                                type: 'GET',
-                                url: baseUrl+"/sistema/hellohi/api/notificacao/view" ,
-                                success: function (clientes) {
-                                    $("#totalNotificacoes").html(total);
-                                    $("#clientesNotificacao").html(clientes);
-                                },
-                                error: function () {
-                                    console.log(error);
-                                }
-                            });
-                        }
-                    },
-                    error: function () {
-                        console.log("Erro Verificar Notificações " + error);
-                    }
-
-                });
-            }
-        </script>
+       
 
         <!-- Top Bar Start -->
         <div class="topbar no-print">

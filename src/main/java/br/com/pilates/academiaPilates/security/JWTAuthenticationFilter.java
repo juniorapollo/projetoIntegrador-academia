@@ -59,7 +59,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             do {
                 try {
                     login = ((UserSS) auth.getPrincipal()).getUsername();
-                    perfil = ((UserSS) auth.getPrincipal()).getNivelUsuario();
+                    perfil = ((UserSS) auth.getPrincipal()).getNivelProfissional();
                     System.out.println("User PERFIL: " + perfil);
                 } catch (Exception e) {                   
                     System.out.println(e);
@@ -74,7 +74,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String tokenLogin = jwtUtil.generateToken(login);
         String tokenPerfil = jwtUtil.generateToken(perfil);
-        System.out.println("TOKENUsuario :" + tokenLogin);
+        System.out.println("TOKENProfissional :" + tokenLogin);
         System.out.println("Token Perfil " + tokenPerfil);
 
         res.addHeader("Authorization","Bearer "+tokenLogin);

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -33,6 +34,7 @@ public abstract class Pessoa implements Serializable{
     private String nome;
    
     @NotBlank(message = "Informe Email")
+    @Email(message="Email inválido")
     private String email;
         
     @NotBlank(message ="Informe Cpf")
