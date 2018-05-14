@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,8 +70,8 @@ public class GaleriaFotoController {
 
     //@PreAuthorize("hasAnyRole('OPERADOR')")
     @PostMapping(path = "${baseUrl}/fotos/enviar")
-    public ResponseEntity TestesalvarFotos(MultipartHttpServletRequest request) {
-
+    public ResponseEntity TestesalvarFotos(MultipartHttpServletRequest request , @ModelAttribute("nome") String qtdSemanas) {
+        System.out.println("TESTETESTE "+ qtdSemanas);
         try {
             Iterator<String> itr = request.getFileNames();
 
@@ -93,9 +94,9 @@ public class GaleriaFotoController {
                 System.out.println("filename " + filename);
                 System.out.println("Base64 " + a);
 
-                GaleriaFoto newFile = new GaleriaFoto(null, mimeType, bytes, null);
+              //  GaleriaFoto newFile = new GaleriaFoto(null, mimeType, bytes, null);
 
-                gr.save(newFile);
+                //gr.save(newFile);
             }
         } catch (Exception e) {
             return new ResponseEntity<>("{}", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -7,7 +7,9 @@ package br.com.pilates.academiaPilates.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,6 +40,11 @@ public class Avaliacao implements Serializable {
     private String dataAvaliacao;
 
     private String hora;
+    
+    
+    @ElementCollection
+    @Lob
+    private List<String> fotos;
 
     @Lob
     @NotBlank(message = "ANAMNESE EM BRANCO")
@@ -58,15 +65,13 @@ public class Avaliacao implements Serializable {
     @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "avaliacao", fetch = FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    private GaleriaFoto fotos;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "avaliacao", fetch = FetchType.LAZY, cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+//    private GaleriaFoto fotos;
  
     //Getters e Setters
     public Avaliacao() {
     }
-
-    
 
     public Long getId() {
         return id;
@@ -92,17 +97,15 @@ public class Avaliacao implements Serializable {
         this.hora = hora;
     }
 
-    
-   
-    
-    public String getProximaAvaliacao() {
-        return proximaAvaliacao; 
+    public List<String> getFotos() {
+        return fotos;
     }
 
-    public void setProximaAvaliacao(String proximaAvaliacao) {
-        this.proximaAvaliacao = proximaAvaliacao;
+    public void setFotos(List<String> fotos) {
+        this.fotos = fotos;
     }
 
+    
 
     public String getAnamnese() {
         return anamnese;
@@ -144,6 +147,14 @@ public class Avaliacao implements Serializable {
         this.examesComplementares = examesComplementares;
     }
 
+    public String getProximaAvaliacao() {
+        return proximaAvaliacao;
+    }
+
+    public void setProximaAvaliacao(String proximaAvaliacao) {
+        this.proximaAvaliacao = proximaAvaliacao;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -152,21 +163,9 @@ public class Avaliacao implements Serializable {
         this.cliente = cliente;
     }
 
-    public GaleriaFoto getFotos() {
-        return fotos;
-    } 
-
-    public void setFotos(GaleriaFoto fotos) {
-        this.fotos = fotos;
-    }
-
     
 
-    @Override
-    public String toString() {
-        return "Avaliacao{" + "id: " + id + ",\n dataAvaliacao=" + dataAvaliacao + ",\n hora=" + hora + ",\n anamnese=" + anamnese + ",\n diagnostico=" + diagnostico + ",\n ap=" + ap + ",\n qp=" + qp + ",\n examesComplementares=" + examesComplementares + ",\n cliente=" + cliente + ",\n fotos=" + fotos + '}';
-    }
-
+    
     
     
     

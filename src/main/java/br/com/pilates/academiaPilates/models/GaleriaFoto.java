@@ -6,6 +6,7 @@
 package br.com.pilates.academiaPilates.models;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,12 +34,17 @@ public class GaleriaFoto implements Serializable {
     private String descricao;
 
     @Lob
-    private byte[] file;
+    private List<byte[]> file;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Avaliacao avaliacao;
 
-    public GaleriaFoto(Long id, String descricao, byte[] file, Avaliacao avaliacao) {
+    public GaleriaFoto() {
+    }
+
+    
+
+    public GaleriaFoto(Long id, String descricao, List<byte[]> file, Avaliacao avaliacao) {
         this.id = id;
         this.descricao = descricao;
         this.file = file;
@@ -73,5 +79,15 @@ public class GaleriaFoto implements Serializable {
     public void setAvaliacao(Avaliacao avaliacao) {
         this.avaliacao = avaliacao;
     }
+
+    public List<byte[]> getFile() {
+        return file;
+    }
+
+    public void setFile(List<byte[]> file) {
+        this.file = file;
+    }
+    
+    
 
 }

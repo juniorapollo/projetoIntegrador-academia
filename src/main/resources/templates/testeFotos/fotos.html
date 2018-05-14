@@ -37,7 +37,7 @@
                                 <h4 class="page-title">Carregar Fotos</h4>
                             </div>
                             <form id="form" action="/fotos/enviar" enctype="multipart/form-data" method="post">
-                                <input name="nome"/>
+                                <input id="inputNome" name="nome" value="TESTE ENVIO DE FOTO"/>
                                 
                                 
                                 <div class="row">
@@ -95,18 +95,26 @@
                     maxFilesize: 5,
                     acceptedFiles: 'image/*',
                     init: function () {
+                    
                         dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
 
                         // for Dropzone to process the queue (instead of default form behavior):
                         document.getElementById("enviarForm").addEventListener("click", function (e) {
-                            // Make sure that the form isn't actually being sent.
+                        var myForm = document.getElementById('form');            
+                        var formData = new FormData(myForm);  
+                              
                             e.preventDefault();
                             e.stopPropagation();
                             dzClosure.processQueue();
+                            
+        
+                            // Make sure that the form isn't actually being sent.
+                            var inputNome = $("#inputNome").val();                   
+                            formData.append("nome", inputNome);
                         });
                         //send all the form data along with the files:
                         this.on("sendingmultiple", function (data, xhr, formData) {
-                            formData.append("nome", jQuery("#nome").val());
+                            
                            // formData.append("lastname", jQuery("#lastname").val());
                         });
                     },

@@ -31,8 +31,8 @@
                                                     <th:block th:include="fragments/mensagemErro :: mensagemErro"></th:block> 
                                                     <input type="hidden" name="id"  th:readonly="#{readonly}" th:field="*{id}"/>
                                                     <input type="checkbox" name="ativo" style="display: none" th:field="*{ativo}"/>
-                                                    
-                                                   
+
+
                                                     <!-- Nome -->
                                                     <div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? has-error">                                                    
                                                         <div class="col-md-12 ">
@@ -227,14 +227,28 @@
                                                     </div> <!-- form-group --> 
 
                                                     <div class="form-group" th:classappend="${#fields.hasErrors('praticaAtividade')} ? has-error">
-                                                        <label class="col-sm-3 control-label"> Pratica Atividade </label>
-                                                        <div class="col-md-5 checkbox checkbox-primary">                                                      
-                                                            <input  type="radio" value="true" name="praticaAtividade" th:field="*{praticaAtividade}"/>
-                                                            <span >Sim</span>
-                                                            <input  type="radio" value="false"  name="praticaAtividade" th:field="*{praticaAtividade}"/>
-                                                            <span >Não</span>
+                                                        <div class="col-md-6"> 
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"><i class="fa"><b>Pratica Atividades</b></i></span>
+                                                                <select class="form-control" name="praticaAtividade" th:field="*{praticaAtividade}">
+                                                                    <option value='true'>Sim</option>
+                                                                    <option value="false">Não</option>
+                                                                </select>    
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('objetivo')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Objetivo</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="text" maxlength="20" name="objetivo" th:field="*{objetivo}" class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    
+                                                   
+
 
 
                                                     <div class="modal-footer"> 

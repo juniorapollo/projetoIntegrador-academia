@@ -479,8 +479,9 @@
                     var strData = start.toString();
                     var partesData = strData.split("-");
                     var dia = parseInt(partesData[2]);
-                    var data = new Date(partesData[0], partesData[1] - 1, dia + 1);
-                        if (!(data > new Date())){
+                    var data = new Date(partesData[0], partesData[1] - 1, dia);
+                    var dataParaComparar = new Date(partesData[0], partesData[1] - 1, dia+1); // Para aceitar agendamento no dia atual
+                        if (!(dataParaComparar > new Date())){
                             $('#sa-basic').click(function(){
                                 swal({
                                     title: "Ops, você não pode agendar nessa data!",

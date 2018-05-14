@@ -40,12 +40,11 @@ public class ServicoController {
 
     @Autowired
     ServicoRepository sr;
-    
+
     @GetMapping(path = "/")
     public List<Servico> servicosJson(Servico servico) {
-        
-        List<Servico> listaServicos = servicoService.listaServicosAtivos();
 
+        List<Servico> listaServicos = servicoService.listaServicosAtivos();
 
         return listaServicos;
     }
@@ -62,13 +61,14 @@ public class ServicoController {
     }
 
     @PostMapping(path = "/cadastro", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_VALUE}, headers = "content-type=application/x-www-form-urlencoded , application/json", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ModelAndView salvarServico(@Valid Servico servico, BindingResult result, RedirectAttributes atributes) {
+    public ModelAndView salvarServico(Servico servico, BindingResult result, RedirectAttributes atributes) {
+        System.out.println("ENTROU SALVAR Servico");
         try {
             if (result.hasErrors()) {
                 System.out.println("Erro Salvar Servicos() " + result.toString());
                 return pageCadastroServico(servico);
             }
-            System.out.println("ENTROU SALVAR Servico");
+
             System.out.println("Servico: " + servico.toString());
             servico.setAtivo(true);
             sr.save(servico);//Salva Cliente criado 

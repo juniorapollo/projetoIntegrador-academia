@@ -59,6 +59,8 @@
             <scope>test</scope>
         </dependency>
         
+        
+        
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -99,6 +101,14 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+        </dependency>
+        
+        <!--JUnit-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
                 
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->

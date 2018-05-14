@@ -4,7 +4,13 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
       >
 
-    <head th:replace="fragments/scripts :: header"></head> 
+    <head> 
+        <th:block th:include="fragments/scripts :: header" ></th:block>
+        <!-- Dropzone css -->
+        <link th:href="@{/assets/dropzone/dropzone.css/}" rel="stylesheet" type="text/css" />
+
+
+    </head>   
     <body class="fixed-left"  >
 
         <div id="wrapper">       
@@ -73,6 +79,9 @@
 
             </th:block>
         </div>
+        
+        
 
     </body>
+    
 </html>

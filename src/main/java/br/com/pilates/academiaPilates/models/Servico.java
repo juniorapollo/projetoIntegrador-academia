@@ -48,6 +48,16 @@ public class Servico implements Serializable{
     public Servico() {
     }
 
+    public Servico(Long id, String descricao, double valor, String tempo, boolean ativo) {
+        this.id = id;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.tempo = tempo;
+        this.ativo = ativo;
+    }
+    
+    
+
     public Long getId() {
         return id;
     }
@@ -97,13 +107,15 @@ public class Servico implements Serializable{
     public void setProfissional(List<Profissional> profissional) {
         this.profissional = profissional;
     }
-    
-    
 
     @Override
     public String toString() {
-        return "Servico{" + "id=" + id + ", descricao=" + descricao + ", valor= R$" + valor + '}';
+        return "Servico{" + "id=" + id + ", descricao=" + descricao + ", valor=" + valor + ", tempo=" + tempo + ", ativo=" + ativo + ", profissional=" + profissional + '}';
     }
+    
+    
+
+    
     
     
     
