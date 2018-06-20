@@ -1,31 +1,47 @@
 
+
+.alert{
+    border-radius: 10px;
+}
 .login-senha{
     border: none;
-    width: 350px;
+    width: 100%;
     height: auto;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 20px;
     display: inline-grid;
     text-align: center;
     background-color: rgba(255,255,255,.3);
 
 }
 .conteiner-fluid{
-    margin-top: 180px;
+    margin-top: 60%;
     width: 100%;
     text-align: center;
 }
 .form-login{
     text-align: left !important;
     font-weight: 600;
-
+     border-radius: 20px;
 }
 .form-senha{
     text-align: left !important;
     font-weight: 600;
+     border-radius: 20px;
 }
-.btn-black{
+input.form-control {
+    border-radius: 10px;
+}
+button.btn.btn-black {
+    width: 90%;
+    margin-left: 5%;
     color: white;
-    background-color: rgba(150,150,150,.5);
-    border: none;
+    margin-top: 5%;
+    border-radius: 20px;
+    background: #373B44;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4286f4, #373B44);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4286f4, #373B44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
 }

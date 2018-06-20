@@ -1,5 +1,7 @@
 package br.com.pilates.academiaPilates;
 
+import br.com.pilates.academiaPilates.service.AgendaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,10 +11,12 @@ import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
 public class AcademiaPilatesApplication {
-
+   
     public static void main(String[] args) {
-        SpringApplication.run(AcademiaPilatesApplication.class, args);
+        SpringApplication.run(AcademiaPilatesApplication.class, args);  
     }
+    
+    
     
     @Bean
     public CorsFilter corsFilter() {

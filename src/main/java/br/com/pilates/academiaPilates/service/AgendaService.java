@@ -21,9 +21,12 @@ import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,9 @@ public class AgendaService {
     @Autowired
     AgendaRepository repo;
     Agenda agenda;
+    
+    @Autowired
+    ClienteService clienteService;
 
     LocalDate HOJE = LocalDate.now(); // 2018-05-05
     private static final DayOfWeek DOMINGO = DayOfWeek.SUNDAY;
@@ -82,9 +88,7 @@ public class AgendaService {
     }
 
     public ArrayList<Agenda> listaAgendaPorCliente(Cliente cliente) {
-
         ArrayList<Agenda> listaAgendaCliente = repo.findByCliente(cliente);
-
         return listaAgendaCliente;
     }
 
@@ -114,11 +118,11 @@ public class AgendaService {
         return dayWeek;
     }
 
-    public LocalDate proximoDataParaDia(String dataRealizouPrimeiroAgendamento ,String diaSemana) throws ParseException {
+    public LocalDate proximoDataParaDia(String dataRealizouPrimeiroAgendamento, String diaSemana) throws ParseException {
         DayOfWeek dia = null;
         String d = dataRealizouPrimeiroAgendamento.substring(0, 10);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate data = LocalDate.parse(d,formatter);
+        LocalDate data = LocalDate.parse(d, formatter);
 
         TemporalAdjuster ajustadorDias;
         LocalDate proximoDiaEscolhido;
@@ -191,6 +195,47 @@ public class AgendaService {
     }
     
      */
+    public void setarDataHoraInicioFinal(Agenda agenda) {
+        String horaFinal = null;
+        String dataInicio = agenda.getStart().substring(0, 10);
+        String horaInicio = agenda.getStart().substring(11, 16);
+        try {
+             horaFinal = agenda.getEnd().substring(12, 17);
+        } catch (Exception e) {
+             horaFinal = agenda.getEnd().substring(11, 16);
+        }
+
+        agenda.setDataInicio(dataInicio);
+        agenda.setDataFinal(dataInicio);
+        agenda.setHoraInicio(horaInicio);
+        agenda.setHoraFinal(horaFinal);
+    }
+
+    public boolean clientePodeAgendar(Agenda agenda) {
+        try {
+            ArrayList<Agenda> agendasDoCliente = repo.findByClienteAndDataInicio(agenda.getCliente(), agenda.getDataInicio());
+            SimpleDateFormat formatador = new SimpleDateFormat("HH:mm");
+            
+            Date horaAgendaCliente = formatador.parse(agendasDoCliente.get(0).getHoraFinal());
+            Date horaNovaAgenda = formatador.parse(agenda.getHoraInicio());
+           
+            if(horaNovaAgenda.getTime() >= horaAgendaCliente.getTime()){
+                System.out.println("CLIENTE Liberado , PODE AGENDAR");
+                return true;
+            }else{
+                System.out.println("Cliente Com Horario Marcado");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Agenda Service Exception, Liberado para Cadastramento de agenda para esse cliente " + e);
+            return true;
+        }
+    }
+    
+    public boolean isReagendamento(Agenda agenda) {
+        return agenda.getIdAgenda() != null;
+    }
+
     public String adicionaDataEndComHorarioDoServico(String dataStart, Servico servico) {
         String data = dataStart.substring(0, 11);
         System.out.println(data);
@@ -220,5 +265,33 @@ public class AgendaService {
         return data + sdf2.format(gc.getTime());
 
     }
+
+    public Long qtdAgendaMesAtual() {
+        String mes = HOJE.toString().substring(5,7);
+        
+        String dataInicioMes = HOJE.getYear()+"-"+mes+"-01";
+        String dataFinalMes = HOJE.getYear()+"-"+mes+"-"+HOJE.getMonth().maxLength();  
+        
+        Long qtd = repo.countByDataInicioBetween(dataInicioMes, dataFinalMes);
+        
+        
+        System.out.println(qtd);
+        HOJE.getMonth();
+        DateTimeFormatter formatador = 
+        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        System.out.println(HOJE.format(formatador)); //// 05/05/2018
+//        System.out.println("MES " + HOJE.getMonth().length(true));
+//        System.out.println("MES " + HOJE.getMonth().getValue());
+//        System.out.println("MES " + HOJE.getYear());
+        
+        
+        return qtd;
+
+
+    }
+    
+    
+    
+    
 
 }

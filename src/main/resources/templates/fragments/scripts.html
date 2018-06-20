@@ -37,7 +37,29 @@
 
         <!-- DataTables -->
         <link href="../../static/assets/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" th:href="@{/assets/datatables/jquery.dataTables.min.css}"/>
+<style>
+            
+           .content-loader{
+                   background: #0000008f;
 
+                z-index: 999999;
+                position:absolute;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left:0px;
+                background-color: eee;
+                display: block;
+            }
+            #loader{
+                position:absolute;
+                left: 50%;
+                top: 50%;
+                background-position: center center;
+                background-repeat: no-repeat;
+
+            }
+        </style>
 
 
 
@@ -47,6 +69,7 @@
 
         <!-- jQuery  -->        
         <script th:src="@{/js/jquery.min.js}"></script>
+
         <script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}" ></script>
         <script src="../../static/js/waves.js" th:src="@{/js/waves.js}" ></script>
         <script src="../../static/js/wow.min.js" th:src="@{/js/wow.min.js}"></script>
@@ -73,6 +96,14 @@
 
         <script th:src="@{/assets/datatables/jquery.dataTables.min.js}"></script>
         <script th:src="@{/assets/datatables/dataTables.bootstrap.js}"></script>
+        <script>
+            var loader = $("#loader");
+            if (loader) {
+                $(window).load(function () {
+                    $(".content-loader").fadeOut('slow');
+                });
+            }
+        </script>
         
     </body>
 </html>

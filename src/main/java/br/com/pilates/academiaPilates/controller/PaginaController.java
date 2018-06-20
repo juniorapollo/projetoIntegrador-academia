@@ -1,7 +1,7 @@
 package br.com.pilates.academiaPilates.controller;
 
-
-
+import br.com.pilates.academiaPilates.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,28 +13,26 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class PaginaController {
+    
+    @Autowired
+    ClienteService clienteService;
 
     public PaginaController() {
     }
-
-
-
-    
-   
     
     @GetMapping(value = "${baseUrl}/sistema")
-    public String index() {
-        return "index/home";
+    public ModelAndView index() {
+        Long qtdClientes = clienteService.countClientesAtivos();
+        ModelAndView mv  = new ModelAndView("index/home");
+        mv.addObject("qtdClientes",qtdClientes);
+        return mv;
     }
 
     @GetMapping(value = "${baseUrl}/entrar")
     public String login() {
         return "login/login";
     }
-
     
-    
-
     @GetMapping(path = "${baseUrl}/sistema/fragments/painelCadastro")
     public ModelAndView painelCadastroPage() {
         ModelAndView mv = new ModelAndView("/fragments/painelCadastro");
@@ -56,6 +54,12 @@ public class PaginaController {
     @RequestMapping("${baseUrl}/fotos")
     public ModelAndView fotos() {
         ModelAndView mv = new ModelAndView("/testeFotos/fotos");
+        return mv;
+    }
+    
+     @RequestMapping("${baseUrl}/sistema/profile")
+    public ModelAndView profile() {
+        ModelAndView mv = new ModelAndView("/profile/profile");
         return mv;
     }
 

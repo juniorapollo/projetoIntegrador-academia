@@ -8,11 +8,9 @@ package br.com.pilates.academiaPilates.controller;
 import br.com.pilates.academiaPilates.models.Cliente;
 import br.com.pilates.academiaPilates.models.Atividades;
 import br.com.pilates.academiaPilates.models.RelatorioDiario;
-import br.com.pilates.academiaPilates.repository.ClienteRepository;
-import br.com.pilates.academiaPilates.repository.AtividadesRepository;
-import br.com.pilates.academiaPilates.repository.ServicoRepository;
 import br.com.pilates.academiaPilates.service.ClienteService;
 import br.com.pilates.academiaPilates.service.AtividadesService;
+import br.com.pilates.academiaPilates.service.RelatorioDiarioService;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,8 @@ public class RelatorioDiarioController {
     @Value("${baseUrl}")
     private String baseUrl;
 
+    @Autowired
+    RelatorioDiarioService service;
     
     @Autowired
     AtividadesService atividadesService;
@@ -78,7 +78,7 @@ public class RelatorioDiarioController {
 
         mv.addObject("cliente", cliente);
 
-        List<Atividades> listaAtividades = atividadesService.listaAtividadesPorNivelCliente(cliente.getNivelCliente());
+        List<Atividades> listaAtividades = atividadesService.listaAtividades();
         List<Cliente> listaClientes = clienteService.listaClientesAtivos();
 
         mv.addObject("atividades", listaAtividades);
@@ -98,15 +98,17 @@ public class RelatorioDiarioController {
         try {
             
             if (result.hasErrors()) {
-                System.out.println("Erro SalvarProfissional() " + result.toString());
+                System.out.println("Erro Relatorio Diario() " + result.toString());
                 return null;
             }
 
             
 
             relatorioDiario.setId(null); // Setando ID Nulo para criar um novo usuário (Garantir)
-             System.out.println(relatorioDiario.toString());
-           
+            
+            
+            service.salvarRelatorioDiario(relatorioDiario); 
+            System.out.println(relatorioDiario.toString());
            
             ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/relatorioDiario/cadastro/clientes/");
             atributes.addFlashAttribute("mensagem", "Relatorio do Cliente " + relatorioDiario.getCliente().getNome() + " salvo com sucesso.");

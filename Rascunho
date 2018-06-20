@@ -590,3 +590,63 @@
     </body>
 </html>
 
+
+
+
+
+
+                                                    <div  class="tab-pane" id="fotos">
+                                                        <div id="portfolio">
+                                                            <div class="container panel" style='background-color: #e5e5e5'>
+                                                                <div class="section-title text-center center">
+                                                                    <h2><span class="center">Fotos Avaliaçōes</span></h2>
+                                                                </div>
+                                                                <div class="categories">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="cat">
+                                                                                <div class="type">
+                                                                                    <div class="btn btn-success  col-sm-2"><a href="#" data-filter="*" class="active">Todas</a></div>
+
+                                                                                    <div class="col-sm-2" th:each=" avaliacao, contador : ${listaAvaliacao}">
+                                                                                        <a class=" btn btn-default " href="#"  th:attr="data-filter=.avaliacao+${avaliacao.id}">
+                                                                                            <span th:text="${contador.count} " > </span>º Avaliação
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="row">
+                                                                    <div class="pricing-item">
+                                                                        <div class="portfolio-items ">
+                                                                            <div th:each=" avaliacao, contador : ${listaAvaliacao}" th:class=" 'col-sm-12 avaliacao' +${avaliacao.id} ">
+                                                                                <div class="panel-heading">
+                                                                                    <h3 class="panel-title" style="color:red; font:14px;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
+                                                                                </div>
+
+                                                                                <div class="panel-body">
+                                                                                    <div class="portfolio-item">
+
+
+                                                                                        <div th:each=" foto, contador : ${avaliacao.fotos}"  class="panel-body col-sm-4">
+
+                                                                                            <img th:src="${foto} " class="fotoAvaliacaoMiniatura "  alt=""/>
+
+                                                                                        </div> 
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div> <!-- End row -->

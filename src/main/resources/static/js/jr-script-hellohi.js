@@ -176,8 +176,5 @@ $(document).ready(function () {
  document.getElementById("inp").addEventListener("change", readFile);
  */
 
-$('#btnHabilitar').click(function(){
-	$('input').prop('readonly', true);
-});
 
 

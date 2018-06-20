@@ -7,6 +7,7 @@ package br.com.pilates.academiaPilates.repository;
 
 
 import br.com.pilates.academiaPilates.models.Cliente;
+import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -17,5 +18,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     
     public Iterable<Cliente> findByAtivoTrueOrderByNomeAsc();
     public Iterable<Cliente> findByAtivoFalse();
+
+    public Long countByNivelClienteAndAtivoTrue(String nivelCliente);
+    
+    public Long countByAtivoTrue();
   
 }

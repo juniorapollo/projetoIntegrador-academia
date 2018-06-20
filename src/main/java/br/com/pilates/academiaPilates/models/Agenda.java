@@ -35,7 +35,7 @@ public class Agenda implements Serializable{
 
      private String textColor;
   
-   // private String dataInicio;
+    private String dataInicio;
 
     private String horaInicio;
     
@@ -64,6 +64,8 @@ public class Agenda implements Serializable{
     private String nomeRealizouCancelamento;
     
     private String motivoCancelamento;
+    
+    
     
     @ManyToOne()
     @JoinColumn(name = "idProfissional")
@@ -147,13 +149,13 @@ public class Agenda implements Serializable{
         this.cliente = cliente;
     }
 
-    //public String getDataInicio() {
-      //  return dataInicio;
-   // }
+    public String getDataInicio() {
+        return dataInicio;
+    }
 
-    //public void setDataInicio(String dataInicio) {
-     //   this.dataInicio = dataInicio;
-   // }
+    public void setDataInicio(String dataInicio) {
+        this.dataInicio = dataInicio;
+    }
 
     public String getHoraInicio() {
         return horaInicio;

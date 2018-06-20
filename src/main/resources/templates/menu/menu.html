@@ -6,7 +6,7 @@
 
 
     <head th:include="fragments/scripts :: header" ></head>
-    
+
     <body class="fixed-left" th:fragment="menu">
         <!-- ========== Left Sidebar Start ========== -->
         <div class="left side-menu ">
@@ -26,6 +26,9 @@
                         <li>
                             <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}" class="waves-effect"><i class="md md-home"></i><span> Início </span></a>
                         </li>
+                        <li>
+                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> Agenda </span></a>
+                        </li>
                         <li class="has_sub">
                             <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Clientes </span> <span class="pull-right"><i class="md md-add"></i></span></a>
                             <ul class="list-unstyled">
@@ -44,37 +47,44 @@
 
                             </ul>
                         </li>
-                        <li>
-                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/cadastro'}}" class="waves-effect"><i class="md-account-balance"></i><span> Profissional </span></a>
+                        <li class="has_sub">
+                            <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Profissionais </span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/cadastro'}}" class="waves-effect"><i class="md-account-balance"></i><span> Cadastrar </span></a>
+                                </li>
+                                <li>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span> Listar </span></a>
+                                </li>
+                            </ul>
                         </li>
+
                         <li>
                             <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/servico/cadastro'}}" class="waves-effect"><i class="fa fa-anchor"></i><span> Serviços </span></a>
                         </li>
-                        
-                        
+
+
                         <li>
                             <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/atividades/cadastro'}}" class="waves-effect"><i class="md-account-balance"></i><span> Atividades </span></a>
                         </li>
-                        <li>
-                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> Agenda </span></a>
-                        </li>
-                        <li>
-                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}" class="waves-effect"><i class="md-account-balance"></i><span> Relatório Diário </span></a>
-                        </li>
-                        
-                        <li>
-                            <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/teste'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> TEste </span></a>
-                        </li>
-                        
+
+
+
+                        <!--                        <li>
+                                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/teste'}}" class="waves-effect"><i class="fa fa-calendar"></i><span> TEste </span></a>
+                                                </li>-->
+
                         <li sec:authorize="hasRole('ADMINISTRADOR')" class="has_sub">
-                            <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Relatórios </span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <a href="#" class="waves-effect"><i class="md-quick-contacts-dialer"></i> <span> Relatórios Diários</span> <span class="pull-right"><i class="md md-add"></i></span></a>
                             <ul class="list-unstyled">
                                 <li>
-                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span> Clientes </span></a>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}" class="waves-effect"><i class="md-account-balance"></i><span> Cadastrar </span></a>
                                 </li>
                                 <li>
-                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span> Profissionais </span></a>
+                                    <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/relatorio'}}" class="waves-effect"><i class="md md-group"></i><span>Listar</span></a>
                                 </li>
+
+
 
 
 
@@ -93,7 +103,7 @@
 
                     </ul>
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix fa"></div>
             </div>
         </div>
         <!-- Left Sidebar End --> 

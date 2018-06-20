@@ -122,6 +122,7 @@
 
         //initializing various charts and components
         Dashboard.prototype.init = function() {
+                
           //plot graph data
           var uploads = [[0, 9], [1, 8], [2, 5], [3, 8], [4, 5], [5, 14], [6, 10]];
           var downloads = [[0, 5], [1, 12], [2,4], [3, 3], [4, 12], [5, 11], [6, 14]];

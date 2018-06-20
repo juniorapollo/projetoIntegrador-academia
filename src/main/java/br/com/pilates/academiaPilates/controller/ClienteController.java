@@ -9,6 +9,7 @@ import br.com.pilates.academiaPilates.models.Cliente;
 import br.com.pilates.academiaPilates.models.Avaliacao;
 import br.com.pilates.academiaPilates.repository.ClienteRepository;
 import br.com.pilates.academiaPilates.repository.AvaliacaoRepository;
+import br.com.pilates.academiaPilates.service.ClienteService;
 import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class ClienteController {
 
     @Autowired
     ClienteRepository ar;
+    
+    @Autowired 
+    ClienteService clienteService;
     
     @Autowired
     AvaliacaoRepository avaliacaoRepository;
@@ -106,12 +110,21 @@ public class ClienteController {
      * @return Lista de Clientes em Json
      */
     //@PreAuthorize("hasAnyRole('OPERADOR')")
-    @RequestMapping(path = "${baseUrl}/sistema/api/cliente", method = RequestMethod.GET)
+    @GetMapping(path = "/api/json")
     public Iterable<Cliente> listarClientes() {
-        Iterable<Cliente> listaClientes = ar.findAll();
+        Iterable<Cliente> listaClientes = ar.findAll() ;
         return listaClientes;
     }
 
+    
+     @GetMapping(path = "/api/json/{idCliente}")
+    public Cliente clientePorId(@PathVariable("idCliente") Long id) {
+       
+        cliente = ar.findOne(id);
+         System.out.println("ACABEI DE ENTRAR PARA PESQUISAR O CLIENTE POR ID  e consegui pegar o cliente " + cliente.toString());
+        return cliente;
+    }
+    
     /**
      *
      * @param cliente

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      sec:authorize="isAuthenticated()">
+
+    <head> 
+        <th:block th:include="fragments/scripts :: header" ></th:block>
+        <link th:href="@{/css/components.css}" rel="stylesheet"/>
+        <link th:href="@{/css/core.css}" rel="stylesheet"/>
+        <style>
+
+            .jr-button{
+                background:#48799e;
+                color:#fff;
+                box-shadow:0 5px 0 #355873;
+            }
+            .jr-button:hover{
+                background: #355873;
+                box-shadow:0 5px 0 #b000;
+            }
+
+        </style>
+
+    </head>    
+
+
+    <body class="fixed-left" >
+        <div class="content-loader">
+            <div id="loader">
+                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
+            </div>
+        </div>
+
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div   th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+        </div>
+            
+
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <!--Scripts-->
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+
+        <!-- sweet alerts -->
+        <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
+        <script th:src="@{/assets/sweet-alert/sweet-alert.init.js}"></script>
+
+        <!-- Counter-up -->
+        <script th:src="@{/assets/counterup/waypoints.min.js}" type="text/javascript"></script>
+        <script th:src="@{/assets/counterup/jquery.counterup.min.js}" type="text/javascript"></script>
+
+        <!--Graficos -->
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.js}" type="text/javascript"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.time.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.tooltip.min.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.resize.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.pie.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.selection.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.stack.js}"></script>
+        <script th:src="@{/assets/plugins/flot-chart/jquery.flot.crosshair.js}"></script>
+        <!-- dashboard  -->
+        <script th:src="@{/assets/plugins/flot-chart/jquery.dashboard.js}"></script>
+
+        
+
+    </body>
+</html>
+
+
+
+

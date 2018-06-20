@@ -26,6 +26,11 @@
 
 
     <body class="fixed-left" >
+        <div class="content-loader">
+            <div id="loader">
+                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
+            </div>
+        </div>
 
         <div id="wrapper">       
             <!--Navbar-->
@@ -60,7 +65,7 @@
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
                                             <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
-                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Clientes</h5></div>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Avaliações</h5></div>
 
                                         </div>
                                     </div>
@@ -138,10 +143,10 @@
                         <br></br><br></br>
                         <div class="col-lg-8">
 
-                            <div class="portlet"><!-- /portlet heading -->
+                            <div class="portlet painel-grafico"><!-- /portlet heading -->
                                 <div class="portlet-heading">
                                     <h3 class="portlet-title text-dark text-uppercase">
-                                        Gráfico Agenda
+                                        Gráfico Agenda -  Mês Atual 
                                     </h3>
                                     <div class="portlet-widgets">
                                         <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
@@ -156,7 +161,7 @@
                                     <div class="portlet-body">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div id="website-stats" style="position: relative;height: 320px"></div>
+                                                <div id="grafico1" style="position: relative;height: 320px"></div>
                                                 <div class="row text-center m-t-30">
                                                     <div class="col-sm-4">
 
@@ -176,10 +181,10 @@
                         </div> <!-- end col -->
 
                         <div class="col-lg-4">
-                            <div class="portlet"><!-- /portlet heading -->
+                            <div class="portlet painel-grafico"><!-- /portlet heading -->
                                 <div class="portlet-heading">
                                     <h3 class="portlet-title text-dark text-uppercase">
-                                        Alunos
+                                        Clientes  -  Total (<span th:text="${qtdClientes}"></span> )
                                     </h3>
                                     <div class="portlet-widgets">
                                         <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
@@ -258,24 +263,30 @@
         <!-- dashboard  -->
         <script th:src="@{/assets/plugins/flot-chart/jquery.dashboard.js}"></script>
 
-        <!-- <script type="text/javascript">
+<!--         <script type="text/javascript">
              d1 = [[0, 3], [1, 3], [2, 5], [3, 7], [4, 8], [5, 10], [6, 11], [7, 9], [8, 5], [9, 13]];
- 
+ colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
              $(document).ready(function () {
-                 $.plot($("#portlet1"),
+                 $.plot($("#website-stats"),
                          [{data: d1,
-                                 label: labels[0],
+                                 label: "some label",
                                  color: colors[0]
                              },
                              {data: d1,
-                                 label: labels[1],
-                                 color: colors[1]
+                                 label: "labels[1],",
+                                 color: "colors[1]"
                              }
                          ],
                          );
  
              });
          </script>-->
+<script>
+//    function($) {
+//    "use strict";
+//    $.Dashboard.prototype();
+//}(window.jQuery);
+</script>
 
     </body>
 </html>

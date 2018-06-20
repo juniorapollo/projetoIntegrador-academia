@@ -7,6 +7,7 @@ package br.com.pilates.academiaPilates.service;
 
 import br.com.pilates.academiaPilates.models.Cliente;
 import br.com.pilates.academiaPilates.repository.ClienteRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,18 @@ public class ClienteService {
     public Cliente clientePorId(Long idCliente){
      
         return repo.getOne(idCliente);
+    }
+    
+    
+    public Long countClientesAtivos(){
+    
+        return repo.countByAtivoTrue();
+    }
+    
+    
+    public Long countClientesAtivosPorNivel(String nivelCliente){
+    
+        return repo.countByNivelClienteAndAtivoTrue(nivelCliente);
     }
     
     

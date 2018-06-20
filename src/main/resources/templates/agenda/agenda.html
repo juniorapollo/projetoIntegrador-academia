@@ -16,7 +16,8 @@
         <link th:href="@{/assets/sweet-alert/sweet-alert.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/assets/timepicker/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/assets/timepicker/bootstrap-timepicker.min.css}" rel="stylesheet" type="text/css"/>
-        <link th:href="@{https://rawgit.com/xdan/datetimepicker/master/jquery.datetimepicker.css}" rel="stylesheet"/>
+        <!--<link th:href="@{https://rawgit.com/xdan/datetimepicker/master/jquery.datetimepicker.css}" rel="stylesheet"/>-->
+        <link th:href="@{/css/agendaTimePicker/datatimepicker.css}" rel="stylesheet" type="text/css"/>
 
 
         <script th:inline="javascript">
@@ -31,121 +32,243 @@
             url = baseUrl + idCliente;
             location = url;
             }
+
+            function abrirAgendaPorProfissional() {
+            /*<![CDATA[*/
+
+            var baseUrl = [[@{${@environment.getProperty('baseUrl') + '/sistema/agenda/profissional/'}}]];
+            /*]]>*/
+
+            var selectBox = document.getElementById("selectBoxProfissional");
+            var idProfissional = selectBox.options[selectBox.selectedIndex].value;
+            url = baseUrl + idProfissional;
+            location = url;
+            }
+
+
         </script>
         <style>
+            .content-page >.content {
+                margin-top: 50px;
+                /*                margin-bottom: 60px;*/
+                /*padding: 20px 5px 15px 5px;*/
+                position: relative;
+            }
             .modal-footer {
                 margin-top: 70px;
+            }
+            #sidebar-menu ul{
+                padding: 5px;
+            }
+
+            .btn-agenda{
+                margin: 10px 0;padding: 6px 10px;color: #ffffff;
+            }
+            .legendColorBox{
+                padding-left: 15px;
+                padding-bottom: 10px;
+            }
+            #wrapper.enlarged .left.side-menu {
+                display: none;
+            }
+            #wrapper.enlarged .content-page{
+                margin-left: -10px;
+            }
+            .panel .panel-body {
+                padding: 10px;
+                height: 100%;
+            } 
+            .bg-cancelado{
+                background-color: #fb6565;
+            }
+            .btn.menuAgenda{
+                border-radius:10px;
+                margin-top: 4px;
+                width: 98%;
+            }
+            col-sm-1.checkbox.checkbox-primary {
+                margin: 10px;
             }
         </style>
     </head>    
 
 
     <body class="fixed-left" >
-
+        <div class="content-loader">
+            <div id="loader">
+                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
+            </div>
+        </div>
         <div id="wrapper">       
             <!--Navbar-->
             <div   th:include="navbar/navbar :: navbar"></div>
             <!--Menu-->
-            <th:block th:include="menu/menu :: menu"></th:block> 
-            <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>      
-            <section id ="linkMontarAgenda" th:text="${linkMontarAgenda}"></section>
-            <section id ="linkEditarAgenda" th:text="${linkEditarAgenda}"></section>
-            <section id ="abrirModal" th:text="${abrirModal}"></section>
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== -->                   
+            <!--<th:block th:include="menu/menu :: menu"></th:block>--> 
+            <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>
+            <th:block th:include="fragments/erroAgenda :: erroAgenda"></th:block>
+            <div style="display: none">
+                <section id ="linkMontarAgenda" th:text="${linkMontarAgenda}"></section>
+                <section id ="linkEditarAgenda" th:text="${linkEditarAgenda}"></section>
+                <section id ="abrirModal" th:text="${abrirModal}"></section>
+            </div>
+
+
+
+
+            <div class="left side-menu ">
+                <div class="sidebar-inner slimscrollleft">
+                    <div id="sidebar-menu">
+                        <ul>
+                            <li>
+                                <div class=" btn menuAgenda btn-block bg-success" >
+                                    <a class="btn-agenda" href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}"  data-target="#novoEvento" style="">
+                                        <i class="fa fa-home"></i> HOME
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>  
+
+                        <ul>
+                            <li>
+                                <div class=" btn menuAgenda btn-block bg-success" >
+                                    <a class="btn-agenda" href="#" data-toggle="modal" data-target="#novoEvento" style="">
+                                        <i class="fa fa-calendar-o"></i> Agendar
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>  
+
+                        <ul>
+                            <li>
+                                <div class="btn menuAgenda btn-block bg-primary"  style="position: relative;">
+                                    <i class="fa fa-database"></i>     <a class="btn-agenda"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" >TODOS</a>
+                                </div> 
+                            </li>
+                        </ul>
+
+                        <ul sec:authorize="hasRole('ADMINISTRADOR')">
+                            <li>
+                                <div class="btn menuAgenda btn-block bg-cancelado"  style="position: relative;">
+                                    <a class="btn-agenda"  href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" >
+                                        <i class="fa fa-remove"></i> CANCELADOS
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                        <hr></hr>
+                        <p class="text-center text-muted "><i class="fa fa-le fa-search"></i>Buscar Agendamento</p>
+
+                        <ul>
+                            <li>
+                                <div class="input">
+                                    <span class="input-group-addon "><i class="fa col-md-5"><b>Clientes</b></i></span>
+                                    <select class="form-control"  id="selectBox" th:if="${listaCliente}" onchange="abrirAgendaPorCliente();" >
+                                        <option value=''></option>
+                                        <option th:each=" cliente : ${listaCliente}"  th:value="${cliente.id}" th:text="${cliente.nome + ' - '+cliente.nivelCliente}"  ></option>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul>
+                            <li>
+                                <div class="input">
+                                    <span class="input-group-addon "><i class="fa col-md-5"><b>Profissionais</b></i></span>
+                                    <select class="form-control"  id="selectBoxProfissional" th:if="${listaCliente}" onchange="abrirAgendaPorProfissional();" >
+                                        <option value=''></option>
+                                        <option th:each=" profissional : ${listaProfissional}"  th:value="${profissional.id}" th:text="${profissional.nome }"  ></option>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <hr></hr>
+                        <hr></hr>
+                        <div class="text-muted text-center"><i class="fa fa-server"></i> Legenda</div>
+                        <hr></hr>
+                        <table >
+                            <tbody >
+                                <tr>
+                                    <td class="legendColorBox" style="padding-left:15px">
+
+                                        <div style="width:4px;border:5px solid #63ab72"></div>
+
+                                    </td>
+                                    <td class="legendLabel legendColorBox">Agendamentos Efetuados</td>
+                                </tr>
+                                <tr>
+                                    <td class="legendColorBox" style="width: 1px;">
+                                        <div style="padding:1px">
+                                            <div style="width:4px;border:5px solid #337ab7  "></div>
+
+                                        </div>
+                                    </td>
+                                    <td class="legendLabel legendColorBox">Agendamentos Reagendados</td>
+                                </tr>
+                                <tr>
+
+                                    <td class="legendColorBox" style="width: 1px;">
+                                        <div style="padding:1px">
+                                            <div style="width:4px;border:5px solid #fb6565  "></div>
+                                        </div>
+                                    </td>
+                                    <td class="legendLabel legendColorBox">Agendamentos Cancelados</td>
+                                </tr>
+
+                            </tbody>
+                        </table>  
+                    </div>
+                </div>
+            </div>
+
+            <!--AGENDA-->
             <div class="content-page">
-                <!-- Start content -->
                 <div class="content">
-
                     <div class="container">
-                        <div class="row" id="legenda">
-
-                        </div>
                         <div class="row">
-                            <div class="col-md-9">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="legendColorBox" style="width: 1px;">
-                                                <div style="padding:1px">
-                                                    <div style="width:4px;border:5px solid  #29b6f6  "></div>
-
-                                                </div>
-                                            </td>
-                                            <td class="legendLabel">Agendado</td>
-                                        </tr>
-                                    </tbody>
-                                </table>    
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel panel-heading"></div>
+                                    <div th:if="${cliente}"  style="position: relative;">
+                                        <h4  class="text-center" style="padding: 10px "> Agendamento Cliente <i class="text-muted fa fa-circle" ></i> <span th:text="${cliente.nome}"></span></h4>
+                                    </div>
+                                    <div th:if="${profissional}"  style="position: relative;">
+                                        <h4  class="text-center" style="padding: 10px "> Agendamento Profissinal <i class="text-muted fa fa-circle" ></i> <span th:text="${profissional.nome}"></span></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Calendario Diario-->
+                            <div class="col-md-4">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <div id="calendar"></div>
+                                            <div class="col-sm-12">
+                                                <div id="calendarDia"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div> <!-- end col -->
 
-                            <div class="col-md-3">
-                                <div class="widget">
-
-                                    <div class="widget-body">
+                            <!--Calendario Semanal/Mensal-->
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
                                         <div class="row">
-
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-
-                                                <a  href="#" data-toggle="modal" data-target="#novoEvento" class="btn btn-lg btn-primary btn-block waves-effect waves-light">
-                                                    <i class="fa fa-plus"></i> Agendar
-                                                </a>
-                                                <a sec:authorize="hasRole('ADMINISTRADOR')" href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" class="btn btn-lg btn-inverse btn-block waves-effect waves-light">
-                                                    <i class="fa fa-remove"></i> Canceladas
-                                                </a>
-                                                <div id="external-events" class="m-t-20">
-
-                                                    <div th:if="${cliente}" class="external-event bg-info" data-class="bg-purple" style="position: relative;">
-                                                        <a href="#" style="margin: 10px 0;padding: 6px 10px;color: #ffffff;">Cliente - <span th:text="${cliente.nome}"></span></a>
-                                                    </div>
-
-                                                    <div th:if="${profissional}" class="external-event bg-info" data-class="bg-purple" style="position: relative;">
-                                                        <a href="#" style="margin: 10px 0;padding: 6px 10px;color: #ffffff;">Profissional - <span th:text="${profissional.nome}"></span></a>
-                                                    </div>
-
-
-                                                    <div class="col-md-12">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa col-md-5"><b>Clientes</b></i></span>
-                                                            <select class="form-control"  id="selectBox" th:if="${listaCliente}" onchange="abrirAgendaPorCliente();" >
-                                                                <option value=''></option>
-                                                                <option th:each=" cliente : ${listaCliente}"  th:value="${cliente.id}" th:text="${cliente.nome + ' - '+cliente.nivelCliente}"  ></option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <br></br>
-                                                    <hr></hr>
-                                                    <p>Seleciona o profissional para abrir sua Agenda</p>
-
-                                                    <div class="external-event bg-purple" data-class="bg-purple" style="position: relative;">
-                                                        <a href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" style="margin: 10px 0;padding: 6px 10px;color: #ffffff;">TODOS</a>
-                                                    </div> 
-                                                    <div th:each=" profissional : ${listaProfissional}" class="external-event bg-purple" data-class="bg-purple" style="position: relative;">
-                                                        <a href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/profissional/'+profissional.id}}" style="margin: 10px 0;padding: 6px 10px;color: #ffffff;"><span th:text="${profissional.nome}"></span></a>
-                                                    </div> 
-                                                </div>
+                                            <div class="col-sm-12 ">
+                                                <div id="calendar"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> <!-- end col-->
+                            </div> <!-- end col -->
                         </div><!--Fim Row -->
+
                         <div class ="row">
                             <!-- BEGIN MODAL -->
-
-
-
                             <!-- Modal FORMULARIO AGENDA -->
                             <div th:if="not ${agenda.cancelado}" class="modal fade" id="novoEvento" >
+
                                 <th:block th:include="formularios/formAgenda :: formAgenda"></th:block> 
                             </div>
                             <!-- END MODAL -->
@@ -159,20 +282,23 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-
-                                                <h4 class="modal-title"><strong>AGENDA CANCELADA</strong> </h4>
+                                                <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" class="waves-effect pull-left" th:if="${abrirModal}" ><span class="fa fa-arrow-circle-o-left" style="padding-right:10px; font-size: 30px;"></span></a>
+                                                <h4 class="modal-title"><strong>Detalhes Cancelamento</strong> </h4>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- Personal-Information -->
                                                 <div class="panel panel-default panel-fill">
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">Detalhes Cancelamento</h3>
-                                                    </div>
+                                                   
                                                     <div class="panel-body">
                                                         <div class="about-info-p">
                                                             <strong>Cliente: </strong>
                                                             <br></br>
                                                             <p class="text-muted" th:text="${agenda.cliente.nome}"></p>
+                                                        </div>
+                                                        <div class="about-info-p">
+                                                            <strong>Profissional: </strong>
+                                                            <br></br>
+                                                            <p class="text-muted" th:text="${agenda.profissional.nome}"></p>
                                                         </div>
                                                         <div class="about-info-p">
                                                             <strong>Email: </strong>
@@ -189,7 +315,7 @@
                                                             <br></br>
                                                             <p class="text-muted" th:text="${agenda.cliente.celular}"></p>
                                                         </div>
-
+                                                        <hr></hr>
                                                         <div class="about-info-p">
                                                             <strong>Profissional que efetuou cancelamento: </strong>
                                                             <br></br>
@@ -210,11 +336,7 @@
                                                 </div>
                                                 <!-- Personal-Information -->
 
-                                                <div class="modal-footer">
-                                                    <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" class="btn btn-default waves-effect" th:if="${abrirModal}" >Voltar</a>
-
-
-                                                </div>
+                                               
 
                                             </div>
 
@@ -223,19 +345,13 @@
                                 </div>
                             </th:block>
                             <!-- END MODAL -->
-
-
-
-
                         </div>
+                    </div>
+                </div>
+            </div> <!--Navbar-->
+        </div> <!-- end col-->
 
-                    </div> <!-- container -->
-                </div> <!-- content -->
-            </div>
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== --> 
-        </div> <!--Navbar-->
+
 
         <script>
             var resizefunc = [];
@@ -249,6 +365,7 @@
         <script th:src="@{/assets/fullcalendar/fullcalendar.min.js}"></script>
         <script th:src="@{/assets/fullcalendar/pt-br.js}"></script>
 
+
         <!-- Alert Menssagem -->
         <script th:src="@{/assets/sweet-alert/sweet-alert.init.js}"></script>
         <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
@@ -258,328 +375,71 @@
         <script th:src="@{/assets/timepicker/bootstrap-timepicker.min.js}"></script>
         <script th:src="@{/assets/spinner/spinner.min.js}"></script>
 
-        <script th:src="@{https://rawgit.com/xdan/datetimepicker/master/build/jquery.datetimepicker.full.js}"></script>
-
-
-
-        <script>
-            $('#spinner1').spinner();
-            function formatadarData(data){
-            var dia = data.toString().substr(0, 2);
-            var mes = data.toString().substr(3, 2);
-            var ano = data.toString().substr(6, 4);
-            var hora = data.toString().substr(11, 2);
-            var min = data.toString().substr(14, 2);
-            var dataFormatada = ano + "-" + mes + "-" + dia + " " + hora + ":" + min;
-            return dataFormatada;
-            }
-
-            function pegarDataInput(){
-            var data = $('#horario').val();
-            var dataFormatada = formatadarData(data);
-            dataFormatada = dataFormatada.toString().substr(0, 10);
-            console.log(dataFormatada);
-            return dataFormatada;
-            }
-
-            function pegarHoraDoInput(){
-            var data = $('#horario').val();
-            var hora = data.toString().substr(11, 2);
-            var min = data.toString().substr(14, 2);
-            return hora + ":" + min;
-            }
-
-            function pegarHoraDoServico(){
-            var selObj = document.getElementById('servico');
-            var selecTedIndex = selObj.selectedIndex;
-            var textoSelecionado = selObj.options[selecTedIndex].text;
-            var saltoHora = textoSelecionado.toString().length - 8;
-            var saltoMinuto = textoSelecionado.toString().length - 5;
-            var horaServico = textoSelecionado.toString().substr(saltoHora, 5);
-            var minutoServico = textoSelecionado.toString().substr(saltoMinuto, 2);
-            return horaServico;
-            }
-            function somarTempos(tempo1, tempo2) {
-            var array1 = tempo1.toString().split(':');
-            var tempo_seg1 = (parseInt(array1[0]) * 3600) + (parseInt(array1[1]) * 60) + parseInt(array1[2]);
-            var array2 = tempo2.toString().split(':');
-            var tempo_seg2 = (parseInt(array2[0]) * 3600) + (parseInt(array2[1]) * 60) + parseInt(array2[2]);
-            var tempofinal = parseInt(tempo_seg1) + parseInt(tempo_seg2);
-            var hours = Math.floor(tempofinal / (60 * 60));
-            var divisorMinutos = tempofinal % (60 * 60);
-            var minutes = Math.floor(divisorMinutos / 60);
-            var divisorSeconds = divisorMinutos % 60;
-            var seconds = Math.ceil(divisorSeconds);
-            var contador = "";
-            if (!(hours > 10)) { contador = "0" + hours + ":"; } else { contador = hours + ":"; }
-            if (!(minutes > 10)) { contador += "0" + minutes; } else { contador += minutes; }
-            // if (!(seconds > 10)) { contador += "0" + seconds; } else { contador += seconds; }
-            return contador;
-            }
-
-
-            function submeterForm(){
-            var inputHorario = $('#horario').val();
-            var form = $('#formAgenda');
-            var id = $('#idAgenda').val();
-            var dataFormatada;
-            var dataEnd = $('#horario').val();
-            dataEnd = dataEnd.toString().substr(0, 10);
-            var pegarDivisorDasTadas = dataEnd.toString().substr(2, 1);
-            var horaFinal;
-            var end;
-            var hora = new Date().getHours();
-            var minuto = new Date().getMinutes();
-            if (!(minuto >= 10)){
-            minuto = '0' + minuto;
-            }
-            var dataRealizouCadastro = new Date().toLocaleDateString();
-            var horaRealizouCadastro = hora + ":" + minuto;
-            if (pegarDivisorDasTadas == '/'){
-            dataFormatada = formatadarData(inputHorario);
-            dataEnd = pegarDataInput();
-            horaFinal = somarTempos(pegarHoraDoServico() + ":00", pegarHoraDoInput() + ":00");
-            end = dataEnd + " " + horaFinal;
-            document.getElementById('end').value = end;
-            document.getElementById('horario').value = dataFormatada;
-            } else{
-            horaFinal = somarTempos(pegarHoraDoServico() + ":00", pegarHoraDoInput() + ":00");
-            end = dataEnd + " " + horaFinal;
-            }
-            //console.log("Hora Final " + horaFinal);
-            //console.log("End  " + end);
-
-            document.getElementById('dataRealizouCadastro').value = dataRealizouCadastro;
-            document.getElementById('horaRealizouCadastro').value = horaRealizouCadastro;
-            form.submit();
-            }
+        <!--<script th:src="@{https://rawgit.com/xdan/datetimepicker/master/build/jquery.datetimepicker.full.js}"></script>-->
+        <script th:src="@{/js/timepicker.js}"></script>
+        <script th:src="@{/assets/fullcalendar/jr-agenda.js}"></script>
+        <script th:src="@{/assets/jquery.validate/jquery.validate.min.js}"></script>
+        <script th:src="@{/js/jr-fullscreen.js}"></script>
 
 
 
 
-            function desabilitar(cliente, servico, horario, btnAgendar, maisSemanas){
-            $("#cliente").attr("disabled", cliente);
-            $("#servico").attr("disabled", servico);
-            $("#horario").attr("disabled", horario);
-            $("#btnAgendar").attr("disabled", btnAgendar);
-            $("#maisSemanas").attr("disabled", maisSemanas);
-            }
-            var id = $('#idAgenda').val();
-            if (!(id == '')){
-            desabilitar(false, false, false, false, false);
-            } else{
-            desabilitar(true, true, true, true, true);
-            }
-            var profissional;
-            var cliente;
-            var servico;
-            var horario;
-            $('#profissional').change(function(){
-            var selObj = document.getElementById('profissional');
-            var selecTedIndex = selObj.selectedIndex;
-            var textoSelecionado = selObj.options[selecTedIndex].text;
-            profissional = textoSelecionado;
-            if (!(profissional == '')){
-            desabilitar(false, true, true, true, true);
-            } else{
-            desabilitar(true, true, true, true, true);
-            }
-            });
-            $('#cliente').change(function(){
-            var selObj = document.getElementById('cliente');
-            var selecTedIndex = selObj.selectedIndex;
-            var textoSelecionado = selObj.options[selecTedIndex].text;
-            cliente = textoSelecionado;
-            if (!(cliente == '')){
-            desabilitar(false, false, true, true, true);
-            } else{
-            desabilitar(false, true, true, true, true);
-            }
-            });
-            $('#servico').change(function(){
-            var selObj = document.getElementById('servico');
-            var selecTedIndex = selObj.selectedIndex;
-            var textoSelecionado = selObj.options[selecTedIndex].text;
-            servico = textoSelecionado;
-            if (!(servico == '')){
-            desabilitar(false, false, false, true, true);
-            } else{
-            desabilitar(false, false, true, true, true);
-            }
-            });
-            $('#horario').change(function(){
-            var horario = $('#horario').val();
-            if (!(horario == '')){
-            desabilitar(false, false, false, false, false);
-            }
-            });
-            $('#maisSemanas').change(function(){
-                var isSelected = $('#maisSemanas').is(':checked');
-                if (isSelected){
-                    $('#qtdSemanas').show();
-                } else{
-                    $('#inputQtdSemanas').val('0');
-                    $('#qtdSemanas').hide();
-                }
+        <script th:if="${abrirModal}">
 
-            });
-            $(document).ready(function () {
+            $('document').ready(function(){
 
-            var dayOfWeek = {};
-            var horarios = ['05:00', '05:15', '05:30', '06:00', '06:15', '06:30', '07:00', '07:15', '07:30', '08:00', '08:15', '08:30', '09:00', '09:15', '09:30', '10:00', '10:15', '10:30', '11:00', '11:15', '11:30', '12:00', '12:15', '12:30', '13:00', '13:15', '13:30', '14:00', '14:15', '14:30', '15:00', '15:15', '15:30', '16:00', '16:15', '16:30', '17:00', '17:15', '17:30', '18:00', '18:15', '18:30', '19:00', '19:15', '19:30', '20:00', '20:15', '20:30', '21:00', '21:15', '21:30', '22:00', '22:15', '22:30', '23:00', '23:15', '23:30', '00:00'];
-            dayOfWeek[0] = { desc: "Dom", allowTimes: horarios };
-            dayOfWeek[1] = { desc: "Seg", allowTimes: horarios };
-            dayOfWeek[2] = { desc: "Ter", allowTimes: horarios };
-            dayOfWeek[3] = { desc: "Qua", allowTimes: horarios };
-            dayOfWeek[4] = { desc: "Qui", allowTimes: horarios };
-            dayOfWeek[5] = { desc: "Sex", allowTimes: horarios };
-            dayOfWeek[6] = { desc: "Sab", allowTimes: horarios };
-            $.datetimepicker.setLocale('pt');
-            var data = new Date();
-            $('#horario').datetimepicker({
-            allowTimes: dayOfWeek[data.getDay()].allowTimes,
-                    onChangeDateTime:function(date, input){
-                    data = date;
-                    this.setOptions({
-                    allowTimes: dayOfWeek[data.getDay()].allowTimes
-                    });
-                    },
-                    onGenerate:function(ct){
-                    // $(this).find('.xdsoft_date.xdsoft_weekend').addClass('xdsoft_disabled');
-                    },
-                    format: 'd/m/Y H:i',
-                    minDate: 0
-            });
+            $('#formAgenda').css("display", "none");
+            $('#btnAgendar').css("display", "none");
+            
             });
         </script>
-
-
-        <script type="text/javascript">
-            var linkMontarAgenda = $("#linkMontarAgenda").html();
-            var linkEditarAgenda = $("#linkEditarAgenda").html();
-            var abrirModal = $("#abrirModal").html();
-            if (abrirModal == "true"){
-                $("#novoEvento").modal({backdrop: "static"});
-            }
-
-            var url = linkMontarAgenda;
-            $(document).ready(function () {
-                var defaultEvents = {
-                url: url,
-            };
-            $('#calendar').fullCalendar({
-                eventClick: function (calEvent) {
-                window.location.href = linkEditarAgenda + calEvent.idAgenda;
-            $("#novoEvent").modal({backdrop: "static"});
-            // change the border color just for fun
-
-
+        <script>
+            $('#formAgenda').validate(
+            {
+            rules: {
+            profissional: "required",
+                    usuario: "required",
+                    servico: "required",
             },
-                    select: function (start, end, allDay) {
-                    var strData = start.toString();
-                    var partesData = strData.split("-");
-                    var dia = parseInt(partesData[2]);
-                    var data = new Date(partesData[0], partesData[1] - 1, dia);
-                    var dataParaComparar = new Date(partesData[0], partesData[1] - 1, dia+1); // Para aceitar agendamento no dia atual
-                        if (!(dataParaComparar > new Date())){
-                            $('#sa-basic').click(function(){
-                                swal({
-                                    title: "Ops, você não pode agendar nessa data!",
-                                    text: "Escolha uma data a partir de hoje.",
-                                    type: "warning",
-                                    showCancelButton: false,
-                                    confirmButtonColor: "#DD6B55",
-                                    confirmButtonText: "OK",
-                                    closeOnConfirm: true
-
-                                });
-                            });
-                        $('#sa-basic').click();
-                        } else{
-                            var a = $("#horario");
-                            data = data.toLocaleString().substring(0,16);
-                   
-                            a.val(data);
-                        $("#novoEvento").modal({backdrop: "static"});
+                    messages: {
+                    profissional: " Obrigatório Profissional",
+                            cliente: "Escolha um Cliente para Agendar",
+                            servico: "Escolha um serviço",
                     }
-                    },
-                    slotDuration: '00:15:00',
-                    minTime: '05:00:00',
-                    maxTime: '24:00:00',
-                    defaultView: 'month',
-                    handleWindowResize: true,
-                    height: $(window).height() - 200,
-                    header: {
-                    left: 'prev,next today',
-                            center: 'title',
-                            right: 'month,agendaWeek,agendaDay'
-                    },
-                    defaultDate: Date(),
-                    editable: true,
-                    eventLimit: true, selectable: true,
-                    lang: 'pt-br',
-                    events: defaultEvents,
-                    drop: function (date) {
-                    $this.onDrop($(this), date);
-                    },
-                    buttonText: {
-                    today: 'Hoje',
-                            month: 'Mês',
-                            week: 'Semana',
-                            day: 'Dia'
-                    }
-
             });
+
+
+            $('#btnEditar').click(function(){
+                 $('#btnEditar').css("display", "none");
+            $('form#formAgenda').css("display", "block");
+            $('#btnAgendar').css("display", "block");
             });
-        </script>
-        <script>
+            $(".fa").click(function(){
 
-            jQuery(document).ready(function () {
-            //Funcoes de Mensagens de Aviso
-
-
-            var hoje = new Date();
-            var dd = hoje.getDate();
-            var mm = hoje.getMonth() + 1; //January is 0!
-            var yyyy = hoje.getFullYear();
-            if (!(dd > 10)){
-            dd = '0' + dd;
-            }
-            if (!(mm > 10)){
-            mm = '0' + mm;
-            }
-            var hoje = yyyy + '-' + mm + '-' + dd;
-            $('#dataInicio').attr({
-            'min' : hoje
+            $("div#sidebar-menu").css("display:none");
+            ;
             });
-            // Time Picker
+//            $("#horario").blur(function(){
+//            var data = this.value;
+//            data = data.toString().substr(0, 10);
+//            var arr = data.split("/");
+//            var teste = new Date(arr[2], arr[1] - 1, arr[0]);
+//            var dia = teste.getDay();
+//            var semana = new Array(6);
+//            semana[0] = 'Domingo';
+//            semana[1] = 'Segunda-Feira';
+//            semana[2] = 'Terça-Feira';
+//            semana[3] = 'Quarta-Feira';
+//            semana[4] = 'Quinta-Feira';
+//            semana[5] = 'Sexta-Feira';
+//            semana[6] = 'Sábado';
+//            diaSemanaSelecionado = semana[dia];
+//            });
+//
 
 
-
-
-
-            jQuery('#horaInicio').timepicker({
-            showMeridian: false,
-                    minuteStep: 15,
-                    defaultTime: '08:00 AM'
-            });
-            jQuery('#horaFinal').timepicker({showMeridian: false,
-                    minuteStep: 15,
-                    defaultTime: '08:00 AM'
-            });
-            $('#link').on('change', function () {
-            var url = $(this).val();
-            if (url) {
-            window.location.href = url;
-            }
-            return false;
-            });
-            });
 
         </script>
-
-
-
 
 
     </body>
