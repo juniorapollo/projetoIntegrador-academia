@@ -5,8 +5,8 @@
  */
 package br.com.pilates.academiaPilates.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -74,6 +73,10 @@ public class Agenda implements Serializable{
     @ManyToOne()
     @JoinColumn(name = "idCliente")
     private Cliente cliente; 
+    
+    @ManyToOne()
+    @JoinColumn(name = "idTurma")
+    private Turma turma; 
     
     private String title ;
     
@@ -252,6 +255,46 @@ public class Agenda implements Serializable{
     public void setMotivoCancelamento(String motivoCancelamento) {
         this.motivoCancelamento = motivoCancelamento;
     }
+
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.idAgenda);
+        hash = 37 * hash + Objects.hashCode(this.color);
+        hash = 37 * hash + Objects.hashCode(this.textColor);
+        hash = 37 * hash + Objects.hashCode(this.dataInicio);
+        hash = 37 * hash + Objects.hashCode(this.horaInicio);
+        hash = 37 * hash + Objects.hashCode(this.dataFinal);
+        hash = 37 * hash + Objects.hashCode(this.horaFinal);
+        hash = 37 * hash + Objects.hashCode(this.start);
+        hash = 37 * hash + Objects.hashCode(this.end);
+        hash = 37 * hash + Objects.hashCode(this.servico);
+        hash = 37 * hash + Objects.hashCode(this.nomeRealizouCadastro);
+        hash = 37 * hash + Objects.hashCode(this.dataRealizouCadastro);
+        hash = 37 * hash + Objects.hashCode(this.horaRealizouCadastro);
+        hash = 37 * hash + (this.cancelado ? 1 : 0);
+        hash = 37 * hash + Objects.hashCode(this.dataCancelamento);
+        hash = 37 * hash + Objects.hashCode(this.horaCancelamento);
+        hash = 37 * hash + Objects.hashCode(this.nomeRealizouCancelamento);
+        hash = 37 * hash + Objects.hashCode(this.motivoCancelamento);
+        hash = 37 * hash + Objects.hashCode(this.profissional);
+        hash = 37 * hash + Objects.hashCode(this.cliente);
+        hash = 37 * hash + Objects.hashCode(this.turma);
+        hash = 37 * hash + Objects.hashCode(this.title);
+        return hash;
+    }
+
+    
+    
+    
 
     @Override
     public String toString() {

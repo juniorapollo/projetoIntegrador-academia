@@ -59,10 +59,8 @@ public class AvaliacaoController {
 
     @Autowired
     GaleriaFotoRepository gr;
-    
-  ClienteController ac;
-  
-   
+
+    ClienteController ac;
 
     /* Json de todas Avaliações */
     @GetMapping(path = "${baseUrl}/sistema/api/avaliacao")
@@ -77,14 +75,17 @@ public class AvaliacaoController {
 //        cliente = ar.findOne(idCliente);
 //        return avaliacaoRepository.findByCliente(cliente);
 //    }
-
-    
-
-    
 //,headers = "content-type=multipart/*"
-    @PostMapping(path = "${baseUrl}/sistema/api/avaliacao/{idCliente}" , headers = "content-type=application/x-www-form-urlencoded , application/json, multipart/*", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ModelAndView salvarAvaliacao(Avaliacao avaliacao ,BindingResult result, @PathVariable("idCliente") Long idCliente, RedirectAttributes atributes) {
-    Data dataHora = new Data();
+    @GetMapping(path = "${baseUrl}/sistema/api/avaliacao/{idCliente}")
+    public ModelAndView retornoPagina(@PathVariable("idCliente") Long idCliente) {
+        ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/cliente/cadastro/" + idCliente);
+        return mv;
+    }
+
+    @PostMapping(path = "${baseUrl}/sistema/api/avaliacao/{idCliente}", headers = "content-type=application/x-www-form-urlencoded , application/json, multipart/*", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ModelAndView salvarAvaliacao(Avaliacao avaliacao, BindingResult result, @PathVariable("idCliente") Long idCliente, RedirectAttributes atributes) {
+        Data dataHora = new Data();
+        ArrayList<Avaliacao> listaAvaliacao = avaliacaoRepository.findByCliente(avaliacao.getCliente());
         cliente = ar.getOne(idCliente);
         boolean a = true;
         try {
@@ -92,29 +93,27 @@ public class AvaliacaoController {
                 System.out.println("Erro SALVAR AVALIACAO() " + result.toString());
                 return ac.consultarClientePage();
             }
-            System.out.println("ENTROU ADICIONAR AVALIACAO " + avaliacao.getAnamnese());
+//            System.out.println("ENTROU ADICIONAR AVALIACAO " + avaliacao.getAnamnese());
             //UserSS user = UserService.authenticated(); //Carrega Usuário Logado no Sistema
             //cliente.setIdCliente(null); // Setando ID Nulo para criar um novo usuário (Garantir)
-            
+
             avaliacao.setDataAvaliacao(dataHora.getDataAtual());
             avaliacao.setHora(dataHora.getHoraAtual());
             avaliacao.setCliente(ar.getOne(idCliente));
             avaliacaoRepository.save(avaliacao);//Salva Avaliacao criada 
-            
-            //galeriaFoto.setAvaliacao(avaliacao);
-            
-            //gr.save(galeriaFoto);
-            
-            //System.out.println(avaliacao.toString());
-             
 
-                ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
-                Iterable<Cliente> listaClientes = ar.findAll();
-                mv.addObject("listaClientes", listaClientes);
-                 mv.addObject("avaliacao", avaliacao);
-                  mv.addObject("cliente", cliente);
-                mv.addObject("abrirModalAposSalvarAvaliacao", true);
-           //atributes.addFlashAttribute("mensagem", "Cliente - " + cliente.getIdCliente() + " " + cliente.getNome() + " editado com sucesso.");
+            //galeriaFoto.setAvaliacao(avaliacao);
+            //gr.save(galeriaFoto);
+            //System.out.println(avaliacao.toString());
+            ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
+
+            Iterable<Cliente> listaClientes = ar.findAll();
+            mv.addObject("listaClientes", listaClientes);
+            mv.addObject("avaliacao", avaliacao);
+            mv.addObject("cliente", cliente);
+            mv.addObject("abrirModalAposSalvarAvaliacao", true);
+
+            //atributes.addFlashAttribute("mensagem", "Cliente - " + cliente.getIdCliente() + " " + cliente.getNome() + " editado com sucesso.");
             return mv;
         } catch (Exception e) {
             System.out.println("Catch  Avaliacao POST:" + e);
@@ -126,28 +125,32 @@ public class AvaliacaoController {
 
     @PutMapping(path = "${baseUrl}/sistema/api/avaliacao/{idAvaliacao}")
     public ModelAndView editarAvaliacao(Avaliacao avaliacao, @PathVariable("idAvaliacao") Long idAvaliacao, GaleriaFoto galeriaFoto, BindingResult result, RedirectAttributes atributes) {
-        
+
+        ArrayList<Avaliacao> listaAvaliacao = avaliacaoRepository.findByCliente(avaliacao.getCliente());
         try {
             if (result.hasErrors()) {
                 System.out.println("Erro EditarAvaliacao() " + result.toString());
                 return ac.consultarClientePage();
             }
             System.out.println("ENTROU Editar AVALIACAO");
-            
+
             avaliacao.setCliente(this.avaliacaoRepository.findOne(idAvaliacao).getCliente());
             avaliacao.setFotos(this.avaliacaoRepository.findOne(idAvaliacao).getFotos());
-            
+
             System.out.println(avaliacao.toString());
-            
-            
-            
+
             //UserSS user = UserService.authenticated(); //Carrega Usuário Logado no Sistema
-            
-            avaliacaoRepository.save(avaliacao); //Salva Avaliacao
-            
-          
-            ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/cliente/cadastro/" + avaliacao.getCliente().getId());
-            //   atributes.addFlashAttribute("mensagem", "Cliente - " + cliente.getIdCliente() + " " + cliente.getNome() + " editado com sucesso.");
+//            avaliacaoRepository.save(avaliacao); //Salva Avaliacao
+//            ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/cliente/cadastro/" + avaliacao.getCliente().getId());
+            ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
+            Iterable<Cliente> listaClientes = ar.findAll();
+            mv.addObject("listaClientes", listaClientes);
+//            mv.addObject("avaliacao", avaliacao);
+            mv.addObject("cliente", avaliacao.getCliente());
+            mv.addObject("listaAvaliacao", listaAvaliacao);
+            mv.addObject("listaAvaliacao", listaAvaliacao);
+            mv.addObject("abrirModalAposSalvarAvaliacao", true);
+//            atributes.addFlashAttribute("mensagem", "Avaliaçãoo - " + avaliacao.getCliente().getNome() + " editado com sucesso!");
             return mv;
         } catch (Exception e) {
             System.out.println("Catch  Avaliacao PUT:" + e);
@@ -171,72 +174,74 @@ public class AvaliacaoController {
         }
 
     }
-    
+
     @PostMapping(path = "${baseUrl}/sistema/api/avaliacao/adicionarfoto/{idAvaliacao}")
-    public ModelAndView salvarFotosAvaliacao(MultipartHttpServletRequest request ,@PathVariable("idAvaliacao") Long idAvaliacao) throws IOException, ServletException {
-       Avaliacao avaliacao = new Avaliacao();
+    public ModelAndView salvarFotosAvaliacao(MultipartHttpServletRequest request, @PathVariable("idAvaliacao") Long idAvaliacao) throws IOException, ServletException {
+        Avaliacao avaliacao = new Avaliacao();
         avaliacao = avaliacaoRepository.findOne(idAvaliacao);
-        System.out.println("ID AVALIACAO = "+ avaliacao.getId());
-        int qtdFotos = request.getParts().size()-1;
+        System.out.println("ID AVALIACAO = " + avaliacao.getId());
+        int qtdFotos = request.getParts().size() - 1;
         List<String> fotos = new ArrayList<>();
-     
+        ArrayList<Avaliacao> listaAvaliacao = avaliacaoRepository.findByCliente(avaliacao.getCliente());
+
         try {
-            
+
             System.out.println("ENTROU ADICIONAR FOTOS ");
             try {
-                
-            Iterator<String> itr = request.getFileNames();
-               int cont = 0;
-            while (itr.hasNext()) {
-                
-                String uploadedFile = itr.next();
-                MultipartFile file = request.getFile(uploadedFile);
-                String mimeType = file.getContentType();
-                String filename = file.getOriginalFilename();
 
-                byte[] bytes = file.getBytes();
+                Iterator<String> itr = request.getFileNames();
+                int cont = 0;
+                while (itr.hasNext()) {
 
-                StringBuilder sb = new StringBuilder();
-                sb.append("data:image/png;base64,");
-                String base64  ="data:image/png;base64,"+ Base64.getEncoder().encodeToString(bytes);
-                System.out.println("sb.toString()");
-                
-                System.out.println("uploadedFile " + uploadedFile);
-                System.out.println("file " + file);
-                System.out.println("mimeType " + mimeType);
-                System.out.println("filename " + filename);
-                System.out.println("Base64 " + base64);
-                fotos.add(cont, base64);
-                avaliacao.setFotos(fotos);
-                 avaliacaoRepository.save(avaliacao);
-                 cont++;
+                    String uploadedFile = itr.next();
+                    MultipartFile file = request.getFile(uploadedFile);
+                    String mimeType = file.getContentType();
+                    String filename = file.getOriginalFilename();
+
+                    byte[] bytes = file.getBytes();
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("data:image/png;base64,");
+                    String base64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(bytes);
+                    System.out.println("sb.toString()");
+
+                    System.out.println("uploadedFile " + uploadedFile);
+                    System.out.println("file " + file);
+                    System.out.println("mimeType " + mimeType);
+                    System.out.println("filename " + filename);
+                    System.out.println("Base64 " + base64);
+                    fotos.add(cont, base64);
+                    avaliacao.setFotos(fotos);
+                    avaliacaoRepository.save(avaliacao);
+                    cont++;
 
 //  GaleriaFoto newFile = new GaleriaFoto(null, mimeType, bytes, null);
-
-                //gr.save(newFile);
+                    //gr.save(newFile);
+                }
+            } catch (Exception e) {
+                System.out.println("Catch Salvar Foto : " + e);
             }
-        } catch (Exception e) {
-                System.out.println("Catch Salvar Foto : " + e );
-        }
-            
-            System.out.println("AVALIACAO ANTES _ " + avaliacao.getId() + avaliacao.getFotos().get(0) );
-           
-            System.out.println("TAMANHO = " + avaliacao.getFotos().size());
-            System.out.println("AVALIACAO DEPOIS _ " + avaliacao.getId() + avaliacao.getFotos().get(0) );
-            
 
-                ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
-                Iterable<Cliente> listaClientes = ar.findAll();
-                mv.addObject("listaClientes", listaClientes);
-                 mv.addObject("avaliacao", avaliacao);
-                  mv.addObject("cliente", cliente);
-                mv.addObject("abrirModalAposSalvarAvaliacao", false);
-           //atributes.addFlashAttribute("mensagem", "Cliente - " + cliente.getIdCliente() + " " + cliente.getNome() + " editado com sucesso.");
+            System.out.println("AVALIACAO ANTES _ " + avaliacao.getId() + avaliacao.getFotos().get(0));
+
+            System.out.println("TAMANHO = " + avaliacao.getFotos().size());
+            System.out.println("AVALIACAO DEPOIS _ " + avaliacao.getId() + avaliacao.getFotos().get(0));
+
+            ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
+            Iterable<Cliente> listaClientes = ar.findAll();
+            mv.addObject("listaClientes", listaClientes);
+            mv.addObject("avaliacao", avaliacao);
+            mv.addObject("cliente", cliente);
+            mv.addObject("listaAvaliacao", listaAvaliacao);
+            mv.addObject("abrirModalAposSalvarAvaliacao", false);
+            //atributes.addFlashAttribute("mensagem", "Cliente - " + cliente.getIdCliente() + " " + cliente.getNome() + " editado com sucesso.");
             return mv;
         } catch (Exception e) {
             System.out.println("Catch  Avaliacao POST:" + e);
-
-            return ac.consultarClientePage();
+            ModelAndView mv = new ModelAndView("relatorio/mostrarCadastroPage");
+            Iterable<Cliente> listaClientes = ar.findAll();
+            mv.addObject("listaClientes", listaClientes);
+            return mv;
         }
 
     }

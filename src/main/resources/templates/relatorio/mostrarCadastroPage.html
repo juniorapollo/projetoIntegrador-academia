@@ -19,6 +19,10 @@
             .active {
                 color: white;
             }
+
+            h5{
+                color:#004c98;
+            }
         </style>
 
     </head>   
@@ -103,7 +107,8 @@
                                                             <span class="hidden-xs">Avaliação</span>
                                                         </a>
                                                     </li>
-                                                    <li th:if="${not #lists.isEmpty(listaAvaliacao)}" class="">
+                                                    <!--                                                    <li th:if="${not #lists.isEmpty(listaAvaliacao)}" class="">-->
+                                                    <li>
                                                         <a href="#fotos" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
                                                             <span class="hidden-xs">Fotos</span>
@@ -145,62 +150,43 @@
                                                     <div class="tab-pane " id="avaliacao">
                                                         <div id="portifolioAvaliacao" class="row port ">
                                                             <div class="panel panel-border panel-info">
-                                                                <div class="panel-heading">
-                                                                    <h3 class="panel-title">Cadastrar Avaliação</h3>
+                                                                <div class="panel-heading text-center">
+                                                                    <h3 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;">Cadastrar Avaliação</h3>
                                                                 </div>
                                                                 <div class="panel-body">
-                                                                    <div class="categories">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12">
-                                                                                <div class="cat">
-                                                                                    <div class="type">
-                                                                                        <div class="btn btn-success  col-sm-2"><a href="#" data-filter="*" class="active">Todas</a></div>
-                                                                                        <!-- FORMUlÁRIO AVALIAÇÃ0 -->
-                                                                                        <form  class="form-horizontal" th:object="${avaliacao}" role="form" enctype="application/x-www-form-urlencodeds"   th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{cliente.id}}}" th:method="POST">
-                                                                                            <fieldset>
-                                                                                                <legend th:if="${avaliacao} != null" style="color:red; background-color: #e5e5e5;" >Data: <span th:text="${avaliacao.dataAvaliacao}"> </span></legend>
-                                                                                                <h5>Anamnese:</h5><textarea required="true" name="anamnese"  rows="3" class="col-sm-12" ></textarea>
-                                                                                                <h5>Antecedentes Pessoais:</h5><textarea name="ap" rows="2" class="col-sm-12"></textarea> 
-                                                                                                <h5>Exames  Complementares:</h5><textarea name="examesComplementares" rows="2" class="col-sm-12" ></textarea>
-                                                                                                <h5>Queixa Principal:</h5><textarea name="qp"  rows="2" class="col-sm-12"></textarea>
-                                                                                                <h5>Diagnóstico:</h5><textarea name="diagnostico"  rows="5" class="col-sm-12" style="border-bottom: 1px;"></textarea>
+                                                                    <!-- FORMUlÁRIO AVALIAÇÃ0 -->
+                                                                    <form  class="form-horizontal" th:object="${avaliacao}" role="form" enctype="application/x-www-form-urlencodeds"   th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{cliente.id}}}" th:method="POST">
+                                                                        <fieldset>
+                                                                            <legend th:if="${avaliacao} != null" style="color:red; background-color: #e5e5e5;" >Data: <span th:text="${avaliacao.dataAvaliacao}"> </span></legend>
+                                                                            <h5>Anamnese *:</h5><textarea required="true" name="anamnese"  rows="3" class="col-sm-12" ></textarea>
+                                                                            <h5>Antecedentes Pessoais:</h5><textarea name="ap" rows="2" class="col-sm-12"></textarea> 
+                                                                            <h5>Exames  Complementares:</h5><textarea name="examesComplementares" rows="2" class="col-sm-12" ></textarea>
+                                                                            <h5>Queixa Principal:</h5><textarea name="qp"  rows="2" class="col-sm-12"></textarea>
+                                                                            <h5>Diagnóstico:</h5><textarea name="diagnostico"  rows="5" class="col-sm-12" style="border-bottom: 1px;"></textarea>
 
-                                                                                            </fieldset>
+                                                                        </fieldset>
 
-                                                                                            <div class="form-footer">
-                                                                                                <button type="submit" class="btn btn-success waves-effect">Salvar</button>
-                                                                                                <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
-                                                                                            </div>
-
-
-
-                                                                                        </form>
-
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
+                                                                        <div class="form-footer">
+                                                                            <button type="submit" class="btn btn-success waves-effect">Salvar</button>
+                                                                            <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
                                                                         </div>
-                                                                    </div>
-
-                                                                </div>                                           
-
+                                                                    </form>
+                                                                </div>
                                                             </div>
-
 
                                                             <!-- =========== EDICAO DE AVALIACAO - Relatório ================= -->
                                                             <div class="panel panel-border panel-info" th:each=" avaliacao, contador : ${listaAvaliacao}">
-                                                                <div class="panel-heading">
-                                                                    <h3 class="panel-title" style="color:red; font:14px;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
+                                                                <div class="panel-heading text-center">   
+                                                                    <h2 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h2>
                                                                 </div>
                                                                 <div class="panel-body"> 
                                                                     <form th:if="${avaliacao} != null" class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${avaliacao}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{avaliacao.id}}}" th:method="PUT"> <!-- Formulário -->
                                                                         <div id="formEditarAvaliacao">               
 
-                                                                            <input type='text' name='id' th:value='${avaliacao.id}'/>
-                                                                            <input type="text" name="dataAvaliacao" th:value='${avaliacao.dataAvaliacao}'/>
-                                                                            <input type="text" name="hora" th:value='${avaliacao.hora}'/>
-                                                                            <h5>Anamnese:</h5>                                            
+                                                                            <input type='hidden' name='id' th:value='${avaliacao.id}'/>
+                                                                            <input type="hidden" name="dataAvaliacao" th:value='${avaliacao.dataAvaliacao}'/>
+                                                                            <input type="hidden" name="hora" th:value='${avaliacao.hora}'/>
+                                                                            <h5>Anamnese *:</h5>                                            
                                                                             <textarea  name="anamnese"  rows="5" class="col-sm-12" ><th:block th:text="${avaliacao.anamnese}"> </th:block></textarea>
                                                                             <h5>Antecedentes Pessoais:</h5>
                                                                             <textarea name="ap" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.ap}"> </th:block></textarea> 
@@ -216,6 +202,7 @@
                                                                         <br></br>
 
                                                                         <div class="form-footer">
+                                                                            <div class="col-sm-6 "><button type="submit" class="btn btn-info waves-effect pull-left"><i class="fa fa-camera"></i></button></div>
                                                                             <button type="submit" class="btn btn-success waves-effect">Salvar</button>
                                                                             <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
                                                                         </div>
@@ -235,7 +222,7 @@
                                                         <div id="portfolio">
                                                             <div class="container panel" style='background-color: #e5e5e5'>
                                                                 <div class="section-title text-center center">
-                                                                    <h2><span class="center">Fotos Avaliaçōes</span></h2>
+                                                                    <h3 ><span class="center">Fotos Avaliaçōes</span></h3>
                                                                 </div>
                                                                 <div class="categories">
                                                                     <div class="row">
@@ -370,22 +357,22 @@
         <script th:if="not ${cliente}">
             $("#tableListaCliente").removeClass("col-md-4 col-lg-4");
         </script>
-        
+
         <script>
-            $("document").ready(function(){
-                var inputs  = document.getElementById("formCliente").getElementsByTagName("input");
-                var selects = document.getElementById("formCliente").getElementsByTagName("select");   
+            $("document").ready(function () {
+                var inputs = document.getElementById("formCliente").getElementsByTagName("input");
+                var selects = document.getElementById("formCliente").getElementsByTagName("select");
                 $(inputs).prop('disabled', true);
                 $(selects).prop('disabled', true);
-                
-                $("#btnHabilitar").click(function(){
+
+                $("#btnHabilitar").click(function () {
                     $(inputs).prop('disabled', false);
                     $(selects).prop('disabled', false);
                 });
             });
         </script>
-        
-        
+
+
         <script>
             var abrirModal = $("#abrirModalAposSalvarAvaliacao").html();
             var form = $('#my-awesome-dropzone');
@@ -399,7 +386,7 @@
                 url: form.attr('action'),
                 autoProcessQueue: false,
                 uploadMultiple: true,
-                maxFilesize: 1,
+                maxFilesize: 10,
                 parallelUploads: 100,
                 maxFiles: 100,
 
@@ -423,6 +410,7 @@
                     // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
                     // of the sending event because uploadMultiple is set to true.
                     this.on("sendingmultiple", function () {
+                        alert("Sucesso");
                         // Gets triggered when the form is actually being sent.
                         // Hide the success button or the complete form.
                     });

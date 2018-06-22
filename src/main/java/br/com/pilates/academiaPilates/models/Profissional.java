@@ -40,9 +40,11 @@ public class Profissional extends Pessoa implements Serializable {
     private boolean ativo = true;
 
 
+    @JsonIgnore    
     @Column(unique = true)
     private String login;
-
+    
+    @JsonIgnore
     private String senha;
 
     @JsonIgnore
