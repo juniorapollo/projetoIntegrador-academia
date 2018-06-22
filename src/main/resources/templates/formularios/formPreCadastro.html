@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
+      >
+
+    <head th:replace="fragments/scripts :: header"></head> 
+    <body class="fixed-left" th:async="async" >
+        <div class="content-loader">
+            <div id="loader">
+                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
+            </div>
+        </div>
+        <div id="wrapper">       
+            <!--Navbar-->
+            <div th:include="navbar/navbar :: navbar"></div>
+            <!--Menu-->
+            <th:block th:include="menu/menu :: menu"></th:block> 
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" ><h3 class="panel-title">Pré - Cadastro Cliente</h3> </div>
+                                    <div class="panel-body">                                        
+                                        <!-- Formulário de cadastro de PreCadastro -->
+                                        <div class="container-fluid" >
+                                            <!-- Formulário -->
+                                            <form  class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${preCadastro}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/preCadastro'}}" th:method="POST"> 
+                                                <th:block th:fragment="formCliente">  
+                                                    <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block> 
+                                                    <th:block th:include="fragments/mensagemErro :: mensagemErro"></th:block> 
+                                                    <input type="hidden" name="id"  th:readonly="#{readonly}" th:field="*{id}"/>
+                                                    <input type="checkbox" name="ativo" style="display: none" th:field="*{ativo}"/>
+
+
+                                                    <!-- Nome -->
+                                                    <div class="form-group jr-required" th:classappend="${#fields.hasErrors('nome')} ? has-error">                                                    
+                                                        <div class="col-md-12 ">
+                                                            <div class="input-group ">
+                                                                <span class="input-group-addon "><i class="fa col-md-5"><b>Nome</b></i></span>
+                                                                <input type="text" autofocus="autofocus" class="form-control block" th:required="required" name="nome" th:field="*{nome}"/>
+                                                            </div>
+                                                        </div>    
+                                                    </div><!-- form-group -->
+
+                                                    
+                                                    <!-- E-mail -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('email')} ? has-error">        
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>E-mail</b></i></span>
+                                                                <input type="email"  name="email"   th:field="*{email}" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    
+
+                                                    <!-- Telefone -->
+                                                    <div class="form-group " th:classappend="${#fields.hasErrors('telefone')} ? has-error">        
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Tel</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="telefone"  th:field="*{telefone}" data-mask="(99) 9999-9999"  class="form-control"  />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Celular -->
+                                                        <div class="col-md-6" th:classappend="${#fields.hasErrors('celular')} ? has-error">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon "><i class="fa"><b>Cel</b></i></span>
+                                                                <div class="input-group col-md-12 ">
+                                                                    <input type="tel" name="celular" th:field="*{celular}" data-mask="(99) 9 9999-9999"  class="form-control" th:required="required" />                                                        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> <!-- form-group --> 
+
+                                                    
+
+
+                                                    <div class="modal-footer"> 
+                                                        <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancelar</button> 
+                                                        <button type="submit" class="btn btn-info waves-effect waves-light">Salvar</button> 
+                                                    </div>
+                                                </th:block>
+                                            </form> 
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <th:block th:include="fragments/scripts :: scripts"></th:block> 
+
+    </body>
+</html>

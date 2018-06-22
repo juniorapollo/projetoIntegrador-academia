@@ -25,7 +25,6 @@ import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -268,14 +267,6 @@ public class AgendaController {
                 }
             }
 
-//          servico = servicoService.servicoPorDescricao(agenda.getServico());
-//            System.out.println(agenda.getStart());
-//            System.out.println(agenda.getEnd());
-//            System.out.println(agenda.toString());
-//            System.out.println("Servico =" + servico.toString());
-//            System.out.println("Hora Realizou = " + agenda.getHoraRealizouCadastro());
-//            System.out.println("Data Realizou Cadastro = " + agenda.getDataRealizouCadastro());
-            //Setar cor se agenda for nula
             if (agenda.getIdAgenda() == null) {
                 agenda.setColor("#439247");
             } else {
@@ -291,6 +282,7 @@ public class AgendaController {
             int qtdSemana = Integer.parseInt(qtdSemanas);
             System.out.println("Qtd Semanas " + qtdSemanas);
             if (qtdSemana > 0) {
+                
                 String horaEnd = null;
                 LocalDate proximoDiaEscolhido = agendaService.proximoDataParaDia(agenda.getStart(), agendaService.diaSemana(agenda.getStart()));
                 String horaStart = agenda.getStart().substring(11, 16);
@@ -302,6 +294,7 @@ public class AgendaController {
 
                 for (int i = 0; i < qtdSemana; i++) {
                     Agenda a = new Agenda();
+                    
                     a.setIdAgenda(null);
                     a.setCancelado(false);
                     a.setCliente(agenda.getCliente());
@@ -311,6 +304,8 @@ public class AgendaController {
                     a.setProfissional(agenda.getProfissional());
                     a.setServico(agenda.getServico());
                     a.setTitle(agenda.getTitle());
+                    a.setDataRealizouCadastro(agenda.getDataRealizouCadastro());
+                    a.setHoraRealizouCadastro(agenda.getHoraRealizouCadastro());
 
                     a.setStart(proximoDiaEscolhido + " " + horaStart);
                     a.setEnd(proximoDiaEscolhido + " " + horaEnd);
@@ -322,10 +317,11 @@ public class AgendaController {
                             return mv;
                         }
                     }
+                    agendaService.setarDataHoraInicioFinal(a);
                     ar.save(a);
                     proximoDiaEscolhido = proximoDiaEscolhido.plusDays(7);
-
-                    System.out.println("Proximas datas " + proximoDiaEscolhido);
+                     System.out.println(i + " Loop");   
+//                      System.out.println("Proximas datas " + proximoDiaEscolhido);
 
                 }
 

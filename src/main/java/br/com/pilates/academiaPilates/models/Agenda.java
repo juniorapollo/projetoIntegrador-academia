@@ -5,6 +5,7 @@
  */
 package br.com.pilates.academiaPilates.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -65,18 +66,19 @@ public class Agenda implements Serializable{
     private String motivoCancelamento;
     
     
-    
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "idProfissional")
     private Profissional profissional;  
     
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "idCliente")
     private Cliente cliente; 
     
-    @ManyToOne()
-    @JoinColumn(name = "idTurma")
-    private Turma turma; 
+//    @ManyToOne()
+//    @JoinColumn(name = "idTurma")
+//    private Turma turma; 
     
     private String title ;
     
@@ -256,13 +258,7 @@ public class Agenda implements Serializable{
         this.motivoCancelamento = motivoCancelamento;
     }
 
-    public Turma getTurma() {
-        return turma;
-    }
-
-    public void setTurma(Turma turma) {
-        this.turma = turma;
-    }
+ 
 
     @Override
     public int hashCode() {
@@ -287,7 +283,7 @@ public class Agenda implements Serializable{
         hash = 37 * hash + Objects.hashCode(this.motivoCancelamento);
         hash = 37 * hash + Objects.hashCode(this.profissional);
         hash = 37 * hash + Objects.hashCode(this.cliente);
-        hash = 37 * hash + Objects.hashCode(this.turma);
+
         hash = 37 * hash + Objects.hashCode(this.title);
         return hash;
     }

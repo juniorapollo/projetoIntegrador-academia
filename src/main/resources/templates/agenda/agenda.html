@@ -44,7 +44,7 @@
             url = baseUrl + idProfissional;
             location = url;
             }
-
+            
 
         </script>
         <style>
@@ -288,7 +288,7 @@
                                             <div class="modal-body">
                                                 <!-- Personal-Information -->
                                                 <div class="panel panel-default panel-fill">
-                                                   
+
                                                     <div class="panel-body">
                                                         <div class="about-info-p">
                                                             <strong>Cliente: </strong>
@@ -336,7 +336,7 @@
                                                 </div>
                                                 <!-- Personal-Information -->
 
-                                               
+
 
                                             </div>
 
@@ -387,10 +387,8 @@
         <script th:if="${abrirModal}">
 
             $('document').ready(function(){
-
             $('#formAgenda').css("display", "none");
             $('#btnAgendar').css("display", "none");
-            
             });
         </script>
         <script>
@@ -407,10 +405,8 @@
                             servico: "Escolha um serviço",
                     }
             });
-
-
             $('#btnEditar').click(function(){
-                 $('#btnEditar').css("display", "none");
+            $('#btnEditar').css("display", "none");
             $('form#formAgenda').css("display", "block");
             $('#btnAgendar').css("display", "block");
             });
@@ -440,8 +436,7 @@
 
 
         </script>
-
-
+       
     </body>
 </html>
 

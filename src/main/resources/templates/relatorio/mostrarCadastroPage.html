@@ -219,18 +219,19 @@
 
                                                     <!-- FOTOS -->
                                                     <div  class="tab-pane" id="fotos">
-                                                        <div id="portfolio">
+                                                        
                                                             <div class="container panel" style='background-color: #e5e5e5'>
-                                                                <div class="section-title text-center center">
-                                                                    <h3 ><span class="center">Fotos Avaliaçōes</span></h3>
+                                                                
+                                                                <div class="section-title panel-heading text-center">
+                                                                    <h2 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;">Fotos Avaliaçōes</h2>
+                                                                    <hr></hr>
                                                                 </div>
                                                                 <div class="categories">
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <div class="cat">
                                                                                 <div class="type">
-                                                                                    <div class="btn btn-success  col-sm-2"><a href="#" data-filter="*" class="active">Todas</a></div>
-
+                                                                                    <a href="#" data-filter="*" class="btn btn-primary  col-sm-2 active">Todas</a>
                                                                                     <div class="col-sm-2" th:each=" avaliacao, contador : ${listaAvaliacao}">
                                                                                         <a class=" btn btn-default " href="#"  th:attr="data-filter=.avaliacao+${avaliacao.id}">
                                                                                             <span th:text="${contador.count} " > </span>º Avaliação
@@ -238,29 +239,30 @@
                                                                                     </div>
                                                                                 </div>
 
-                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
 
                                                                 <div class="row">
                                                                     <div class="pricing-item">
                                                                         <div class="portfolio-items ">
                                                                             <div th:each=" avaliacao, contador : ${listaAvaliacao}" th:class=" 'col-sm-12 avaliacao' +${avaliacao.id} ">
                                                                                 <div class="panel-heading">
-                                                                                    <h3 class="panel-title" style="color:red; font:14px;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
+                                                                                    <h3 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
                                                                                 </div>
 
                                                                                 <div class="panel-body">
-                                                                                    <div class="portfolio-item">
+                                                                                    <div class="portfolio-item  webdesign illustrator">
 
-
-                                                                                        <div th:each=" foto, contador : ${avaliacao.fotos}"  class="panel-body col-sm-4">
-
-                                                                                            <img th:src="${foto} " class="fotoAvaliacaoMiniatura "  alt=""/>
-
+                                                                                        <div class="row port">
+                                                                                        <div th:each=" foto, contador : ${avaliacao.fotos}"  class="panel col-sm-4">
+                                                                                            
+                                                                                             
+                                                                                                <img th:src="${foto} " class="fotoAvaliacaoMiniatura "  alt=""/>
+                                                                                       
+                                                                                         
                                                                                         </div> 
+                                                                                    </div>
                                                                                     </div>
 
                                                                                 </div>
@@ -300,7 +302,6 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <a type="button" href="#" class="btn btn-default waves-effect"  data-dismiss="modal"><i class="fa fa-arrow-circle-o-left"></i></a>
                             <h4 class="modal-title"><strong>Adicionar Fotos</strong> </h4>
                         </div>
                         <div class="modal-body">
@@ -311,8 +312,6 @@
                                 </div>
                                 <div class="panel-body">
                                     <form id="my-awesome-dropzone" class="form-horizontal dropzone" enctype="multipart/form-data"   th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/adicionarfoto/'+{avaliacao.id}}}" th:method="POST">
-
-
 
                                         <button type='submit'>Enviar</button>
                                     </form>

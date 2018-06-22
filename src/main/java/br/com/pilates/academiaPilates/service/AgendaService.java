@@ -110,7 +110,7 @@ public class AgendaService {
         try {
             gc.setTime(new SimpleDateFormat("yyyy-MM-dd hh:mm", new Locale("pt", "BR")).parse(data));
             String dia = new SimpleDateFormat("EEE", new Locale("pt", "BR")).format(gc.getTime()).toUpperCase();
-            System.out.println(dia);
+//            System.out.println(dia);
             return dia;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -220,14 +220,14 @@ public class AgendaService {
             Date horaNovaAgenda = formatador.parse(agenda.getHoraInicio());
            
             if(horaNovaAgenda.getTime() >= horaAgendaCliente.getTime()){
-                System.out.println("CLIENTE Liberado , PODE AGENDAR");
+//                System.out.println("CLIENTE Liberado , PODE AGENDAR");
                 return true;
             }else{
-                System.out.println("Cliente Com Horario Marcado");
+//                System.out.println("Cliente Com Horario Marcado");
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Agenda Service Exception, Liberado para Cadastramento de agenda para esse cliente " + e);
+//            System.out.println("Agenda Service Exception, Liberado para Cadastramento de agenda para esse cliente " + e);
             return true;
         }
     }
@@ -238,7 +238,7 @@ public class AgendaService {
 
     public String adicionaDataEndComHorarioDoServico(String dataStart, Servico servico) {
         String data = dataStart.substring(0, 11);
-        System.out.println(data);
+//        System.out.println(data);
         String horaStart = dataStart.substring(11, 16);
         String horaServico = servico.getTempo();
 
@@ -275,7 +275,7 @@ public class AgendaService {
         Long qtd = repo.countByDataInicioBetween(dataInicioMes, dataFinalMes);
         
         
-        System.out.println(qtd);
+//        System.out.println(qtd);
         HOJE.getMonth();
         DateTimeFormatter formatador = 
         DateTimeFormatter.ofPattern("yyyy-MM-dd");
