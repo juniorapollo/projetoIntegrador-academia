@@ -119,6 +119,12 @@
                                             <p class="text-muted" th:text="${agenda.cliente.nome}"></p>
                                         </div>
                                         <div class="about-info-p">
+                                            <strong> Horário </strong>
+                                            <br></br>
+                                            <span class="text-muted" th:text="${agenda.horaInicio}"> </span> às <span class="text-muted" th:text="${agenda.horaFinal}"></span>
+                                        </div>
+                                        
+                                        <div class="about-info-p">
                                             <strong> Profissional </strong>
                                             <br></br>
                                             <p class="text-muted" th:text="${agenda.profissional.nome}"></p>

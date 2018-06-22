@@ -44,7 +44,7 @@
             url = baseUrl + idProfissional;
             location = url;
             }
-            
+
 
         </script>
         <style>
@@ -89,6 +89,15 @@
             col-sm-1.checkbox.checkbox-primary {
                 margin: 10px;
             }
+            #sidebar-menu > ul > li > a {
+                display: block;
+                color: white    ;
+                padding: 9px 25px;
+                font-size: 14px;
+            }
+            #sidebar-menu > ul > li > a:hover {
+                color:gray;
+            }
         </style>
     </head>    
 
@@ -112,47 +121,42 @@
                 <section id ="abrirModal" th:text="${abrirModal}"></section>
             </div>
 
-
-
-
             <div class="left side-menu ">
                 <div class="sidebar-inner slimscrollleft">
                     <div id="sidebar-menu">
                         <ul>
                             <li>
-                                <div class=" btn menuAgenda btn-block bg-success" >
-                                    <a class="btn-agenda" href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}"  data-target="#novoEvento" style="">
-                                        <i class="fa fa-home"></i> HOME
-                                    </a>
-                                </div>
+                                <a class="btn menuAgenda btn-block bg-overlay btn-sm" href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}"  data-target="#novoEvento" style="">
+                                    <i class="fa fa-home"></i> HOME
+                                </a>
                             </li>
                         </ul>  
 
                         <ul>
                             <li>
-                                <div class=" btn menuAgenda btn-block bg-success" >
-                                    <a class="btn-agenda" href="#" data-toggle="modal" data-target="#novoEvento" style="">
+                              
+                                    <a class="btn menuAgenda btn-block bg-success btn-sm" href="#" data-toggle="modal" data-target="#novoEvento" style="">
                                         <i class="fa fa-calendar-o"></i> Agendar
                                     </a>
-                                </div>
+                           
                             </li>
                         </ul>  
 
                         <ul>
                             <li>
-                                <div class="btn menuAgenda btn-block bg-primary"  style="position: relative;">
-                                    <i class="fa fa-database"></i>     <a class="btn-agenda"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" >TODOS</a>
-                                </div> 
+                                
+                                       <a class="btn menuAgenda btn-block bg-primary btn-sm"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" ><i class="fa fa-database"></i>   TODOS</a>
+                               
                             </li>
                         </ul>
 
                         <ul sec:authorize="hasRole('ADMINISTRADOR')">
                             <li>
-                                <div class="btn menuAgenda btn-block bg-cancelado"  style="position: relative;">
-                                    <a class="btn-agenda"  href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" >
+                               
+                                    <a class="btn menuAgenda btn-block bg-cancelado btn-sm"  href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" >
                                         <i class="fa fa-remove"></i> CANCELADOS
                                     </a>
-                                </div>
+                              
                             </li>
                         </ul>
                         <hr></hr>
@@ -436,7 +440,7 @@
 
 
         </script>
-       
+
     </body>
 </html>
 
