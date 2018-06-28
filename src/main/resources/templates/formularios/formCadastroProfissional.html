@@ -45,7 +45,7 @@
                                                 <div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? has-error">                                                    
                                                     <div class="col-md-12 ">
                                                         <div class="input-group ">
-                                                            <span class="input-group-addon "><i class="fa col-md-5"><b>Nome</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa col-md-5"><b>Nome*</b></i></span>
                                                             <input type="text" autofocus="autofocus" class="form-control" th:required="required" name="nome" th:field="*{nome}"/>
                                                         </div>
                                                     </div>    
@@ -57,7 +57,7 @@
                                                 <div class="form-group" th:classappend="${#fields.hasErrors('cpf')} ? has-error">   
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>CPF</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>CPF*</b></i></span>
                                                             <div class="input-group col-md-12 ">
                                                                 <input type="text" name="cpf" th:field="*{cpf}" data-mask="999.999.999-99"  class="form-control" th:required="required" />                                                        
                                                             </div>
@@ -69,7 +69,7 @@
                                                 <div class="form-group jr-required" th:classappend="${#fields.hasErrors('email')} ? has-error">        
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>E-mail</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>E-mail*</b></i></span>
                                                             <input type="email"  name="email"   th:field="*{email}" class="form-control" />
                                                         </div>
                                                     </div>
@@ -79,7 +79,7 @@
                                                 <div class="form-group jr-required" th:classappend="${#fields.hasErrors('sexo')} ? has-error">          
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa"><b>Sexo</b></i></span>
+                                                            <span class="input-group-addon"><i class="fa"><b>Sexo*</b></i></span>
                                                             <select class="form-control" name="sexo"  th:field="*{sexo}">
                                                                 <option value=''></option>
                                                                 <option value='M'>Masculino</option>
@@ -103,7 +103,7 @@
                                                     <!-- Celular -->
                                                     <div class="col-md-6" th:classappend="${#fields.hasErrors('celular')} ? has-error">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>Cel</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>Cel*</b></i></span>
                                                             <div class="input-group col-md-12 ">
                                                                 <input type="tel" name="celular" th:field="*{celular}" data-mask="(99) 9 9999-9999"  class="form-control" th:required="required" />                                                        
                                                             </div>
@@ -115,14 +115,14 @@
                                                 <div class="form-group jr-required" th:classappend="${#fields.hasErrors('dataNasc')} ? has-error">                                         
                                                     <div class="col-md-6">
                                                         <div class="input-group ">
-                                                            <span class="input-group-addon "><i class="fa col-md-5"><b>Data</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa col-md-5"><b>Data*</b></i></span>
                                                             <input type="date" class="form-control" name="dataNasc" th:field="*{dataNasc}"/>
                                                         </div>
                                                     </div>    
 
                                                     <div class="col-md-6" th:classappend="${#fields.hasErrors('idade')} ? has-error">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>Idade</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>Idade*</b></i></span>
                                                             <div class="input-group col-md-12 ">
                                                                 <input type="number" name="idade" th:field="*{idade}" min="1" max="100" class="form-control"  />                                                        
                                                             </div>
@@ -134,7 +134,7 @@
                                                 <div class="form-group jr-required" th:classappend="${#fields.hasErrors('cep')} ? has-error">                                                    
                                                     <div class="col-md-12">
                                                         <div class="input-group ">
-                                                            <span class="input-group-addon "><i class="fa "><b>Cep</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa "><b>Cep*</b></i></span>
                                                             <input type="tel"  id="cep" onblur="pesquisacep(this.value);" class="form-control" data-mask="99999-999" th:required="required" name="cep" th:field="*{cep}"/>
                                                         </div>
                                                     </div>    
@@ -204,7 +204,7 @@
                                                 <div class="form-group jr-required" th:classappend="${#fields.hasErrors('login')} ? has-error">        
                                                     <div class="col-md-6">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>Login</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>Login*</b></i></span>
                                                             <div class="input-group col-md-12 ">
                                                                 <input type="text" name="login" th:field="*{login}" class="form-control"  />                                                        
                                                             </div>
@@ -214,7 +214,7 @@
                                                     <!-- Senha -->
                                                     <div class="col-md-6" th:classappend="${#fields.hasErrors('senha')} ? has-error">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon "><i class="fa"><b>Senha</b></i></span>
+                                                            <span class="input-group-addon "><i class="fa"><b>Senha*</b></i></span>
                                                             <div class="input-group col-md-12 ">
                                                                 <input type="text" name="senha"  th:field="*{senha}" class="form-control" th:required="required" />                                                        
                                                             </div>
@@ -226,7 +226,7 @@
                                                 <div class="form-group" th:classappend="${#fields.hasErrors('nivelProfissional')} ? has-error">          
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa"><b>Nível</b></i></span>
+                                                            <span class="input-group-addon"><i class="fa"><b>Nível*</b></i></span>
                                                             <select class="form-control" name="nivelProfissional" th:field="*{nivelProfissional}">
                                                                 <option value=''></option>
                                                                 <option value='ADMINISTRADOR'>Administrador</option>
@@ -241,7 +241,7 @@
                                                 <div class="form-group " th:classappend="${#fields.hasErrors('nivelProfissional')} ? has-error">          
                                                     <div class="col-md-12">
                                                         <div class="input-group">
-                                                            <span class="input-group-addon"><i class="fa"><b>Serviços</b></i></span>
+                                                            <span class="input-group-addon"><i class="fa"><b>Serviços*</b></i></span>
                                                             <select class="select2" multiple='multiple' data-placeholder="Selecione Serviços Realizados..." th:field="*{servicos}" >
                                                                 
                                                                 <option th:each=" servico : ${servicos}"  th:value="${servico.id}" th:text="${servico.descricao}"></option>

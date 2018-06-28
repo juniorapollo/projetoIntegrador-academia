@@ -99,7 +99,9 @@ table {
 
 span#timer {
     color: white;
-    font-weight: bold;
+    /*font-weight: bold;*/
+line-height: 70px;
+
 }
 
 

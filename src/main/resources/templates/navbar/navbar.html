@@ -4,10 +4,19 @@
 
     <!--<head th:include="fragments/header :: header"></head>-->
 
-    <head th:include="fragments/scripts :: header" ></head>
+    <head th:include="fragments/scripts :: header" >
+        <style>
+            span#timer {
+                font-size: 12px;
+                line-height: 70px;
+                color: #fff;
+                margin-left: -10px;
+            }
+        </style>
+    </head>
     <body id="no-print" class="fixed-left " th:fragment="navbar" >
 
-       
+
 
         <!-- Top Bar Start -->
         <div class="topbar no-print">
@@ -23,7 +32,7 @@
                             <button class="button-menu-mobile open-left"><i class="fa fa-bars"></i></button>
                             <span class="clearfix"></span>
                         </div>
-                        <span  style="line-height: 70px; color: #fff; padding: 0px 15px;" id="timer"></span>
+                        <span  style="line-height: 70px; color: #fff;" id="timer"></span>
                     </div>
                     <!--/.nav-collapse -->
                 </div>
@@ -32,7 +41,7 @@
         </div>
         <!-- Top Bar End -->
 
-<footer class="footer text-right no-print" >
+        <footer class="footer text-right no-print" >
             2018 © Inside Tecnologia
         </footer>
 

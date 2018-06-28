@@ -64,7 +64,7 @@
                                 <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/consultar'}}">
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
-                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
+                                            <span class="mini-stat-icon"><i class="md-favorite"></i></span>
                                             <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Avaliações</h5></div>
 
                                         </div>
@@ -82,21 +82,22 @@
                                     </div>
                                 </a>   
 
-
-                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}">
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/atividades/cadastro'}}">
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
-                                            <span class="mini-stat-icon"><i class="md-book"></i></span>
-                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Relatório  Diário </h5></div>
+                                            <span class="mini-stat-icon"><i class="ion-android-data"></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Cadastro Atividades</h5></div>
 
                                         </div>
                                     </div>
                                 </a>
 
+
+
                                 <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro'}}" >
                                     <div class="col-sm-6 col-lg-3 ">
                                         <div class=" text-center mini-stat clearfix bx-shadow jr-button">
-                                            <span class="mini-stat-icon"><i class="ion-eye "></i></span>
+                                            <span class="mini-stat-icon"><i class="ion-android-contacts "></i></span>
                                             <div class="m-t-20">
                                                 <h5 class="text-uppercase text-white m-0">Cadastrar Clientes</h5>
                                             </div>
@@ -108,7 +109,7 @@
                                 <a  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/cadastro'}}">
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
-                                            <span class="mini-stat-icon "><i class="ion-android-contacts"></i></span>
+                                            <span class="mini-stat-icon "><i class="fa fa-male"></i></span>
                                             <div class="m-t-20"><h5 class="text-uppercase text-white m-0"> Profissional</h5></div>
 
                                         </div>
@@ -118,18 +119,18 @@
                                 <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/profissional/relatorio'}}">
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
-                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
+                                            <span class="mini-stat-icon"><i class="ion-android-calendar"></i></span>
                                             <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Relatório de  Profissionais </h5></div>
 
                                         </div>
                                     </div>
                                 </a>
 
-                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/atividades/cadastro'}}">
+                                <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/relatorioDiario/cadastro/clientes/'}}">
                                     <div class="col-sm-6 col-lg-3">
                                         <div class="text-center mini-stat clearfix  bx-shadow jr-button">
-                                            <span class="mini-stat-icon"><i class="ion-android-contacts"></i></span>
-                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Cadastro Atividades</h5></div>
+                                            <span class="mini-stat-icon"><i class="md-list "></i></span>
+                                            <div class="m-t-20"><h5 class="text-uppercase text-white m-0">Relatório  Diário </h5></div>
 
                                         </div>
                                     </div>
@@ -263,30 +264,30 @@
         <!-- dashboard  -->
         <script th:src="@{/assets/plugins/flot-chart/jquery.dashboard.js}"></script>
 
-<!--         <script type="text/javascript">
-             d1 = [[0, 3], [1, 3], [2, 5], [3, 7], [4, 8], [5, 10], [6, 11], [7, 9], [8, 5], [9, 13]];
- colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
-             $(document).ready(function () {
-                 $.plot($("#website-stats"),
-                         [{data: d1,
-                                 label: "some label",
-                                 color: colors[0]
-                             },
-                             {data: d1,
-                                 label: "labels[1],",
-                                 color: "colors[1]"
-                             }
-                         ],
-                         );
- 
-             });
-         </script>-->
-<script>
-//    function($) {
-//    "use strict";
-//    $.Dashboard.prototype();
-//}(window.jQuery);
-</script>
+        <!--         <script type="text/javascript">
+                     d1 = [[0, 3], [1, 3], [2, 5], [3, 7], [4, 8], [5, 10], [6, 11], [7, 9], [8, 5], [9, 13]];
+         colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+                     $(document).ready(function () {
+                         $.plot($("#website-stats"),
+                                 [{data: d1,
+                                         label: "some label",
+                                         color: colors[0]
+                                     },
+                                     {data: d1,
+                                         label: "labels[1],",
+                                         color: "colors[1]"
+                                     }
+                                 ],
+                                 );
+         
+                     });
+                 </script>-->
+        <script>
+            //    function($) {
+            //    "use strict";
+            //    $.Dashboard.prototype();
+            //}(window.jQuery);
+        </script>
 
     </body>
 </html>

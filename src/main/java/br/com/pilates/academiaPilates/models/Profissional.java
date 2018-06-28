@@ -57,7 +57,6 @@ public class Profissional extends Pessoa implements Serializable {
     @OneToMany(fetch=FetchType.LAZY)
     private List<Agenda> agenda = new ArrayList<Agenda>();//Tentar Iterable
     
-    
 
     @ElementCollection(fetch = FetchType.EAGER) // EAGER, par reftornar o perfil ENUM com o Profissional no Json
     @CollectionTable(name = "perfis")

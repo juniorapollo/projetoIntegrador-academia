@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+    sec:authorize="isAuthenticated()">
+
+
+
+<head>
+    <th:block th:replace="fragments/scripts :: header"> </th:block>
+    <style>
+        .panel-group .panel-heading {
+            padding: 2% 26px;
+        }
+    </style>
+
+</head>
+
+<body class="fixed-left">
+    <div class="content-loader">
+        <div id="loader">
+            <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i>
+        </div>
+    </div>
+    <div id="wrapper">
+        <!--Navbar-->
+        <div th:include="navbar/navbar :: navbar"></div>
+        <!--Menu-->
+        <th:block th:include="menu/menu :: menu"></th:block>
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <h3 class="panel-title">Relatório Turma</h3>
+                                        </div>
+                                        <div class="col-sm-10">
+                                            <div class="btn-group pull-right">
+                                                <button type="button" class="pull-right btn btn-primary dropdown-toggle waves-effect waves-light" data-toggle="dropdown"
+                                                    aria-expanded="false">Ações
+                                                    <span class="m-l-5">
+                                                        <i class="fa fa-cog"></i>
+                                                    </span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+
+                                                    <li>
+                                                        <a href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/turma/ativo=true/inativo=false'}}" title="Turmas Ativas">
+                                                            <i class="fa fa-check"> </i> Ativos</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/turma/ativo=false/inativo=true'}}" title="Turmas Inativas">
+                                                            <i class="md md-not-interested"> </i> Inativos</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/turma/ativo=true/inativo=true'}}" title="Turmas Ativas/Inativas">
+                                                            <i class="fa fa-users"> </i> Todos</a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <a href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/turma/cadastro'}}" title="Nova Turma">
+                                                            <i class="fa fa-plus"> </i> Adicionar</a>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body table-rep-plugin">
+                                    <div class="table" data-pattern="priority-columns">
+
+                                        <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>
+
+                                        <table id="datatable" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cod</th>
+                                                    <th>Situação</th>
+                                                    <th>Nome</th>
+                                                    <th>Nível</th>
+                                                    <th>Clientes</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each=" turma : ${turmas}">
+                                                    <td>
+                                                        <span th:text="${turma.id}"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span th:if="${turma.ativo}">
+                                                            <i class="fa fa-check"></i>Ativo</span>
+                                                        <span th:if="not ${turma.ativo}">
+                                                            <i class=" md-not-interested" style="color: red"> </i> Inativo </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span th:text="${turma.nome}"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span th:text="${turma.nivelTurma}"></span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="panel-group" id="accordion-test-2" style="margin:0px">
+                                                            <div class="panel panel-default panel-color">
+                                                                <div class="panel-heading">
+                                                                    <a data-toggle="collapse" data-parent="#accordion-test-2" th:href="@{'#nomes'+${turma.id}}" aria-expanded="false" class="collapsed">
+                                                                        <i class="md md-list"></i> Clientes
+                                                                    </a>
+                                                                </div>
+                                                                <div th:id="'nomes'+${turma.id}" th:class="@{'panel-collapse collapse nomes' + ${turma.id}}">
+                                                                    <div class="panel-body">
+                                                                        <table>
+                                                                            <tr th:each=" cliente : ${turma.clientes}" th:if="${cliente.isAtivo()}">
+                                                                                <td>
+                                                                                    <li>
+                                                                                        <span th:text="${cliente.nome}"></span>
+                                                                                    </li>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td>
+                                                        <!--Formulário para Editar turma Ativar / Desativar / Abrir Relatorio-->
+                                                        <form th:action="@{${@environment.getProperty('baseUrl')+'/sistema/turma/id/'+{turma.id}}}" th:method="DELETE">
+                                                            <!-- Btn Editar Turma -->
+                                                            <a href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/turma/editar/'+{turma.id}}}">
+                                                                <i title="Abrir Cadastro" class="fa fa-pencil" style="font-size:x-large"></i>
+                                                            </a>
+
+
+                                                            <a th:if="${turma.ativo}" th:href="@{'#'+${turma.id}}" title="Desativar" style="padding: 0px" class="pull-right" role=""
+                                                                data-toggle="modal">
+                                                                <i class="md-delete" style="color: red;font-size: x-large;"></i>
+                                                            </a>
+                                                            <a th:if="not ${turma.ativo}" th:href="@{'#'+${turma.id}}" title="Ativar" style="padding: 0px" class="pull-right" role=""
+                                                                data-toggle="modal">
+                                                                <i class="ion-checkmark-circled" style="color: green;font-size: x-large;"></i>
+                                                            </a>
+
+                                                            <!--Modal Para confirmar Exclusão-->
+                                                            <div th:id="${turma.id}" th:class="@{'modal fade bs-example-modal-sm '+${turma.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-sm">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title" id="mySmallModalLabel">
+                                                                                <span class="modal-title fa  fa-exclamation-circle" style="color:#a11"></span> Atenção</h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p th:if="${turma.ativo}">Deseja realmente excluir
+                                                                                <span th:text="${turma.nome}"></span>?</p>
+                                                                            <p th:if="not ${turma.ativo}">Deseja ativar o turma
+                                                                                <span th:text="${turma.nome}"></span>?</p>
+
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" class="btn btn-success waves-effect">Confirmar</button>
+                                                                            <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                            </div>
+                                                            <!-- /.modal -->
+                                                        </form>
+                                                        <!-- Fim Form -->
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Row -->
+
+                    <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content ">
+                                <div class="modal-header">
+                                    <!--Cabeçalho Modal Formulário cadastro turma -->
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title">Cadastro de Turmas</h4>
+                                </div>
+
+                                <div class="modal-body">
+                                    <!-- corpo do modal -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal -->
+
+                </div>
+                <!-- container -->
+
+            </div>
+            <!-- content -->
+
+
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+    </div>
+    <!--Navbar-->
+
+    <script>
+
+        var resizefunc = [];
+    </script>
+    <style>
+        div.dataTables_paginate {
+            margin: 0;
+            white-space: nowrap;
+            text-align: right;
+            margin-top: 0px;
+        }
+    </style>
+
+    <!--Scripts-->
+    <th:block th:include="fragments/scripts :: scripts"></th:block>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datatable').dataTable();
+
+        });
+
+    </script>
+
+</body>
+
+</html>

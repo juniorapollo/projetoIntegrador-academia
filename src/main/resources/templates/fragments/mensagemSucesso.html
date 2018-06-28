@@ -5,11 +5,11 @@
     <head></head>
 
     <body th:fragment="mensagemSucesso" >
-        <script th:inline="javascript" th:if="${not #strings.isEmpty(mensagemErro)}">
+        <script th:inline="javascript" th:if="${not #strings.isEmpty(mensagem)}">
             window.onload = function () {
                 /*<![CDATA[*/
                 
-                var a = /*[[${mensagemErro}]]*/ 'default';
+                var a = /*[[${mensagem}]]*/ 'default';
                         $.Notification.notify('success', 'top right','',a);
 
                console.log(a);

@@ -49,10 +49,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Cod</th>
-                                                        <!-- <th>Status</th> -->
+                                                        
                                                         <th>Nome</th>
                                                         <th>E-mail</th>
-                                                        <th>Cpf</th>
+                                                        <th>CPF</th>
+                                                        <th>Celular</th>
                                                         <th>Ações</th> 
                                                     </tr>
                                                 </thead>
@@ -62,6 +63,7 @@
                                                         <!--<td><span th:if="${profissional.ativo}">Ativo</span><span th:if="not ${profissional.ativo}"><i class=" md-not-interested" style="color: red"> </i> Inativo </span></td>-->                                                       
                                                         <td><span th:text="${profissional.nome}"></span></td>
                                                         <td><span th:text="${profissional.email}"></span></td>
+                                                        <td><span th:text="${profissional.cpf}"></span></td>
                                                         <td><span th:text="${profissional.celular}"></span></td>
 
                                                         <td>

@@ -62,5 +62,6 @@ public class PaginaController {
         ModelAndView mv = new ModelAndView("/profile/profile");
         return mv;
     }
+    
 
 }
