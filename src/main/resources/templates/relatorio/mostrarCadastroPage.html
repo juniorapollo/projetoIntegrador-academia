@@ -1,431 +1,495 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
-      >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-    <head> 
-        <th:block th:include="fragments/scripts :: header" ></th:block>
-        <!-- Dropzone css -->
-        <link th:href="@{/assets/dropzone/dropzone.css/}" rel="stylesheet" type="text/css" />
-        <style>
-            .type .btn {
+<head>
+    <th:block th:include="fragments/scripts :: header"></th:block>
+    <!-- Dropzone css -->
+    <link th:href="@{/assets/dropzone/dropzone.css/}" rel="stylesheet" type="text/css" />
+    <style>
+        .type .btn {
 
-                font-weight: bold;
-                padding-left: 10px;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            .active {
-                color: white;
-            }
+            font-weight: bold;
+            padding-left: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-            h5{
-                color:#004c98;
-            }
-        </style>
+        .active {
+            color: white;
+        }
 
-    </head>   
-    <body class="fixed-left"  >
-        <div class="content-loader">
-            <div id="loader">
-                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
-            </div>
+        h5 {
+            color: #004c98;
+        }
+    </style>
+
+</head>
+
+<body class="fixed-left">
+    <div class="content-loader">
+        <div id="loader">
+            <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i>
         </div>
-        <section id ="abrirModalAposSalvarAvaliacao" th:text="${abrirModalAposSalvarAvaliacao}"></section>
+    </div>
+    <section id="abrirModalAposSalvarAvaliacao" th:text="${abrirModalAposSalvarAvaliacao}"></section>
 
-        <div id="wrapper" class="forced enlarged">       
-            <!--Navbar-->
-            <div th:include="navbar/navbar :: navbar"></div>
-            <!--Menu-->
-            <th:block th:include="menu/menu :: menu"></th:block> 
-
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== -->    
-            <div class="content-page">
-                <!-- Start content -->
-                <div class="content">
-                    <!-- Right Sidebar -->
-                    <div class="col-md-12 col-lg-12">
-                        <div class="container">
-                            <div class="row">
-
-                                <div  id="tableListaCliente" class="col-md-4 col-lg-4">
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title">Clientes</h3>
-                                        </div>
-                                        <div class="panel-body">
-
-                                            <table id="datatable" class="table  table-hover table-bordered"  style="width: 10%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nivel</th> 
-                                                        <th>Cod</th>
-                                                        <th>Nome</th>
-                                                        <th>Celular</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr  th:each=" cliente : ${listaClientes}" th:if="${cliente.isAtivo()}" >
-                                                        <td><a th:if="${cliente.nivelCliente} == INICIANTE" class="fa fa-circle text-warning " title="Iniciante" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">1 Iniciante</a>
-                                                            <a th:if="${cliente.nivelCliente} == INTERMEDIARIO" class="fa fa-circle text-success " title="Intermediario" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">2 Intermediario</a>
-                                                            <a th:if="${cliente.nivelCliente} == AVANCADO" class="fa fa-circle text-danger " title="Avançado" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}" style="margin-left: 45%;"> </a><a style="display: none">3 Avancado</a></td>  
-                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" th:text="${cliente.id}"></a></td>
-                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" href="#" th:text="${cliente.nome}"></a></td>    
-                                                        <td><a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}" href="#" th:text="${cliente.celular}"></a></td> 
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="inputs"></div>
-                                <th:block th:if="${cliente}">
-                                    <div class="col-sm-8">        
-
-                                        <div class="panel panel-color panel-default">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">Ficha Técnica - <span th:text="${cliente.nome}"></span></h3>
-                                            </div>
-                                            <div class="panel-body">
-
-                                                <ul class="nav nav-tabs navtab-bg"> 
-                                                    <li >
-                                                        <a href="#dadosCadastrais" data-toggle="tab" aria-expanded="false">
-                                                            <span class="visible-xs"><i class="fa fa-home"></i></span>
-                                                            <span class="hidden-xs">Dados Cadastrais</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="active">
-                                                        <a href="#avaliacao" data-toggle="tab" aria-expanded="true">
-                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
-                                                            <span class="hidden-xs">Avaliação</span>
-                                                        </a>
-                                                    </li>
-                                                    <!--                                                    <li th:if="${not #lists.isEmpty(listaAvaliacao)}" class="">-->
-                                                    <li>
-                                                        <a href="#fotos" data-toggle="tab" aria-expanded="false">
-                                                            <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
-                                                            <span class="hidden-xs">Fotos</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-
-                                                <!-- *** Dados Cadastrais *** -->
-                                                <div class="tab-content">
-                                                    <div class="tab-pane" id="dadosCadastrais">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading" >
-                                                                <h3 class="panel-title">
-                                                                    Cadastro Cliente 
-                                                                    <div class="btn-group pull-right">
-                                                                        <button  type="button" class="pull-right btn btn-primary dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Ações <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
-                                                                        <ul class="dropdown-menu" role="menu">
-                                                                            <li id="btnHabilitar" ><a href="#" id="btnEditar"><i class="md md-edit" > </i> Editar</a></li> 
-                                                                        </ul>
-                                                                    </div> 
-                                                                </h3> 
-                                                            </div>
-                                                            <div class="panel-body">                                        
-                                                                <!-- Formulário de cadastro de Cliente E Edicao -->
-                                                                <div class="container-fluid" th:if="${cliente.id} != null" >
-
-                                                                    <form  class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${cliente}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/cliente'}}" th:method="PUT"> <!-- Formulário -->
-                                                                        <!-- Formulário -->
-                                                                        <div id="formCliente">
-                                                                            <th:block th:include="formularios/formCliente :: formCliente"></th:block>
-                                                                        </div>
-
-                                                                    </form> 
-
-                                                                </div>
-                                                            </div>
-                                                        </div>                          
-                                                    </div>
-
-
-                                                    <!-- ====================== Avaliacao ============================-->
-                                                    <div class="tab-pane " id="avaliacao">
-                                                        <div id="portifolioAvaliacao" class="row port ">
-                                                            <div class="panel panel-border panel-info">
-                                                                <div class="panel-heading text-center">
-                                                                    <h3 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;">Cadastrar Avaliação</h3>
-                                                                </div>
-                                                                <div class="panel-body">
-                                                                    <!-- FORMUlÁRIO AVALIAÇÃ0 -->
-                                                                    <form  class="form-horizontal" th:object="${avaliacao}" role="form" enctype="application/x-www-form-urlencodeds"   th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{cliente.id}}}" th:method="POST">
-                                                                        <fieldset>
-                                                                            <legend th:if="${avaliacao} != null" style="color:red; background-color: #e5e5e5;" >Data: <span th:text="${avaliacao.dataAvaliacao}"> </span></legend>
-                                                                            <h5>Anamnese *:</h5><textarea required="true" name="anamnese"  rows="3" class="col-sm-12" ></textarea>
-                                                                            <h5>Antecedentes Pessoais:</h5><textarea name="ap" rows="2" class="col-sm-12"></textarea> 
-                                                                            <h5>Exames  Complementares:</h5><textarea name="examesComplementares" rows="2" class="col-sm-12" ></textarea>
-                                                                            <h5>Queixa Principal:</h5><textarea name="qp"  rows="2" class="col-sm-12"></textarea>
-                                                                            <h5>Diagnóstico:</h5><textarea name="diagnostico"  rows="5" class="col-sm-12" style="border-bottom: 1px;"></textarea>
-
-                                                                        </fieldset>
-
-                                                                        <div class="form-footer">
-                                                                            <button type="submit" class="btn btn-success waves-effect">Salvar</button>
-                                                                            <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- =========== EDICAO DE AVALIACAO - Relatório ================= -->
-                                                            <div class="panel panel-border panel-info" th:each=" avaliacao, contador : ${listaAvaliacao}">
-                                                                <div class="panel-heading text-center">   
-                                                                    <h2 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h2>
-                                                                </div>
-                                                                <div class="panel-body"> 
-                                                                    <form th:if="${avaliacao} != null" class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds"  th:object="${avaliacao}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{avaliacao.id}}}" th:method="PUT"> <!-- Formulário -->
-                                                                        <div id="formEditarAvaliacao">               
-
-                                                                            <input type='hidden' name='id' th:value='${avaliacao.id}'/>
-                                                                            <input type="hidden" name="dataAvaliacao" th:value='${avaliacao.dataAvaliacao}'/>
-                                                                            <input type="hidden" name="hora" th:value='${avaliacao.hora}'/>
-                                                                            <h5>Anamnese *:</h5>                                            
-                                                                            <textarea  name="anamnese"  rows="5" class="col-sm-12" ><th:block th:text="${avaliacao.anamnese}"> </th:block></textarea>
-                                                                            <h5>Antecedentes Pessoais:</h5>
-                                                                            <textarea name="ap" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.ap}"> </th:block></textarea> 
-                                                                            <h5>Exames  Complementares:</h5>
-                                                                            <textarea name="examesComplementares" rows="2" class="col-sm-12" ><th:block th:text="${avaliacao.examesComplementares}"> </th:block></textarea>
-                                                                            <h5>Queixa Principal:</h5>
-                                                                            <textarea name="qp"  rows="2" class="col-sm-12"><th:block th:text="${avaliacao.qp}"> </th:block></textarea>
-                                                                            <h5>Diagnóstico:</h5>
-                                                                            <textarea name="diagnostico"  rows="2" class="col-sm-12" style="border-bottom: 0px;"><th:block th:text="${avaliacao.diagnostico}"> </th:block></textarea>
-
-                                                                        </div> 
-
-                                                                        <br></br>
-
-                                                                        <div class="form-footer">
-                                                                            <div class="col-sm-6 "><button type="submit" class="btn btn-info waves-effect pull-left"><i class="fa fa-camera"></i></button></div>
-                                                                            <button type="submit" class="btn btn-success waves-effect">Salvar</button>
-                                                                            <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
-                                                                        </div>
-
-                                                                        <!--  <th:block th:include="fragments/formEditarAvaliacao :: formEditarAvaliacao"></th:block> -->
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> <!-- Fim Edicao Avaliacao -->
-
-
-
-
-                                                    <!-- FOTOS -->
-                                                    <div  class="tab-pane" id="fotos">
-                                                        
-                                                            <div class="container panel" style='background-color: #e5e5e5'>
-                                                                
-                                                                <div class="section-title panel-heading text-center">
-                                                                    <h2 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;">Fotos Avaliaçōes</h2>
-                                                                    <hr></hr>
-                                                                </div>
-                                                                <div class="categories">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <div class="cat">
-                                                                                <div class="type">
-                                                                                    <a href="#" data-filter="*" class="btn btn-primary  col-sm-2 active">Todas</a>
-                                                                                    <div class="col-sm-2" th:each=" avaliacao, contador : ${listaAvaliacao}">
-                                                                                        <a class=" btn btn-default " href="#"  th:attr="data-filter=.avaliacao+${avaliacao.id}">
-                                                                                            <span th:text="${contador.count} " > </span>º Avaliação
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row">
-                                                                    <div class="pricing-item">
-                                                                        <div class="portfolio-items ">
-                                                                            <div th:each=" avaliacao, contador : ${listaAvaliacao}" th:class=" 'col-sm-12 avaliacao' +${avaliacao.id} ">
-                                                                                <div class="panel-heading">
-                                                                                    <h3 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;"><span th:text="${contador.count}"></span>º - Avaliação ( <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
-                                                                                </div>
-
-                                                                                <div class="panel-body">
-                                                                                    <div class="portfolio-item  webdesign illustrator">
-
-                                                                                        <div class="row port">
-                                                                                        <div th:each=" foto, contador : ${avaliacao.fotos}"  class="panel col-sm-4">
-                                                                                            
-                                                                                             
-                                                                                                <img th:src="${foto} " class="fotoAvaliacaoMiniatura "  alt=""/>
-                                                                                       
-                                                                                         
-                                                                                        </div> 
-                                                                                    </div>
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div> <!-- End row -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </th:block> 
-
-                            </div>
-                        </div>
-                    </div> <!-- container -->
-                </div> <!-- content -->
-            </div>
-        </div>
+    <div id="wrapper" class="forced enlarged">
+        <!--Navbar-->
+        <div th:include="navbar/navbar :: navbar"></div>
+        <!--Menu-->
+        <th:block th:include="menu/menu :: menu"></th:block>
 
         <!-- ============================================================== -->
         <!-- Start right Content here -->
-        <!-- ============================================================== --> 
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <!-- Right Sidebar -->
+                <div class="col-md-12 col-lg-12">
+                    <div class="container">
+                        <div class="row">
 
+                            <div id="tableListaCliente" class="col-md-4 col-lg-4">
 
-        <!--MODAL ADICIONAR Fotos-->
-        <th:block th:if='${avaliacao}'>
-            <div class="modal fade" id="adicionarFotos" >
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Clientes</h3>
+                                    </div>
+                                    <div class="panel-body">
 
+                                        <table id="datatable" class="table  table-hover table-bordered" style="width: 10%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nivel</th>
+                                                    <th>Cod</th>
+                                                    <th>Nome</th>
+                                                    <th>Celular</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each=" cliente : ${listaClientes}" th:if="${cliente.isAtivo()}">
+                                                    <td>
+                                                        <a th:if="${cliente.nivelCliente} == INICIANTE" class="fa fa-circle text-warning "
+                                                            title="Iniciante" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}"
+                                                            style="margin-left: 45%;"> </a>
+                                                        <a style="display: none">1 Iniciante</a>
+                                                        <a th:if="${cliente.nivelCliente} == INTERMEDIARIO" class="fa fa-circle text-success " title="Intermediario" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}"
+                                                            style="margin-left: 45%;"> </a>
+                                                        <a style="display: none">2 Intermediario</a>
+                                                        <a th:if="${cliente.nivelCliente} == AVANCADO" class="fa fa-circle text-danger " title="Avançado" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/consultar/cliente/'+{cliente.id}}}"
+                                                            style="margin-left: 45%;"> </a>
+                                                        <a style="display: none">3 Avancado</a>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}"
+                                                            th:text="${cliente.id}"></a>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}"
+                                                            href="#" th:text="${cliente.nome}"></a>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro/'+{cliente.id}}}"
+                                                            href="#" th:text="${cliente.celular}"></a>
+                                                    </td>
+                                                </tr>
 
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title"><strong>Adicionar Fotos</strong> </h4>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Personal-Information -->
-                            <div class="panel panel-default panel-fill">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"> </h3>
-                                </div>
-                                <div class="panel-body">
-                                    <form id="my-awesome-dropzone" class="form-horizontal dropzone" enctype="multipart/form-data"   th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/adicionarfoto/'+{avaliacao.id}}}" th:method="POST">
-
-                                        <button type='submit'>Enviar</button>
-                                    </form>
-                                    <div class="modal-footer">
-                                        <a type="button" href="#" class="btn btn-default waves-effect"  data-dismiss="modal">Voltar</a>
-
-
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Personal-Information -->
+
+                            <div id="inputs"></div>
+                            <th:block th:if="${cliente}">
+                                <div class="col-sm-8">
+
+                                    <div class="panel panel-color panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Ficha Técnica -
+                                                <span th:text="${cliente.nome}"></span>
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <ul class="nav nav-tabs navtab-bg">
+                                                <li>
+                                                    <a href="#dadosCadastrais" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs">
+                                                            <i class="fa fa-home"></i>
+                                                        </span>
+                                                        <span class="hidden-xs">Dados Cadastrais</span>
+                                                    </a>
+                                                </li>
+                                                <li class="active">
+                                                    <a href="#avaliacao" data-toggle="tab" aria-expanded="true">
+                                                        <span class="visible-xs">
+                                                            <i class="fa fa-user"></i>
+                                                        </span>
+                                                        <span class="hidden-xs">Avaliação</span>
+                                                    </a>
+                                                </li>
+                                                <!--                                                    <li th:if="${not #lists.isEmpty(listaAvaliacao)}" class="">-->
+                                                <li>
+                                                    <a href="#fotos" data-toggle="tab" aria-expanded="false">
+                                                        <span class="visible-xs">
+                                                            <i class="fa fa-envelope-o"></i>
+                                                        </span>
+                                                        <span class="hidden-xs">Fotos</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <!-- *** Dados Cadastrais *** -->
+                                            <div class="tab-content">
+                                                <div class="tab-pane" id="dadosCadastrais">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">
+                                                                Cadastro Cliente
+                                                                <div class="btn-group pull-right">
+                                                                    <button type="button" class="pull-right btn btn-primary dropdown-toggle waves-effect waves-light" data-toggle="dropdown"
+                                                                        aria-expanded="false">Ações
+                                                                        <span class="m-l-5">
+                                                                            <i class="fa fa-cog"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li id="btnHabilitar">
+                                                                            <a href="#" id="btnEditar">
+                                                                                <i class="md md-edit"> </i> Editar</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </h3>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <!-- Formulário de cadastro de Cliente E Edicao -->
+                                                            <div class="container-fluid" th:if="${cliente.id} != null">
+
+                                                                <form class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds" th:object="${cliente}" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/cliente'}}"
+                                                                    th:method="PUT">
+                                                                    <!-- Formulário -->
+                                                                    <!-- Formulário -->
+                                                                    <div id="formCliente">
+                                                                        <th:block th:include="formularios/formCliente :: formCliente"></th:block>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ====================== Avaliacao ============================-->
+                                                <div class="tab-pane " id="avaliacao">
+                                                    <div id="portifolioAvaliacao" class="row port ">
+                                                        <div class="panel panel-border panel-info">
+                                                            <div class="panel-heading text-center">
+                                                                <h3 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;">Cadastrar Avaliação</h3>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <!-- FORMUlÁRIO AVALIAÇÃ0 -->
+                                                                <form class="form-horizontal" th:object="${avaliacao}" role="form" enctype="application/x-www-form-urlencodeds" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{cliente.id}}}"
+                                                                    th:method="POST">
+                                                                    <fieldset>
+                                                                        <legend th:if="${avaliacao} != null" style="color:red; background-color: #e5e5e5;">Data:
+                                                                            <span th:text="${avaliacao.dataAvaliacao}">
+                                                                            </span>
+                                                                        </legend>
+                                                                        <h5>Anamnese *:</h5>
+                                                                        <textarea required="true" name="anamnese"
+                                                                            rows="3" class="col-sm-12"></textarea>
+                                                                        <h5>Antecedentes Pessoais:</h5>
+                                                                        <textarea name="ap" rows="2"
+                                                                            class="col-sm-12"></textarea>
+                                                                        <h5>Exames Complementares:</h5>
+                                                                        <textarea name="examesComplementares"
+                                                                            rows="2" class="col-sm-12"></textarea>
+                                                                        <h5>Queixa Principal:</h5>
+                                                                        <textarea name="qp" rows="2"
+                                                                            class="col-sm-12"></textarea>
+                                                                        <h5>Diagnóstico:</h5>
+                                                                        <textarea name="diagnostico" rows="5"
+                                                                            class="col-sm-12" style="border-bottom: 1px;"></textarea>
+
+                                                                    </fieldset>
+
+                                                                    <div class="form-footer">
+                                                                        <button type="submit" class="btn btn-success waves-effect">Salvar</button>
+                                                                        <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- =========== EDICAO DE AVALIACAO - Relatório ================= -->
+                                                        <div class="panel panel-border panel-info" th:each=" avaliacao, contador : ${listaAvaliacao}">
+                                                            <div class="panel-heading text-center">
+                                                                <h2 class="panel-title" style=" color:#1d39d6; background-color: #f1f1f1;">
+                                                                    <span th:text="${contador.count}"></span>º - Avaliação (
+                                                                    <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h2>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <form th:if="${avaliacao} != null" class="form-horizontal" role="form" enctype="application/x-www-form-urlencodeds" th:object="${avaliacao}"
+                                                                    th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/'+{avaliacao.id}}}"
+                                                                    th:method="PUT">
+                                                                    <!-- Formulário -->
+                                                                    <div id="formEditarAvaliacao">
+
+                                                                        <input type='hidden' name='id' th:value='${avaliacao.id}' />
+                                                                        <input type="hidden" name="dataAvaliacao" th:value='${avaliacao.dataAvaliacao}' />
+                                                                        <input type="hidden" name="hora" th:value='${avaliacao.hora}' />
+                                                                        <h5>Anamnese *:</h5>
+                                                                        <textarea name="anamnese" rows="5" class="col-sm-12"><th:block th:text="${avaliacao.anamnese}"> </th:block></textarea>
+                                                                        <h5>Antecedentes Pessoais:</h5>
+                                                                        <textarea name="ap" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.ap}"> </th:block></textarea>
+                                                                        <h5>Exames Complementares:</h5>
+                                                                        <textarea name="examesComplementares" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.examesComplementares}"> </th:block></textarea>
+                                                                        <h5>Queixa Principal:</h5>
+                                                                        <textarea name="qp" rows="2" class="col-sm-12"><th:block th:text="${avaliacao.qp}"> </th:block></textarea>
+                                                                        <h5>Diagnóstico:</h5>
+                                                                        <textarea name="diagnostico" rows="2" class="col-sm-12" style="border-bottom: 0px;"><th:block th:text="${avaliacao.diagnostico}"> </th:block></textarea>
+
+                                                                    </div>
+
+                                                                    <br></br>
+
+                                                                    <div class="form-footer">
+                                                                        <div class="col-sm-6 ">
+                                                                            <button type="submit" class="btn btn-info waves-effect pull-left">
+                                                                                <i class="fa fa-camera"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-success waves-effect">Salvar</button>
+                                                                        <a class="btn btn-danger waves-effect waves-light" data-dismiss="modal">Cancelar</a>
+                                                                    </div>
+
+                                                                    <!--  <th:block th:include="fragments/formEditarAvaliacao :: formEditarAvaliacao"></th:block> -->
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Fim Edicao Avaliacao -->
 
 
+
+
+                                                <!-- FOTOS -->
+                                                <div class="tab-pane" id="fotos">
+
+                                                    <div class="container panel" style='background-color: #e5e5e5'>
+
+                                                        <div class="section-title panel-heading text-center">
+                                                            <h2 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;">Fotos Avaliaçōes</h2>
+                                                            <hr></hr>
+                                                        </div>
+                                                        <div class="categories">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="cat">
+                                                                        <div class="type">
+                                                                            <a href="#" data-filter="*" class="btn btn-primary  col-sm-2 active">Todas</a>
+                                                                            <div class="col-sm-2" th:each=" avaliacao, contador : ${listaAvaliacao}">
+                                                                                <a class=" btn btn-default " href="#" th:attr="data-filter=.avaliacao+${avaliacao.id}">
+                                                                                    <span th:text="${contador.count} "> </span>º Avaliação
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="pricing-item">
+                                                                    <div class="portfolio-items ">
+                                                                        <div th:each=" avaliacao, contador : ${listaAvaliacao}" th:class=" 'col-sm-12 avaliacao' +${avaliacao.id} ">
+                                                                            <div class="panel-heading">
+                                                                                <h3 class="panel-title" style="font-size: 20px; color:#328de5; background-color: #e5e5e5;">
+                                                                                    <span th:text="${contador.count}"></span>º - Avaliação (
+                                                                                    <span th:text="${avaliacao.dataAvaliacao}  "></span> )</h3>
+                                                                            </div>
+
+                                                                            <div class="panel-body">
+                                                                                <div class="portfolio-item  webdesign illustrator">
+
+                                                                                    <div class="row port">
+                                                                                        <div th:each=" foto, contador : ${avaliacao.fotos}" class="panel col-sm-4">
+
+
+                                                                                            <img th:src="${foto} " class="fotoAvaliacaoMiniatura " alt="" />
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- End row -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </th:block>
 
                         </div>
-
                     </div>
                 </div>
+                <!-- container -->
             </div>
+            <!-- content -->
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
 
 
-        </th:block>
-        <!-- END MODAL -->
+    <!--MODAL ADICIONAR Fotos-->
+    <th:block th:if='${avaliacao}'>
+        <div class="modal fade" id="adicionarFotos">
+
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            <strong>Adicionar Fotos</strong>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Personal-Information -->
+                        <div class="panel panel-default panel-fill">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"> </h3>
+                            </div>
+                            <div class="panel-body">
+                                <form id="my-awesome-dropzone" class="form-horizontal dropzone" enctype="multipart/form-data" th:action="@{${@environment.getProperty('baseUrl')+'/sistema/api/avaliacao/adicionarfoto/'+{avaliacao.id}}}"
+                                    th:method="POST">
+
+                                    <button type='submit'>Enviar</button>
+                                </form>
+                                <div class="modal-footer">
+                                    <a type="button" href="#" class="btn btn-default waves-effect" data-dismiss="modal">Voltar</a>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Personal-Information -->
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </th:block>
+    <!-- END MODAL -->
 
 
 
 
-        <script>
+    <script>
 
-            var resizefunc = [];
-        </script>
+        var resizefunc = [];
+    </script>
 
 
 
-        <!--Scripts-->
-        <th:block th:include="fragments/scripts :: scripts"></th:block> 
-        <!-- Page Specific JS Libraries -->
-        <script th:src="@{/assets/dropzone/dropzone.js}"></script>
-        <script  th:src="@{/portifolio/js/jquery.isotope.js}"></script> 
-        <script  th:src="@{/portifolio/js/main.js}"></script>
+    <!--Scripts-->
+    <th:block th:include="fragments/scripts :: scripts"></th:block>
+    <!-- Page Specific JS Libraries -->
+    <script th:src="@{/assets/dropzone/dropzone.js}"></script>
+    <script th:src="@{/portifolio/js/jquery.isotope.js}"></script>
+    <script th:src="@{/portifolio/js/main.js}"></script>
 
-        <script th:if="not ${cliente}">
-            $("#tableListaCliente").removeClass("col-md-4 col-lg-4");
-        </script>
+    <script th:if="not ${cliente}">
+        $("#tableListaCliente").removeClass("col-md-4 col-lg-4");
+    </script>
 
-        <script>
-            $("document").ready(function () {
-                var inputs = document.getElementById("formCliente").getElementsByTagName("input");
-                var selects = document.getElementById("formCliente").getElementsByTagName("select");
-                $(inputs).prop('disabled', true);
-                $(selects).prop('disabled', true);
+    <script>
+        $("document").ready(function () {
+            var inputs = document.getElementById("formCliente").getElementsByTagName("input");
+            var selects = document.getElementById("formCliente").getElementsByTagName("select");
+            $(inputs).prop('disabled', true);
+            $(selects).prop('disabled', true);
 
-                $("#btnHabilitar").click(function () {
-                    $(inputs).prop('disabled', false);
-                    $(selects).prop('disabled', false);
-                });
+            $("#btnHabilitar").click(function () {
+                $(inputs).prop('disabled', false);
+                $(selects).prop('disabled', false);
             });
-        </script>
+        });
+    </script>
 
 
-        <script>
-            var abrirModal = $("#abrirModalAposSalvarAvaliacao").html();
-            var form = $('#my-awesome-dropzone');
-            if (abrirModal === "true") {
-                console.log(abrirModal);
-                $("#adicionarFotos").modal({backdrop: "static"});
+    <script>
+        var abrirModal = $("#abrirModalAposSalvarAvaliacao").html();
+        var form = $('#my-awesome-dropzone');
+        if (abrirModal === "true") {
+            console.log(abrirModal);
+            $("#adicionarFotos").modal({ backdrop: "static" });
+        }
+
+        Dropzone.options.myAwesomeDropzone = {// The camelized version of the ID of the form element
+
+            url: form.attr('action'),
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            maxFilesize: 10,
+            parallelUploads: 100,
+            maxFiles: 100,
+
+            // The setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+
+                // First change the button to actually tell Dropzone to process the queue.
+                this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    // Make sure that the form isn't actually being sent.
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    myDropzone.processQueue();
+                    //e.serialize();
+                    //console.log(e.serialize());
+                    //form.submit();
+
+                });
+
+                // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                // of the sending event because uploadMultiple is set to true.
+                this.on("sendingmultiple", function () {
+                    alert("Sucesso");
+                    // Gets triggered when the form is actually being sent.
+                    // Hide the success button or the complete form.
+                });
+                this.on("successmultiple", function (files, response) {
+                    $("#adicionarFotos").modal('hide');
+                });
+                this.on("errormultiple", function (files, response) {
+                    // Gets triggered when there was an error sending the files.
+                    // Maybe show form again, and notify user of error
+                });
             }
 
-            Dropzone.options.myAwesomeDropzone = {// The camelized version of the ID of the form element
-
-                url: form.attr('action'),
-                autoProcessQueue: false,
-                uploadMultiple: true,
-                maxFilesize: 10,
-                parallelUploads: 100,
-                maxFiles: 100,
-
-                // The setting up of the dropzone
-                init: function () {
-                    var myDropzone = this;
-
-                    // First change the button to actually tell Dropzone to process the queue.
-                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                        // Make sure that the form isn't actually being sent.
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        myDropzone.processQueue();
-                        //e.serialize();
-                        //console.log(e.serialize());
-                        //form.submit();
-
-                    });
-
-                    // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-                    // of the sending event because uploadMultiple is set to true.
-                    this.on("sendingmultiple", function () {
-                        alert("Sucesso");
-                        // Gets triggered when the form is actually being sent.
-                        // Hide the success button or the complete form.
-                    });
-                    this.on("successmultiple", function (files, response) {
-                        $("#adicionarFotos").modal('hide');
-                    });
-                    this.on("errormultiple", function (files, response) {
-                        // Gets triggered when there was an error sending the files.
-                        // Maybe show form again, and notify user of error
-                    });
-                }
-
-            }
+        }
 
 
 
@@ -474,17 +538,17 @@
 
 
 
-        </script>
-        <script type="text/javascript">
-            $('#datatable').dataTable({
-                "ordering": true
-            });
+    </script>
+    <script type="text/javascript">
+        $('#datatable').dataTable({
+            "ordering": true
+        });
 
-        </script>
-
-
+    </script>
 
 
-    </body>
+
+
+</body>
+
 </html>
-

@@ -8,27 +8,21 @@ package br.com.pilates.academiaPilates.service;
 import br.com.pilates.academiaPilates.models.Agenda;
 import br.com.pilates.academiaPilates.models.Cliente;
 import br.com.pilates.academiaPilates.models.Profissional;
-import br.com.pilates.academiaPilates.models.Servico;
 import br.com.pilates.academiaPilates.repository.AgendaRepository;
-import java.sql.Time;
-import java.text.ParseException;
+import br.com.pilates.academiaPilates.security.UserSS;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -38,13 +32,18 @@ import org.springframework.stereotype.Service;
 public class AgendaService {
 
     @Autowired
-    AgendaRepository repo;
+    public AgendaRepository repo;
     Agenda agenda;
-    
+
     @Autowired
     ClienteService clienteService;
 
+    public UserSS user() {
+        return UserService.authenticated();
+    }
+
     LocalDate HOJE = LocalDate.now(); // 2018-05-05
+    
     private static final DayOfWeek DOMINGO = DayOfWeek.SUNDAY;
     private static final DayOfWeek SEGUNDA = DayOfWeek.MONDAY;
     private static final DayOfWeek TERCA = DayOfWeek.TUESDAY;
@@ -58,6 +57,71 @@ public class AgendaService {
         agenda = repo.getOne(idAgenda);
 
         return agenda;
+    }
+
+    public Agenda salvarAgenda(Agenda agenda, RedirectAttributes atributes) {
+        /*Seta Nome do Usuario que efetuou agendamento*/
+        UserSS usuario = user();
+        agenda.setNomeRealizouCadastro(usuario.getNome());
+
+        /* Seta Data e Hora quando efetuou agendamento */
+        agenda = setarDataHoraEfetivacaoAgendamento(agenda);
+
+        /*Seta o tempo final do agendamento baseado no tempo de servico*/
+        String[] horarioServico = agenda.getServico().getTempo().split(":");
+        agenda.setEnd(agenda.getStart().plusHours(Long.parseLong(horarioServico[0])));//Hora
+        agenda.setEnd(agenda.getEnd().plusMinutes(Long.parseLong(horarioServico[1])));//Minutos
+
+        /*Seta Data/Hora Inicio e Final para realizar busca no banco */
+        setarDataHoraInicioFinal(agenda);
+
+        agenda.setTitle("Cliente: " + agenda.getCliente().getNome() + " ,Tel: " + agenda.getCliente().getCelular());
+
+        if (!isReagendamento(agenda)) {
+            if (clientePodeAgendar(agenda)) {
+                repo.save(agenda);
+                setAtributes(atributes, true);
+            } else {
+                setAtributes(atributes, false);
+                return agenda;
+            }
+
+        }
+        return agenda;
+
+    }
+
+    private Agenda setarDataHoraEfetivacaoAgendamento(Agenda agenda) {
+        DateTimeFormatter formatadorData
+                = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatadorHora
+                = DateTimeFormatter.ofPattern("HH:mm");
+        agenda.setDataRealizouCadastro(HOJE.format(formatadorData));
+        agenda.setHoraRealizouCadastro(LocalTime.now().format(formatadorHora));
+        return agenda;
+    }
+
+    public void setAtributes(RedirectAttributes atributes, boolean agendamentoRealizado) {
+        if (agendamentoRealizado) {
+            atributes.addFlashAttribute("mensagem", "Agendado com sucesso.");
+        } else {
+            System.out.println("Set Atrubutes Mensagem de Erro pois Cliente ja tem Agendamento  "  );
+            atributes.addFlashAttribute("mensagemErro", "Cliente " + agenda.getCliente().getNome() + " já têm um horário marcado às " + agenda.getHoraInicio() + "hr do dia " + agenda.getDataInicio());
+        }
+    }
+
+    public Agenda setarDataHoraInicioFinal(Agenda agenda) {
+        /*Divide a DateTime em Data - Hora em um arraty de 2 Indices*/
+        String[] start = agenda.getStart().toString().split("T");
+        String[] end = agenda.getEnd().toString().split("T");
+
+        agenda.setDataInicio(start[0]);
+        agenda.setHoraInicio(start[1]);
+        agenda.setDataFinal(end[0]);
+        agenda.setHoraFinal(end[1]);
+
+        return agenda;
+
     }
 
     public List<Agenda> listaAgendasIniciandoDoMesAtual() {
@@ -81,9 +145,7 @@ public class AgendaService {
     }
 
     public ArrayList<Agenda> listaAgendaPorProfissional(Profissional profissional) {
-
         ArrayList<Agenda> listaAgendaProfissional = repo.findByProfissional(profissional);
-
         return listaAgendaProfissional;
     }
 
@@ -93,83 +155,14 @@ public class AgendaService {
     }
 
     public List<Agenda> listarAgendasCanceladas() {
-
         List<Agenda> listaAgenda = repo.findByCanceladoTrue();
-
         return listaAgenda;
-
     }
 
     public LocalDate hoje() {
         return HOJE;
     }
 
-    public String diaSemana(String data) {
-        String dayWeek = "---";
-        GregorianCalendar gc = new GregorianCalendar();
-        try {
-            gc.setTime(new SimpleDateFormat("yyyy-MM-dd hh:mm", new Locale("pt", "BR")).parse(data));
-            String dia = new SimpleDateFormat("EEE", new Locale("pt", "BR")).format(gc.getTime()).toUpperCase();
-//            System.out.println(dia);
-            return dia;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dayWeek;
-    }
-
-    public LocalDate proximoDataParaDia(String dataRealizouPrimeiroAgendamento, String diaSemana) throws ParseException {
-        DayOfWeek dia = null;
-        String d = dataRealizouPrimeiroAgendamento.substring(0, 10);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate data = LocalDate.parse(d, formatter);
-
-        TemporalAdjuster ajustadorDias;
-        LocalDate proximoDiaEscolhido;
-        switch (diaSemana) {
-            case "DOM":
-                dia = DOMINGO;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-
-            case "SEG":
-                dia = SEGUNDA;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-
-            case "TER":
-                dia = TERCA;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-            case "QUA":
-                dia = QUARTA;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-            case "QUI":
-                dia = QUINTA;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-            case "SEX":
-                dia = SEXTA;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-            case "SÁB":
-                dia = SABADO;
-                ajustadorDias = TemporalAdjusters.next(dia);
-                proximoDiaEscolhido = data.with(ajustadorDias);
-                return proximoDiaEscolhido;
-
-            default:
-                return null;
-        }
-
-    }
 
     /*public List<Agenda> listarAgendaPorProfissionalPelaDataEHora(Profissional profissional, String horaInicio, String horaFinal, String dataInicio) {
 
@@ -195,103 +188,72 @@ public class AgendaService {
     }
     
      */
-    public void setarDataHoraInicioFinal(Agenda agenda) {
-        String horaFinal = null;
-        String dataInicio = agenda.getStart().substring(0, 10);
-        String horaInicio = agenda.getStart().substring(11, 16);
-        try {
-             horaFinal = agenda.getEnd().substring(12, 17);
-        } catch (Exception e) {
-             horaFinal = agenda.getEnd().substring(11, 16);
-        }
-
-        agenda.setDataInicio(dataInicio);
-        agenda.setDataFinal(dataInicio);
-        agenda.setHoraInicio(horaInicio);
-        agenda.setHoraFinal(horaFinal);
-    }
-
     public boolean clientePodeAgendar(Agenda agenda) {
         try {
             ArrayList<Agenda> agendasDoCliente = repo.findByClienteAndDataInicio(agenda.getCliente(), agenda.getDataInicio());
             SimpleDateFormat formatador = new SimpleDateFormat("HH:mm");
-            
             Date horaAgendaCliente = formatador.parse(agendasDoCliente.get(0).getHoraFinal());
             Date horaNovaAgenda = formatador.parse(agenda.getHoraInicio());
-           
-            if(horaNovaAgenda.getTime() >= horaAgendaCliente.getTime()){
-//                System.out.println("CLIENTE Liberado , PODE AGENDAR");
-                return true;
-            }else{
-//                System.out.println("Cliente Com Horario Marcado");
-                return false;
-            }
+
+            return horaNovaAgenda.getTime() >= horaAgendaCliente.getTime();
         } catch (Exception e) {
-//            System.out.println("Agenda Service Exception, Liberado para Cadastramento de agenda para esse cliente " + e);
+//            System.out.println("Agenda Service ClientePodeAgendar() 272 - Nao achou nenhuma Agendamento do cliente");
             return true;
         }
     }
-    
+
+    /*
+    Verica se é agendamento ou reagendamento , verificando a existencia de id 
+     */
     public boolean isReagendamento(Agenda agenda) {
         return agenda.getIdAgenda() != null;
     }
 
-    public String adicionaDataEndComHorarioDoServico(String dataStart, Servico servico) {
-        String data = dataStart.substring(0, 11);
-//        System.out.println(data);
-        String horaStart = dataStart.substring(11, 16);
-        String horaServico = servico.getTempo();
-
-        GregorianCalendar gc = new GregorianCalendar();
-
-        int hora = Integer.parseInt(horaServico.substring(0, 2));
-        // System.out.println(hora);
-        int min = Integer.parseInt(horaServico.substring(3, 5));
-        // System.out.println(min);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-        Time time = new Time(hora, min, 00);
-        gc.setTimeInMillis(time.getTime());
-        hora = Integer.parseInt(horaStart.substring(0, 2));
-        //System.out.println(hora);
-        min = Integer.parseInt(horaStart.substring(3, 5));
-        //System.out.println(min);
-
-        gc.add(Calendar.HOUR, hora);
-        gc.add(Calendar.MINUTE, min);
-        gc.add(Calendar.SECOND, 00);
-        //System.out.println("HORA SOMADA: " + sdf2.format(gc.getTime()));
-        return data + sdf2.format(gc.getTime());
-
-    }
-
     public Long qtdAgendaMesAtual() {
-        String mes = HOJE.toString().substring(5,7);
-        
-        String dataInicioMes = HOJE.getYear()+"-"+mes+"-01";
-        String dataFinalMes = HOJE.getYear()+"-"+mes+"-"+HOJE.getMonth().maxLength();  
-        
+        String mes = HOJE.toString().substring(5, 7);
+        String dataInicioMes = HOJE.getYear() + "-" + mes + "-01";
+        String dataFinalMes = HOJE.getYear() + "-" + mes + "-" + HOJE.getMonth().maxLength();
         Long qtd = repo.countByDataInicioBetween(dataInicioMes, dataFinalMes);
-        
-        
-//        System.out.println(qtd);
         HOJE.getMonth();
-        DateTimeFormatter formatador = 
-        DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        System.out.println(HOJE.format(formatador)); //// 05/05/2018
-//        System.out.println("MES " + HOJE.getMonth().length(true));
-//        System.out.println("MES " + HOJE.getMonth().getValue());
-//        System.out.println("MES " + HOJE.getYear());
-        
-        
+        DateTimeFormatter formatador
+                = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return qtd;
-
-
     }
-    
-    
-    
-    
 
+    public List<DayOfWeek> getProximoDia(String[] diasDaSemana) {
+        List<DayOfWeek> proximoDia = new ArrayList<>();
+       
+        for (String diasDaSemana1 : diasDaSemana) {
+           
+            switch (diasDaSemana1) {
+                case "01":
+                    proximoDia.add(DOMINGO);
+                    break;
+                case "02":
+                    proximoDia.add(SEGUNDA);
+                    break;
+                case "03":
+                    proximoDia.add(TERCA);
+                    break;
+                case "04":
+                    proximoDia.add(QUARTA);
+                    break;
+                case "05":
+                    proximoDia.add(QUINTA);
+                    break;
+                case "06":
+                    proximoDia.add(SEXTA);
+                    break;
+                case "07":
+                    proximoDia.add(SABADO);
+                    break;
+                default:
+                    break;
+            }
+        }
+  
+        return proximoDia;
+    }
 }
+
+

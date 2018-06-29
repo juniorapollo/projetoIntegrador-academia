@@ -21,13 +21,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +57,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AgendaController {
 
     LocalDate HOJE = LocalDate.now(); // 2018-05-05
+    private List<DayOfWeek> proximoDia = new ArrayList<>();
+
     private static final DayOfWeek DOMINGO = DayOfWeek.SUNDAY;
     private static final DayOfWeek SEGUNDA = DayOfWeek.MONDAY;
     private static final DayOfWeek TERCA = DayOfWeek.TUESDAY;
@@ -80,7 +87,7 @@ public class AgendaController {
     @Autowired
     ServicoService servicoService;
     Servico servico;
-    
+
     @Autowired
     GraficoService graficoService;
 
@@ -91,7 +98,7 @@ public class AgendaController {
     @GetMapping(value = "/all")
     public List<Agenda> jsonAgenda() {
         try {
-            List<Agenda> agendas = agendaService.listaAgendasIniciandoDoMesAtual();
+            List<Agenda> agendas = agendaService.repo.findAll();
 
             return agendas;
 
@@ -149,7 +156,7 @@ public class AgendaController {
         ModelAndView mv = new ModelAndView("agenda/agenda");
         Agenda agenda = new Agenda();
         mv.addObject("agenda", agenda);
-        List<Agenda> agendas = agendaService.listaAgendasIniciandoDoMesAtual();
+        List<Agenda> agendas = agendaService.repo.findAll();
         mv.addObject("listaProfissional", profissionalService.listaProfissionalAtivo());
         mv.addObject("listaCliente", clienteService.listaClientesAtivos());
         mv.addObject("listaServico", servicoService.listaServicosAtivos());
@@ -193,7 +200,7 @@ public class AgendaController {
         mv.addObject("cliente", agenda.getCliente());
         mv.addObject("listaServico", servicoService.listaServicosAtivos());
 
-        List<Agenda> agendas = agendaService.listaAgendasIniciandoDoMesAtual();
+        List<Agenda> agendas = agendaService.repo.findAll();
         mv.addObject("todasAgendas", agendas);
         mv.addObject("linkMontarAgenda", "./all");
         mv.addObject("abrirModal", true);
@@ -248,93 +255,75 @@ public class AgendaController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_VALUE}, headers = "content-type=application/x-www-form-urlencoded , application/json", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ModelAndView salvarAgenda(@Valid Agenda agenda, BindingResult result, RedirectAttributes atributes, @ModelAttribute("qtdSemanas") String qtdSemanas) {
+    public ModelAndView salvarAgenda(Agenda agenda, BindingResult result,
+            RedirectAttributes atributes,
+            @ModelAttribute("qtdSemanas") String qtdSemanas,
+            @ModelAttribute("listaDosDiasDaSemana") String[] diasDaSemana) {
         try {
-            ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/agenda");
 
             if (result.hasErrors()) {
                 System.out.println("Erro Salvar Agenda() " + result.toString());
                 return montarAgenda();
             }
-            UserSS usuario = user();
-            agendaService.setarDataHoraInicioFinal(agenda);
-
-            if (!agendaService.isReagendamento(agenda)) {
-                System.out.println("Não é Reagendamento");
-                if (!agendaService.clientePodeAgendar(agenda)) {
-                    atributes.addFlashAttribute("mensagemErro", "Cliente " + agenda.getCliente().getNome() + " já têm um horário marcado entre  " + agenda.getHoraInicio() + " às " + agenda.getHoraFinal() + " horas no dia " + agenda.getDataInicio());
-                    return mv;
-                }
-            }
-
-            if (agenda.getIdAgenda() == null) {
-                agenda.setColor("#439247");
-            } else {
-                agenda.setColor("");
-            }
-
-            agenda.setCancelado(false);
-            agenda.setTitle(agenda.getProfissional().getNome() + " , Cliente: " + agenda.getCliente().getNome() + " , Serviço: " + agenda.getServico() + " ,  Tel: " + agenda.getCliente().getCelular());
-            agenda.setNomeRealizouCadastro(usuario.getNome());
-//          System.out.println("Nome Quem Realizou Cadastro = " + agenda.getNomeRealizouCadastro());
-            ar.save(agenda);//Salva agenda criado 
-
+            ModelAndView mv = new ModelAndView("redirect:" + baseUrl + "/sistema/agenda");
             int qtdSemana = Integer.parseInt(qtdSemanas);
-            System.out.println("Qtd Semanas " + qtdSemanas);
-            if (qtdSemana > 0) {
-                
-                String horaEnd = null;
-                LocalDate proximoDiaEscolhido = agendaService.proximoDataParaDia(agenda.getStart(), agendaService.diaSemana(agenda.getStart()));
-                String horaStart = agenda.getStart().substring(11, 16);
-                try {
-                    horaEnd = agenda.getEnd().substring(12, 17);
-                } catch (Exception e) {
-                    horaEnd = agenda.getEnd().substring(11, 16);
-                }
 
-                for (int i = 0; i < qtdSemana; i++) {
-                    Agenda a = new Agenda();
-                    
-                    a.setIdAgenda(null);
-                    a.setCancelado(false);
-                    a.setCliente(agenda.getCliente());
-                    a.setColor("#439247");
-
-                    a.setNomeRealizouCadastro(usuario.getNome());
-                    a.setProfissional(agenda.getProfissional());
-                    a.setServico(agenda.getServico());
-                    a.setTitle(agenda.getTitle());
-                    a.setDataRealizouCadastro(agenda.getDataRealizouCadastro());
-                    a.setHoraRealizouCadastro(agenda.getHoraRealizouCadastro());
-
-                    a.setStart(proximoDiaEscolhido + " " + horaStart);
-                    a.setEnd(proximoDiaEscolhido + " " + horaEnd);
-
-                    if (!agendaService.isReagendamento(a)) {
-                        System.out.println("Não é Reagendamento");
-                        if (!agendaService.clientePodeAgendar(a)) {
-                            atributes.addFlashAttribute("mensagemErro", "Cliente " + a.getCliente().getNome() + " já têm um horário marcado entre  " + a.getHoraInicio() + " às " + a.getHoraFinal() + " horas no dia " + a.getDataInicio());
-                            return mv;
-                        }
-                    }
-                    agendaService.setarDataHoraInicioFinal(a);
-                    ar.save(a);
-                    proximoDiaEscolhido = proximoDiaEscolhido.plusDays(7);
-                     System.out.println(i + " Loop");   
-//                      System.out.println("Proximas datas " + proximoDiaEscolhido);
-
-                }
-
+//          Carrega os DayOFWeek referente ao Array dos dias Selecionados
+            System.out.println("Dias Da Semana Vindo Do Formulario" + Arrays.toString(diasDaSemana));
+            if (diasDaSemana.length > 0) {
+                proximoDia = agendaService.getProximoDia(diasDaSemana);
             }
 
-            atributes.addFlashAttribute("mensagem", "Agendado com sucesso.");
+//          Salvar Agenda
+            agenda = agendaService.salvarAgenda(agenda, atributes);
+            
+
+            if (qtdSemana > 0) {
+                System.out.println("Entrou QtdSemana IF ");
+                LocalDateTime dataAux = agenda.getStart();
+                int count = 0;
+                for (int i = 1; i <= qtdSemana; i++) {
+                    for (DayOfWeek dia : proximoDia) {
+                        
+                        Agenda novaAgenda = new Agenda();
+                        novaAgenda.setCliente(agenda.getCliente());
+                        novaAgenda.setProfissional(agenda.getProfissional());
+                        novaAgenda.setServico(agenda.getServico());
+                        TemporalAdjuster ajustadorParaProximaData = TemporalAdjusters.next(dia);
+                        
+                        if (count == 0) {
+                            novaAgenda.setStart(dataAux.with(ajustadorParaProximaData));
+                            agendaService.salvarAgenda(novaAgenda, atributes);
+                            
+                        } else {
+                            dataAux = dataAux.with(ajustadorParaProximaData);
+                            novaAgenda.setStart(dataAux);
+                            agendaService.salvarAgenda(novaAgenda, atributes);
+                        }
+                        count++;
+                    }
+                }
+                proximoDia.clear();
+            }
+
+            //            TemporalAdjuster ajustadorParaProximaSexta = TemporalAdjusters.next(DayOfWeek.FRIDAY);
+//            LocalDateTime proximaSexta = agenda.getStart().with(ajustadorParaProximaSexta);
+//            System.out.println("Data Atual = " + agenda.getStart());
+//            System.out.println("Proxima Sexta - " + proximaSexta);
+//            if (agenda.getIdAgenda() == null) {
+//                agenda.setColor("#439247");
+//            } else {
+//                agenda.setColor("");
+//            }
+            
             return mv;
+//           
         } catch (Exception e) {
             System.out.println("Catch  Agenda Controller POST:" + e);
-            atributes.addFlashAttribute("mensagem", "Agendado com sucesso.");
+//            atributes.addFlashAttribute("mensagem", "Agendado com sucesso.");
             return montarAgenda();
         }
-
+//
     }
 
     @DeleteMapping(value = "/{idAgenda}", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_VALUE}, headers = "content-type=application/x-www-form-urlencoded , application/json", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -429,7 +418,7 @@ public class AgendaController {
 
     @GetMapping(value = "/qtdAgenda")
     public Map qtdAgendaMesAtual() {
-        
+
         agendaService.qtdAgendaMesAtual();
         Map map = graficoService.montarGraficos();
 

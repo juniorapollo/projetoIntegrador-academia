@@ -1,424 +1,469 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" 
-      sec:authorize="isAuthenticated()">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+    sec:authorize="isAuthenticated()">
 
-    <head> 
-        <th:block th:include="fragments/scripts :: header" ></th:block>
+<head>
+    <th:block th:include="fragments/scripts :: header"></th:block>
 
-        <!--Calendar css -->
-        <link th:href="@{/assets/fullcalendar/fullcalendar.css}" rel="stylesheet"/>
-        <link th:href="@{/assets/select2/select2.css}" rel="stylesheet" type="text/css"/>
-        <link  rel="stylesheet" th:href="@{/assets/timepicker/bootstrap-timepicker.min.css}"/>
-        <link href="../../static/assets/timepicker/bootstrap-datepicker.min.css" rel="stylesheet" th:href="@{/assets/timepicker/bootstrap-datepicker.min.css}"/>
-        <link th:href="@{/assets/sweet-alert/sweet-alert.min.css}" rel="stylesheet" type="text/css"/>
-        <link th:href="@{/assets/timepicker/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css"/>
-        <link th:href="@{/assets/timepicker/bootstrap-timepicker.min.css}" rel="stylesheet" type="text/css"/>
-        <!--<link th:href="@{https://rawgit.com/xdan/datetimepicker/master/jquery.datetimepicker.css}" rel="stylesheet"/>-->
-        <link th:href="@{/css/agendaTimePicker/datatimepicker.css}" rel="stylesheet" type="text/css"/>
+    <!--Calendar css -->
+    <link th:href="@{/assets/fullcalendar/fullcalendar.css}" rel="stylesheet" />
+    <link th:href="@{/assets/select2/select2.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" th:href="@{/assets/timepicker/bootstrap-timepicker.min.css}" />
+    <link href="../../static/assets/timepicker/bootstrap-datepicker.min.css" rel="stylesheet" th:href="@{/assets/timepicker/bootstrap-datepicker.min.css}"
+    />
+    <link th:href="@{/assets/sweet-alert/sweet-alert.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/assets/timepicker/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/assets/timepicker/bootstrap-timepicker.min.css}" rel="stylesheet" type="text/css" />
+    <!--<link th:href="@{https://rawgit.com/xdan/datetimepicker/master/jquery.datetimepicker.css}" rel="stylesheet"/>-->
+    <link th:href="@{/css/agendaTimePicker/datatimepicker.css}" rel="stylesheet" type="text/css" />
 
 
-        <script th:inline="javascript">
-            function abrirAgendaPorCliente() {
+    <script th:inline="javascript">
+        function abrirAgendaPorCliente() {
             /*<![CDATA[*/
 
-            var baseUrl = [[@{${@environment.getProperty('baseUrl') + '/sistema/agenda/cliente/'}}]];
-            /*]]>*/
+            var baseUrl = [[@{ ${@environment.getProperty('baseUrl') + '/sistema/agenda/cliente/'
+        }}]];
+        /*]]>*/
 
-            var selectBox = document.getElementById("selectBox");
-            var idCliente = selectBox.options[selectBox.selectedIndex].value;
-            url = baseUrl + idCliente;
-            location = url;
+        var selectBox = document.getElementById("selectBox");
+        var idCliente = selectBox.options[selectBox.selectedIndex].value;
+        url = baseUrl + idCliente;
+        location = url;
             }
 
-            function abrirAgendaPorProfissional() {
+        function abrirAgendaPorProfissional() {
             /*<![CDATA[*/
 
-            var baseUrl = [[@{${@environment.getProperty('baseUrl') + '/sistema/agenda/profissional/'}}]];
-            /*]]>*/
+            var baseUrl = [[@{ ${@environment.getProperty('baseUrl') + '/sistema/agenda/profissional/'
+        }}]];
+        /*]]>*/
 
-            var selectBox = document.getElementById("selectBoxProfissional");
-            var idProfissional = selectBox.options[selectBox.selectedIndex].value;
-            url = baseUrl + idProfissional;
-            location = url;
-            }
-
-
-        </script>
-        <style>
-            .content-page >.content {
-                margin-top: 50px;
-                /*                margin-bottom: 60px;*/
-                /*padding: 20px 5px 15px 5px;*/
-                position: relative;
-            }
-            .modal-footer {
-                margin-top: 70px;
-            }
-            #sidebar-menu ul{
-                padding: 5px;
+        var selectBox = document.getElementById("selectBoxProfissional");
+        var idProfissional = selectBox.options[selectBox.selectedIndex].value;
+        url = baseUrl + idProfissional;
+        location = url;
             }
 
-            .btn-agenda{
-                margin: 10px 0;padding: 6px 10px;color: #ffffff;
-            }
-            .legendColorBox{
-                padding-left: 15px;
-                padding-bottom: 10px;
-            }
-            #wrapper.enlarged .left.side-menu {
-                display: none;
-            }
-            #wrapper.enlarged .content-page{
-                margin-left: -10px;
-            }
-            .panel .panel-body {
-                padding: 10px;
-                height: 100%;
-            } 
-            .bg-cancelado{
-                background-color: #fb6565;
-            }
-            .btn.menuAgenda{
-                border-radius:10px;
-                margin-top: 4px;
-                width: 98%;
-            }
-            col-sm-1.checkbox.checkbox-primary {
-                margin: 10px;
-            }
-            #sidebar-menu > ul > li > a {
-                display: block;
-                color: white    ;
-                padding: 9px 25px;
-                font-size: 14px;
-            }
-            #sidebar-menu > ul > li > a:hover {
-                color:gray;
-            }
-        </style>
-    </head>    
+
+    </script>
+    <style>
+        .fc-day-grid {
+            display: none;
+        }
+
+        .content-page>.content {
+            margin-top: 50px;
+            /*                margin-bottom: 60px;*/
+            /*padding: 20px 5px 15px 5px;*/
+            position: relative;
+        }
+
+        .modal-footer {
+            margin-top: 70px;
+        }
+
+        #sidebar-menu ul {
+            padding: 5px;
+        }
+
+        .btn-agenda {
+            margin: 10px 0;
+            padding: 6px 10px;
+            color: #ffffff;
+        }
+
+        .legendColorBox {
+            padding-left: 15px;
+            padding-bottom: 10px;
+        }
+
+        #wrapper.enlarged .left.side-menu {
+            display: none;
+        }
+
+        #wrapper.enlarged .content-page {
+            margin-left: -10px;
+        }
+
+        .panel .panel-body {
+            padding: 10px;
+            height: 100%;
+        }
+
+        .bg-cancelado {
+            background-color: #fb6565;
+        }
+
+        .btn.menuAgenda {
+            border-radius: 10px;
+            margin-top: 4px;
+            width: 98%;
+        }
+
+        col-sm-1.checkbox.checkbox-primary {
+            margin: 10px;
+        }
+
+        #sidebar-menu>ul>li>a {
+            display: block;
+            color: white;
+            padding: 9px 25px;
+            font-size: 14px;
+        }
+
+        #sidebar-menu>ul>li>a:hover {
+            color: gray;
+        }
+    </style>
+</head>
 
 
-    <body class="fixed-left" >
-        <div class="content-loader">
-            <div id="loader">
-                <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i> 
+<body class="fixed-left">
+    <div class="content-loader">
+        <div id="loader">
+            <i class="fa fa-spinner fa-spin text-primary loader" style="font-size: 50px;"></i>
+        </div>
+    </div>
+    <div id="wrapper">
+        <!--Navbar-->
+        <div th:include="navbar/navbar :: navbar"></div>
+        <!--Menu-->
+        <!--<th:block th:include="menu/menu :: menu"></th:block>-->
+        <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>
+        <th:block th:include="fragments/erroAgenda :: erroAgenda"></th:block>
+        <div style="display: none">
+            <section id="linkMontarAgenda" th:text="${linkMontarAgenda}"></section>
+            <section id="linkEditarAgenda" th:text="${linkEditarAgenda}"></section>
+            <section id="abrirModal" th:text="${abrirModal}"></section>
+        </div>
+
+        <div class="left side-menu ">
+            <div class="sidebar-inner slimscrollleft">
+                <div id="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a class="btn menuAgenda btn-block bg-overlay btn-sm" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}"
+                                data-target="#novoEvento" style="">
+                                <i class="fa fa-home"></i> HOME
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>
+
+                            <a class="btn menuAgenda btn-block bg-success btn-sm" href="#" data-toggle="modal" data-target="#novoEvento" style="">
+                                <i class="fa fa-calendar-o"></i> Agendar
+                            </a>
+
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>
+
+                            <a class="btn menuAgenda btn-block bg-primary btn-sm" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}">
+                                <i class="fa fa-database"></i> TODOS</a>
+
+                        </li>
+                    </ul>
+
+                    <ul sec:authorize="hasRole('ADMINISTRADOR')">
+                        <li>
+
+                            <a class="btn menuAgenda btn-block bg-cancelado btn-sm" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}">
+                                <i class="fa fa-remove"></i> CANCELADOS
+                            </a>
+
+                        </li>
+                    </ul>
+                    <hr></hr>
+                    <p class="text-center text-muted ">
+                        <i class="fa fa-le fa-search"></i>Buscar Agendamento</p>
+
+                    <ul>
+                        <li>
+                            <div class="input">
+                                <span class="input-group-addon ">
+                                    <i class="fa col-md-5">
+                                        <b>Clientes</b>
+                                    </i>
+                                </span>
+                                <select class="form-control" id="selectBox" th:if="${listaCliente}" onchange="abrirAgendaPorCliente();">
+                                    <option value=''></option>
+                                    <option th:each=" cliente : ${listaCliente}" th:value="${cliente.id}" th:text="${cliente.nome + ' - '+cliente.nivelCliente}"></option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>
+                            <div class="input">
+                                <span class="input-group-addon ">
+                                    <i class="fa col-md-5">
+                                        <b>Profissionais</b>
+                                    </i>
+                                </span>
+                                <select class="form-control" id="selectBoxProfissional" th:if="${listaCliente}" onchange="abrirAgendaPorProfissional();">
+                                    <option value=''></option>
+                                    <option th:each=" profissional : ${listaProfissional}" th:value="${profissional.id}" th:text="${profissional.nome }"></option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <hr></hr>
+                    <hr></hr>
+                    <div class="text-muted text-center">
+                        <i class="fa fa-server"></i> Legenda</div>
+                    <hr></hr>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="legendColorBox" style="padding-left:15px">
+
+                                    <div style="width:4px;border:5px solid #63ab72"></div>
+
+                                </td>
+                                <td class="legendLabel legendColorBox">Agendamentos Efetuados</td>
+                            </tr>
+                            <tr>
+                                <td class="legendColorBox" style="width: 1px;">
+                                    <div style="padding:1px">
+                                        <div style="width:4px;border:5px solid #337ab7  "></div>
+
+                                    </div>
+                                </td>
+                                <td class="legendLabel legendColorBox">Agendamentos Reagendados</td>
+                            </tr>
+                            <tr>
+
+                                <td class="legendColorBox" style="width: 1px;">
+                                    <div style="padding:1px">
+                                        <div style="width:4px;border:5px solid #fb6565  "></div>
+                                    </div>
+                                </td>
+                                <td class="legendLabel legendColorBox">Agendamentos Cancelados</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div id="wrapper">       
-            <!--Navbar-->
-            <div   th:include="navbar/navbar :: navbar"></div>
-            <!--Menu-->
-            <!--<th:block th:include="menu/menu :: menu"></th:block>--> 
-            <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>
-            <th:block th:include="fragments/erroAgenda :: erroAgenda"></th:block>
-            <div style="display: none">
-                <section id ="linkMontarAgenda" th:text="${linkMontarAgenda}"></section>
-                <section id ="linkEditarAgenda" th:text="${linkEditarAgenda}"></section>
-                <section id ="abrirModal" th:text="${abrirModal}"></section>
-            </div>
 
-            <div class="left side-menu ">
-                <div class="sidebar-inner slimscrollleft">
-                    <div id="sidebar-menu">
-                        <ul>
-                            <li>
-                                <a class="btn menuAgenda btn-block bg-overlay btn-sm" href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema'}}"  data-target="#novoEvento" style="">
-                                    <i class="fa fa-home"></i> HOME
-                                </a>
-                            </li>
-                        </ul>  
-
-                        <ul>
-                            <li>
-                              
-                                    <a class="btn menuAgenda btn-block bg-success btn-sm" href="#" data-toggle="modal" data-target="#novoEvento" style="">
-                                        <i class="fa fa-calendar-o"></i> Agendar
-                                    </a>
-                           
-                            </li>
-                        </ul>  
-
-                        <ul>
-                            <li>
-                                
-                                       <a class="btn menuAgenda btn-block bg-primary btn-sm"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda'}}" ><i class="fa fa-database"></i>   TODOS</a>
-                               
-                            </li>
-                        </ul>
-
-                        <ul sec:authorize="hasRole('ADMINISTRADOR')">
-                            <li>
-                               
-                                    <a class="btn menuAgenda btn-block bg-cancelado btn-sm"  href="#"  th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" >
-                                        <i class="fa fa-remove"></i> CANCELADOS
-                                    </a>
-                              
-                            </li>
-                        </ul>
-                        <hr></hr>
-                        <p class="text-center text-muted "><i class="fa fa-le fa-search"></i>Buscar Agendamento</p>
-
-                        <ul>
-                            <li>
-                                <div class="input">
-                                    <span class="input-group-addon "><i class="fa col-md-5"><b>Clientes</b></i></span>
-                                    <select class="form-control"  id="selectBox" th:if="${listaCliente}" onchange="abrirAgendaPorCliente();" >
-                                        <option value=''></option>
-                                        <option th:each=" cliente : ${listaCliente}"  th:value="${cliente.id}" th:text="${cliente.nome + ' - '+cliente.nivelCliente}"  ></option>
-                                    </select>
+        <!--AGENDA-->
+        <div class="content-page">
+            <div class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel panel-heading"></div>
+                                <div th:if="${cliente}" style="position: relative;">
+                                    <h4 class="text-center" style="padding: 10px "> Agendamento Cliente
+                                        <i class="text-muted fa fa-circle"></i>
+                                        <span th:text="${cliente.nome}"></span>
+                                    </h4>
                                 </div>
-                            </li>
-                        </ul>
-
-                        <ul>
-                            <li>
-                                <div class="input">
-                                    <span class="input-group-addon "><i class="fa col-md-5"><b>Profissionais</b></i></span>
-                                    <select class="form-control"  id="selectBoxProfissional" th:if="${listaCliente}" onchange="abrirAgendaPorProfissional();" >
-                                        <option value=''></option>
-                                        <option th:each=" profissional : ${listaProfissional}"  th:value="${profissional.id}" th:text="${profissional.nome }"  ></option>
-                                    </select>
-                                </div>
-                            </li>
-                        </ul>
-
-                        <hr></hr>
-                        <hr></hr>
-                        <div class="text-muted text-center"><i class="fa fa-server"></i> Legenda</div>
-                        <hr></hr>
-                        <table >
-                            <tbody >
-                                <tr>
-                                    <td class="legendColorBox" style="padding-left:15px">
-
-                                        <div style="width:4px;border:5px solid #63ab72"></div>
-
-                                    </td>
-                                    <td class="legendLabel legendColorBox">Agendamentos Efetuados</td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="width: 1px;">
-                                        <div style="padding:1px">
-                                            <div style="width:4px;border:5px solid #337ab7  "></div>
-
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel legendColorBox">Agendamentos Reagendados</td>
-                                </tr>
-                                <tr>
-
-                                    <td class="legendColorBox" style="width: 1px;">
-                                        <div style="padding:1px">
-                                            <div style="width:4px;border:5px solid #fb6565  "></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel legendColorBox">Agendamentos Cancelados</td>
-                                </tr>
-
-                            </tbody>
-                        </table>  
-                    </div>
-                </div>
-            </div>
-
-            <!--AGENDA-->
-            <div class="content-page">
-                <div class="content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="panel panel-default">
-                                    <div class="panel panel-heading"></div>
-                                    <div th:if="${cliente}"  style="position: relative;">
-                                        <h4  class="text-center" style="padding: 10px "> Agendamento Cliente <i class="text-muted fa fa-circle" ></i> <span th:text="${cliente.nome}"></span></h4>
-                                    </div>
-                                    <div th:if="${profissional}"  style="position: relative;">
-                                        <h4  class="text-center" style="padding: 10px "> Agendamento Profissinal <i class="text-muted fa fa-circle" ></i> <span th:text="${profissional.nome}"></span></h4>
-                                    </div>
+                                <div th:if="${profissional}" style="position: relative;">
+                                    <h4 class="text-center" style="padding: 10px "> Agendamento Profissinal
+                                        <i class="text-muted fa fa-circle"></i>
+                                        <span th:text="${profissional.nome}"></span>
+                                    </h4>
                                 </div>
                             </div>
-                            <!--Calendario Diario-->
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div id="calendarDia"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
-
-                            <!--Calendario Semanal/Mensal-->
-                            <div class="col-md-8">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 ">
-                                                <div id="calendar"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
-                        </div><!--Fim Row -->
-
-                        <div class ="row">
-                            <!-- BEGIN MODAL -->
-                            <!-- Modal FORMULARIO AGENDA -->
-                            <div th:if="not ${agenda.cancelado}" class="modal fade" id="novoEvento" >
-
-                                <th:block th:include="formularios/formAgenda :: formAgenda"></th:block> 
-                            </div>
-                            <!-- END MODAL -->
-
-                            <!-- Modal Erro Ao Cadastrar Data Errada -->
-                            <button class="btn btn-info waves-effect waves-light btn-sm" id="sa-basic"  style="visibility: hidden;"></button>
-
-                            <!--Modal Mostrar Detalhes do Cancelamento da Agenda -->
-                            <th:block th:if="${agenda.cancelado}" sec:authorize="hasRole('ADMINISTRADOR')">
-                                <div class="modal fade" id="novoEvento">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" class="waves-effect pull-left" th:if="${abrirModal}" ><span class="fa fa-arrow-circle-o-left" style="padding-right:10px; font-size: 30px;"></span></a>
-                                                <h4 class="modal-title"><strong>Detalhes Cancelamento</strong> </h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Personal-Information -->
-                                                <div class="panel panel-default panel-fill">
-
-                                                    <div class="panel-body">
-                                                        <div class="about-info-p">
-                                                            <strong>Cliente: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.cliente.nome}"></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Profissional: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.profissional.nome}"></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Email: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.cliente.email}"></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Telefone: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.cliente.telefone}"></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Celular: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.cliente.celular}"></p>
-                                                        </div>
-                                                        <hr></hr>
-                                                        <div class="about-info-p">
-                                                            <strong>Profissional que efetuou cancelamento: </strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.nomeRealizouCancelamento}"></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Data:</strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.dataCancelamento +' às '+ agenda.horaCancelamento}" ></p>
-                                                        </div>
-                                                        <div class="about-info-p">
-                                                            <strong>Motivo:</strong>
-                                                            <br></br>
-                                                            <p class="text-muted" th:text="${agenda.motivoCancelamento}"></p>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <!-- Personal-Information -->
-
-
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </th:block>
-                            <!-- END MODAL -->
                         </div>
+                        <!--Calendario Diario-->
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div id="calendarDia"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <!--Calendario Semanal/Mensal-->
+                        <div class="col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div id="calendar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!--Fim Row -->
+
+                    <div class="row">
+                        <!-- BEGIN MODAL -->
+                        <!-- Modal FORMULARIO AGENDA -->
+                        <div th:if="not ${agenda.cancelado}" class="modal fade" id="novoEvento">
+
+                            <th:block th:include="formularios/formAgenda :: formAgenda"></th:block>
+                        </div>
+                        <!-- END MODAL -->
+
+                        <!-- Modal Erro Ao Cadastrar Data Errada -->
+                        <button class="btn btn-info waves-effect waves-light btn-sm" id="sa-basic" style="visibility: hidden;"></button>
+
+                        <!--Modal Mostrar Detalhes do Cancelamento da Agenda -->
+                        <th:block th:if="${agenda.cancelado}" sec:authorize="hasRole('ADMINISTRADOR')">
+                            <div class="modal fade" id="novoEvento">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <a type="button" href="#" th:href="@{${@environment.getProperty('baseUrl')+'/sistema/agenda/cancelado'}}" class="waves-effect pull-left"
+                                                th:if="${abrirModal}">
+                                                <span class="fa fa-arrow-circle-o-left" style="padding-right:10px; font-size: 30px;"></span>
+                                            </a>
+                                            <h4 class="modal-title">
+                                                <strong>Detalhes Cancelamento</strong>
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Personal-Information -->
+                                            <div class="panel panel-default panel-fill">
+
+                                                <div class="panel-body">
+                                                    <div class="about-info-p">
+                                                        <strong>Cliente: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.cliente.nome}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Profissional: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.profissional.nome}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Email: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.cliente.email}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Telefone: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.cliente.telefone}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Celular: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.cliente.celular}"></p>
+                                                    </div>
+                                                    <hr></hr>
+                                                    <div class="about-info-p">
+                                                        <strong>Profissional que efetuou cancelamento: </strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.nomeRealizouCancelamento}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Data:</strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.dataCancelamento +' às '+ agenda.horaCancelamento}"></p>
+                                                    </div>
+                                                    <div class="about-info-p">
+                                                        <strong>Motivo:</strong>
+                                                        <br></br>
+                                                        <p class="text-muted" th:text="${agenda.motivoCancelamento}"></p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- Personal-Information -->
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                        <!-- END MODAL -->
                     </div>
                 </div>
-            </div> <!--Navbar-->
-        </div> <!-- end col-->
+            </div>
+        </div>
+        <!--Navbar-->
+    </div>
+    <!-- end col-->
 
 
 
-        <script>
-            var resizefunc = [];
-        </script>
+    <script>
+        var resizefunc = [];
+    </script>
 
-        <!--Scripts-->
-        <th:block th:include="fragments/scripts :: scripts"></th:block> 
-        <!-- BEGIN PAGE CALENDAR -->
+    <!--Scripts-->
+    <th:block th:include="fragments/scripts :: scripts"></th:block>
+    <!-- BEGIN PAGE CALENDAR -->
 
-        <script th:src="@{/assets/fullcalendar/moment.min.js}"></script>
-        <script th:src="@{/assets/fullcalendar/fullcalendar.min.js}"></script>
-        <script th:src="@{/assets/fullcalendar/pt-br.js}"></script>
-
-
-        <!-- Alert Menssagem -->
-        <script th:src="@{/assets/sweet-alert/sweet-alert.init.js}"></script>
-        <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
-
-        <!-- TimePicker -->
-        <script th:src="@{/assets/timepicker/bootstrap-datepicker.js}"></script>
-        <script th:src="@{/assets/timepicker/bootstrap-timepicker.min.js}"></script>
-        <script th:src="@{/assets/spinner/spinner.min.js}"></script>
-
-        <!--<script th:src="@{https://rawgit.com/xdan/datetimepicker/master/build/jquery.datetimepicker.full.js}"></script>-->
-        <script th:src="@{/js/timepicker.js}"></script>
-        <script th:src="@{/assets/fullcalendar/jr-agenda.js}"></script>
-        <script th:src="@{/assets/jquery.validate/jquery.validate.min.js}"></script>
-        <script th:src="@{/js/jr-fullscreen.js}"></script>
+    <script th:src="@{/assets/fullcalendar/moment.min.js}"></script>
+    <script th:src="@{/assets/fullcalendar/fullcalendar.min.js}"></script>
+    <script th:src="@{/assets/fullcalendar/pt-br.js}"></script>
 
 
+    <!-- Alert Menssagem -->
+    <script th:src="@{/assets/sweet-alert/sweet-alert.init.js}"></script>
+    <script th:src="@{/assets/sweet-alert/sweet-alert.min.js}"></script>
+
+    <!-- TimePicker -->
+    <script th:src="@{/assets/timepicker/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/assets/timepicker/bootstrap-timepicker.min.js}"></script>
+    <script th:src="@{/assets/spinner/spinner.min.js}"></script>
+
+    <!--<script th:src="@{https://rawgit.com/xdan/datetimepicker/master/build/jquery.datetimepicker.full.js}"></script>-->
+    <script th:src="@{/js/timepicker.js}"></script>
+    <script th:src="@{/assets/fullcalendar/jr-agenda.js}"></script>
+    <script th:src="@{/assets/jquery.validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/js/jr-fullscreen.js}"></script>
 
 
-        <script th:if="${abrirModal}">
 
-            $('document').ready(function(){
+
+    <script th:if="${abrirModal}">
+
+        $('document').ready(function () {
             $('#formAgenda').css("display", "none");
             $('#btnAgendar').css("display", "none");
-            });
-        </script>
-        <script>
-            $('#formAgenda').validate(
+        });
+    </script>
+    <script>
+        $('#formAgenda').validate(
             {
-            rules: {
-            profissional: "required",
+                rules: {
+                    profissional: "required",
                     usuario: "required",
                     servico: "required",
-            },
-                    messages: {
+                },
+                messages: {
                     profissional: " Obrigatório Profissional",
-                            cliente: "Escolha um Cliente para Agendar",
-                            servico: "Escolha um serviço",
-                    }
+                    cliente: "Escolha um Cliente para Agendar",
+                    servico: "Escolha um serviço",
+                }
             });
-            $('#btnEditar').click(function(){
+        $('#btnEditar').click(function () {
             $('#btnEditar').css("display", "none");
             $('form#formAgenda').css("display", "block");
             $('#btnAgendar').css("display", "block");
-            });
-            $(".fa").click(function(){
+        });
+        $(".fa").click(function () {
 
             $("div#sidebar-menu").css("display:none");
             ;
-            });
+        });
 //            $("#horario").blur(function(){
 //            var data = this.value;
 //            data = data.toString().substr(0, 10);
@@ -439,8 +484,8 @@
 
 
 
-        </script>
+    </script>
 
-    </body>
+</body>
+
 </html>
-
