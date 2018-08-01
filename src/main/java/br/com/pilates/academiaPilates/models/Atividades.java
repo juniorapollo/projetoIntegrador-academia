@@ -10,6 +10,7 @@ package br.com.pilates.academiaPilates.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,17 +38,13 @@ public class Atividades implements Serializable {
     
     private String nome;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="atividades_relatorio",
             joinColumns = {@JoinColumn(name="atividades_id")},
             inverseJoinColumns = {@JoinColumn(name="relatorio_id")}) 
     private List<RelatorioDiario> relatorioDiario = new ArrayList<RelatorioDiario>();  
   
-    
-    
-    
-    
-
+  
     public Atividades() {
     }
 

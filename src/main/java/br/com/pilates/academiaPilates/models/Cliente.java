@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -41,6 +42,7 @@ public class Cliente extends Pessoa implements Serializable {
 
     private String objetivo;
 
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "cliente_atividades",
             joinColumns = {
@@ -48,7 +50,12 @@ public class Cliente extends Pessoa implements Serializable {
             inverseJoinColumns = {
                 @JoinColumn(name = "atividades_id")})
     private List<Atividades> atividades = new ArrayList<Atividades>();
-
+    
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "cliente_agenda", joinColumns = @JoinColumn(name = "cliente_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "agenda_id", referencedColumnName = "idAgenda"))
+    private Set<Agenda> agendas = new HashSet<>();
+    
     //private String login;
     //private String senha;
     //@Lob
@@ -138,6 +145,16 @@ public class Cliente extends Pessoa implements Serializable {
     public void setAtividades(List<Atividades> atividades) {
         this.atividades = atividades;
     }
+
+    public Set<Agenda> getAgendas() {
+        return agendas; 
+    }
+
+    public void setAgendas(Set<Agenda> agendas) {
+        this.agendas = agendas;
+    }
+    
+    
 
    
 

@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.pilates.academiaPilates.models;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -56,7 +49,7 @@ public class Turma implements Serializable {
     @JoinTable(name = "cliente_turmas",
             joinColumns = { @JoinColumn(name = "cliente_id") },
             inverseJoinColumns = { @JoinColumn(name = "turma_id") })
-    private List<Cliente> clientes = new ArrayList<>(); 
+    private Set<Cliente> clientes = new HashSet<>(); 
 
 
     public Turma() {
@@ -100,16 +93,15 @@ public class Turma implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
 
-    public List<Cliente> getClientes() {
+    public Set<Cliente> getClientes() {
         return clientes;
     }
 
-    public void setClientes(List<Cliente> clientes) {
+    public void setClientes(Set<Cliente> clientes) {
         this.clientes = clientes;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 5;

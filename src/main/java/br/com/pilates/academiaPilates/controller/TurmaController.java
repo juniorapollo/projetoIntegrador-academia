@@ -3,7 +3,6 @@ package br.com.pilates.academiaPilates.controller;
 import br.com.pilates.academiaPilates.models.Turma;
 import br.com.pilates.academiaPilates.service.ClienteService;
 import br.com.pilates.academiaPilates.service.TurmaService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

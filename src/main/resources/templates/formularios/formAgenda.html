@@ -65,13 +65,22 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-5">
+<!--                            <div class="col-md-5">
                                 <label class="control-label">Cliente</label>
                                 <select class="form-control" th:name="${cliente}" th:field="*{cliente}" required="required" id="cliente">
                                     <option value=''></option>
                                     <option th:each=" cliente : ${listaCliente}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
                                 </select>
+                            </div>-->
+                            
+                             <div class="col-md-5">
+                                <label class="control-label">Turma</label>
+                                <select class="form-control" th:name="${turma}" th:field="*{turma}" required="required" id="turma">
+                                    <option value=''></option>
+                                    <option th:each=" turma : ${listaTurma}" th:value="${turma.id}" th:text="${turma.nome}"></option>
+                                </select>
                             </div>
+                            
                             <div class="col-md-1" th:if="not ${agenda.idAgenda}">
                                 <label class="control-label"></label>
                                 <a th:href="@{${@environment.getProperty('baseUrl')+'/sistema/cliente/cadastro'}}" class="btn btn-group bg-success form-control"

@@ -3,8 +3,8 @@ package br.com.pilates.academiaPilates.service;
 import br.com.pilates.academiaPilates.models.Cliente;
 import br.com.pilates.academiaPilates.repository.TurmaRepository;
 import br.com.pilates.academiaPilates.models.Turma;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class TurmaService {
     @Autowired
     TurmaRepository repo;
 
-    private Turma turma;
+    private Turma turma; 
 
     public Turma turmaPorId(Long id) {
         try {
@@ -49,7 +49,7 @@ public class TurmaService {
         }
     }
 
-    public Turma salvarTurma(Turma turma, List<Cliente> clientes) {
+    public Turma salvarTurma(Turma turma, Set<Cliente> clientes) {
         if (existeClientes(turma)) {
             repo.save(turma);
             System.out.println("Clientes : " + turma.getClientes().toString());

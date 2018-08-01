@@ -55,6 +55,14 @@ public class ClienteController {
      * @return ModelAndView (html) , que vai listar os clientes cadastrados
      */
     // @PreAuthorize("hasAnyRole('OPERADOR')") 
+    
+    @GetMapping(path="/teste")
+    public Cliente tes(Cliente cliente) {
+       Cliente c = new Cliente();
+     
+return c;    
+    
+    }
     @GetMapping(path="/relatorio")
     public ModelAndView listarClientePage(Cliente cliente) {
         ModelAndView mv = new ModelAndView("cadastro/listaCliente");

@@ -21,97 +21,75 @@
     <script th:inline="javascript">
         function abrirAgendaPorCliente() {
             /*<![CDATA[*/
-
             var baseUrl = [[@{ ${@environment.getProperty('baseUrl') + '/sistema/agenda/cliente/'
         }}]];
         /*]]>*/
-
         var selectBox = document.getElementById("selectBox");
         var idCliente = selectBox.options[selectBox.selectedIndex].value;
         url = baseUrl + idCliente;
         location = url;
             }
-
         function abrirAgendaPorProfissional() {
             /*<![CDATA[*/
-
             var baseUrl = [[@{ ${@environment.getProperty('baseUrl') + '/sistema/agenda/profissional/'
         }}]];
         /*]]>*/
-
         var selectBox = document.getElementById("selectBoxProfissional");
         var idProfissional = selectBox.options[selectBox.selectedIndex].value;
         url = baseUrl + idProfissional;
         location = url;
             }
-
-
     </script>
     <style>
-        .fc-day-grid {
-            display: none;
-        }
-
+        
         .content-page>.content {
             margin-top: 50px;
             /*                margin-bottom: 60px;*/
             /*padding: 20px 5px 15px 5px;*/
             position: relative;
         }
-
         .modal-footer {
             margin-top: 70px;
         }
-
         #sidebar-menu ul {
             padding: 5px;
         }
-
         .btn-agenda {
             margin: 10px 0;
             padding: 6px 10px;
             color: #ffffff;
         }
-
         .legendColorBox {
             padding-left: 15px;
             padding-bottom: 10px;
         }
-
         #wrapper.enlarged .left.side-menu {
             display: none;
         }
-
         #wrapper.enlarged .content-page {
             margin-left: -10px;
         }
-
         .panel .panel-body {
             padding: 10px;
             height: 100%;
         }
-
         .bg-cancelado {
             background-color: #fb6565;
         }
-
         .btn.menuAgenda {
             border-radius: 10px;
             margin-top: 4px;
             width: 98%;
         }
-
         col-sm-1.checkbox.checkbox-primary {
             margin: 10px;
         }
-
         #sidebar-menu>ul>li>a {
             display: block;
             color: white;
             padding: 9px 25px;
             font-size: 14px;
         }
-
         #sidebar-menu>ul>li>a:hover {
             color: gray;
         }
@@ -130,13 +108,18 @@
         <div th:include="navbar/navbar :: navbar"></div>
         <!--Menu-->
         <!--<th:block th:include="menu/menu :: menu"></th:block>-->
+       
         <th:block th:include="fragments/mensagemSucesso :: mensagemSucesso"></th:block>
+       
         <th:block th:include="fragments/erroAgenda :: erroAgenda"></th:block>
+       
         <div style="display: none">
             <section id="linkMontarAgenda" th:text="${linkMontarAgenda}"></section>
             <section id="linkEditarAgenda" th:text="${linkEditarAgenda}"></section>
             <section id="abrirModal" th:text="${abrirModal}"></section>
         </div>
+
+       
 
         <div class="left side-menu ">
             <div class="sidebar-inner slimscrollleft">
@@ -206,9 +189,25 @@
                                         <b>Profissionais</b>
                                     </i>
                                 </span>
-                                <select class="form-control" id="selectBoxProfissional" th:if="${listaCliente}" onchange="abrirAgendaPorProfissional();">
+                                <select class="form-control" id="selectBoxProfissional" th:if="${listaProfissional}" onchange="abrirAgendaPorProfissional();">
                                     <option value=''></option>
                                     <option th:each=" profissional : ${listaProfissional}" th:value="${profissional.id}" th:text="${profissional.nome }"></option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>
+                            <div class="input">
+                                <span class="input-group-addon ">
+                                    <i class="fa col-md-5">
+                                        <b>Turmas</b>
+                                    </i>
+                                </span>
+                                <select class="form-control" id="selectBoxTurma" th:if="${listaTurma}" onchange="abrirAgendaPorTurma();">
+                                    <option value=''></option>
+                                    <option th:each=" turma : ${listaTurma}" th:value="${turma.id}" th:text="${turma.nome }"></option>
                                 </select>
                             </div>
                         </li>
@@ -247,7 +246,7 @@
                                 </td>
                                 <td class="legendLabel legendColorBox">Agendamentos Cancelados</td>
                             </tr>
-
+                           
                         </tbody>
                     </table>
                 </div>
@@ -263,7 +262,7 @@
                             <div class="panel panel-default">
                                 <div class="panel panel-heading"></div>
                                 <div th:if="${cliente}" style="position: relative;">
-                                    <h4 class="text-center" style="padding: 10px "> Agendamento Cliente
+                                    <h4 class="text-center" style="padding: 10px "> Agendamento Cliente 
                                         <i class="text-muted fa fa-circle"></i>
                                         <span th:text="${cliente.nome}"></span>
                                     </h4>
@@ -277,7 +276,7 @@
                             </div>
                         </div>
                         <!--Calendario Diario-->
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="row">
@@ -291,7 +290,7 @@
                         <!-- end col -->
 
                         <!--Calendario Semanal/Mensal-->
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="row">
@@ -434,7 +433,6 @@
 
 
     <script th:if="${abrirModal}">
-
         $('document').ready(function () {
             $('#formAgenda').css("display", "none");
             $('#btnAgendar').css("display", "none");
@@ -460,7 +458,6 @@
             $('#btnAgendar').css("display", "block");
         });
         $(".fa").click(function () {
-
             $("div#sidebar-menu").css("display:none");
             ;
         });
@@ -481,9 +478,6 @@
 //            diaSemanaSelecionado = semana[dia];
 //            });
 //
-
-
-
     </script>
 
 </body>

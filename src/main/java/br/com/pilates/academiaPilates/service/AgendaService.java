@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.pilates.academiaPilates.service;
 
 import br.com.pilates.academiaPilates.models.Agenda;
@@ -75,18 +70,16 @@ public class AgendaService {
         /*Seta Data/Hora Inicio e Final para realizar busca no banco */
         setarDataHoraInicioFinal(agenda);
 
-        agenda.setTitle("Cliente: " + agenda.getCliente().getNome() + " ,Tel: " + agenda.getCliente().getCelular());
-
-        if (!isReagendamento(agenda)) {
-            if (clientePodeAgendar(agenda)) {
-                repo.save(agenda);
-                setAtributes(atributes, true);
-            } else {
-                setAtributes(atributes, false);
-                return agenda;
-            }
-
-        }
+//          if (!isReagendamento(agenda)) {
+//            if (clientePodeAgendar(agenda)) {
+//                repo.save(agenda);
+//                setAtributes(atributes, true);
+//            } else {
+//                setAtributes(atributes, false);
+//                return agenda;
+//            }
+//        }
+        repo.save(agenda);
         return agenda;
 
     }
@@ -165,26 +158,21 @@ public class AgendaService {
 
 
     /*public List<Agenda> listarAgendaPorProfissionalPelaDataEHora(Profissional profissional, String horaInicio, String horaFinal, String dataInicio) {
-
         int minutoFinal = Integer.parseInt(horaFinal.substring(4, 5));
         minutoFinal = minutoFinal;
         horaFinal = horaFinal.substring(0, 4) + minutoFinal;
         return repo.findByProfissionalAndHoraInicioBetweenAndCanceladoFalseAndDataInicio(profissional, horaInicio, horaFinal, dataInicio);
-
     }
-
     public boolean verificaListaAgendaVazia(Profissional profissional, String horaInicio, String horaFinal, String dataInicio, Long idAgenda) {
         System.out.println("Id Agenda Service  " + idAgenda);
         // Se é nulo , é para cadastrar agenda , entao é necessario verificar disponibilidade profissional
         List<Agenda> listaAgenda = listarAgendaPorProfissionalPelaDataEHora(profissional, horaInicio, horaFinal, dataInicio);
         System.out.println("AGenda do PRofissional disponivel? " + listaAgenda.isEmpty());
         if (listaAgenda.isEmpty()) {
-
             return listaAgenda.isEmpty();
         } else {
             return false;
         }
-
     }
     
      */
@@ -255,5 +243,3 @@ public class AgendaService {
         return proximoDia;
     }
 }
-
-

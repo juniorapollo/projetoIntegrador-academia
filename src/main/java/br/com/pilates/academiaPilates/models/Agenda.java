@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.pilates.academiaPilates.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -88,6 +83,11 @@ public class Agenda implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "idCliente")
     private Cliente cliente;
+    
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "idTurma")
+    private Turma turma;
 
 //    @ManyToOne()
 //    @JoinColumn(name = "idTurma")
@@ -97,7 +97,7 @@ public class Agenda implements Serializable {
     public Agenda() {
     }
 
-    public Agenda(Long idAgenda, String color, String textColor, String dataInicio, String horaInicio, String dataFinal, String horaFinal, LocalDateTime start, LocalDateTime end, Servico servico, String nomeRealizouCadastro, String dataRealizouCadastro, String horaRealizouCadastro, boolean cancelado, String dataCancelamento, String horaCancelamento, String nomeRealizouCancelamento, String motivoCancelamento, Profissional profissional, Cliente cliente, String title) {
+    public Agenda(Long idAgenda, String color, String textColor, String dataInicio, String horaInicio, String dataFinal, String horaFinal, LocalDateTime start, LocalDateTime end, Servico servico, String nomeRealizouCadastro, String dataRealizouCadastro, String horaRealizouCadastro, boolean cancelado, String dataCancelamento, String horaCancelamento, String nomeRealizouCancelamento, String motivoCancelamento, Profissional profissional, Cliente cliente,Turma turma, String title) {
         this.idAgenda = idAgenda;
         this.color = color;
         this.textColor = textColor;
@@ -118,7 +118,8 @@ public class Agenda implements Serializable {
         this.motivoCancelamento = motivoCancelamento;
         this.profissional = profissional;
         this.cliente = cliente;
-        this.title = title;
+        this.turma = turma;
+        this.title = title;       
     }
     
 
@@ -294,6 +295,14 @@ public class Agenda implements Serializable {
         this.motivoCancelamento = motivoCancelamento;
     }
 
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
+    }    
+    
     @Override
     public int hashCode() {
         int hash = 3;

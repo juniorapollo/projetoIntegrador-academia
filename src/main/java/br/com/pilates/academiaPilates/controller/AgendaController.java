@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.pilates.academiaPilates.controller;
 
 import br.com.pilates.academiaPilates.models.Agenda;
@@ -16,14 +11,12 @@ import br.com.pilates.academiaPilates.service.ClienteService;
 import br.com.pilates.academiaPilates.service.GraficoService;
 import br.com.pilates.academiaPilates.service.ProfissionalService;
 import br.com.pilates.academiaPilates.service.ServicoService;
+import br.com.pilates.academiaPilates.service.TurmaService;
 import br.com.pilates.academiaPilates.service.UserService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -32,8 +25,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -85,6 +76,9 @@ public class AgendaController {
     Cliente cliente;
 
     @Autowired
+    TurmaService turmaService;
+
+    @Autowired
     ServicoService servicoService;
     Servico servico;
 
@@ -110,6 +104,7 @@ public class AgendaController {
 
     @GetMapping(value = "/all/cancelado")
     public List<Agenda> jsonAgendaCancelada() {
+
         try {
             List<Agenda> agendas = agendaService.listarAgendasCanceladas();
 
@@ -138,33 +133,21 @@ public class AgendaController {
 
     @GetMapping(value = "/json-montar-agenda-por-profissional/{idProfissional}")
     public ArrayList<Agenda> jsonMontarAgendaPorProfissional(@PathVariable("idProfissional") Long idProfissional) {
-
         try {
             ArrayList<Agenda> agendas = new ArrayList<Agenda>();
             agendas = agendaService.listaAgendaPorProfissional(profissionalService.profissionalPorId(idProfissional));
-
             return agendas;
-
         } catch (Exception ioex) {
             System.out.println(ioex.getMessage());
         }
         return null;
     }
 
-    @GetMapping(value = "")
+    @GetMapping()
     public ModelAndView montarAgenda() {
         ModelAndView mv = new ModelAndView("agenda/agenda");
         Agenda agenda = new Agenda();
-        mv.addObject("agenda", agenda);
-        List<Agenda> agendas = agendaService.repo.findAll();
-        mv.addObject("listaProfissional", profissionalService.listaProfissionalAtivo());
-        mv.addObject("listaCliente", clienteService.listaClientesAtivos());
-        mv.addObject("listaServico", servicoService.listaServicosAtivos());
-
-        mv.addObject("linkMontarAgenda", "./agenda/all");
-        mv.addObject("linkEditarAgenda", "./agenda/editar/");
-        mv.addObject("todasAgendas", agendas);
-        mv.addObject("abrirModal", false);
+        carregarObjView(mv,false);
 
         return mv;
     }
@@ -172,41 +155,19 @@ public class AgendaController {
     @GetMapping(value = "/cancelado")
     public ModelAndView montarAgendaCancelada() {
         ModelAndView mv = new ModelAndView("agenda/agenda");
-        Agenda agenda = new Agenda();
-        mv.addObject("agenda", agenda);
-        List<Agenda> agendas = agendaService.listarAgendasCanceladas();
-        mv.addObject("listaProfissional", profissionalService.listaProfissionalAtivo());
-        mv.addObject("listaCliente", clienteService.listaClientesAtivos());
-        mv.addObject("listaServico", servicoService.listaServicosAtivos());
-
-        mv.addObject("linkMontarAgenda", ".././agenda/all/cancelado");
-        mv.addObject("linkEditarAgenda", ".././agenda/editar/");
-        mv.addObject("todasAgendas", agendas);
-        mv.addObject("abrirModal", false);
-
+        carregarObjView(mv, false);
         return mv;
     }
 
     @GetMapping(value = "/editar/{idAgenda}")
     public ModelAndView montarAgendaParaEditar(@PathVariable("idAgenda") Long idAgenda) {
         ModelAndView mv = new ModelAndView("agenda/agenda");
-
-        Agenda agenda = new Agenda();
-        agenda = agendaService.agendaPorId(idAgenda);
-        mv.addObject("agenda", agenda);
-
-        mv.addObject("listaCliente", clienteService.listaClientesAtivos());
-        mv.addObject("listaProfissional", profissionalService.listaProfissionalAtivo());
-        mv.addObject("cliente", agenda.getCliente());
-        mv.addObject("listaServico", servicoService.listaServicosAtivos());
-
-        List<Agenda> agendas = agendaService.repo.findAll();
-        mv.addObject("todasAgendas", agendas);
-        mv.addObject("linkMontarAgenda", "./all");
-        mv.addObject("abrirModal", true);
-        mv.addObject("nomeRealizouCadastro", agenda.getNomeRealizouCadastro());
-        mv.addObject("dataRealizouCadastro", agenda.getDataRealizouCadastro());
-        mv.addObject("horaRealizouCadastro", agenda.getHoraRealizouCadastro());
+        carregarObjView(mv, true);
+        Agenda a = agendaService.agendaPorId(idAgenda);
+        mv.addObject("agenda", a);
+        mv.addObject("nomeRealizouCadastro", a.getNomeRealizouCadastro());
+        mv.addObject("dataRealizouCadastro", a.getDataRealizouCadastro());
+        mv.addObject("horaRealizouCadastro", a.getHoraRealizouCadastro());
 
         return mv;
     }
@@ -274,38 +235,70 @@ public class AgendaController {
                 proximoDia = agendaService.getProximoDia(diasDaSemana);
             }
 
-//          Salvar Agenda
-            agenda = agendaService.salvarAgenda(agenda, atributes);
-            
+            if (agenda.getTurma() != null) {
+                agenda.getTurma().getClientes().forEach((cli) -> {
+                    agenda.setCliente(cli);
+                    System.out.println(agenda.getDataInicio());
+                    Agenda a = new Agenda(
+                            null,
+                            agenda.getColor(),
+                            agenda.getTextColor(),
+                            agenda.getDataInicio(),
+                            agenda.getHoraInicio(),
+                            agenda.getDataFinal(),
+                            agenda.getHoraFinal(),
+                            agenda.getStart(),
+                            agenda.getEnd(),
+                            agenda.getServico(),
+                            agenda.getNomeRealizouCadastro(),
+                            agenda.getDataRealizouCadastro(),
+                            agenda.getHoraRealizouCadastro(),
+                            agenda.isCancelado(),
+                            agenda.getDataCancelamento(),
+                            agenda.getHoraCancelamento(),
+                            agenda.getNomeRealizouCancelamento(),
+                            agenda.getMotivoCancelamento(),
+                            agenda.getProfissional(),
+                            agenda.getCliente(),
+                            agenda.getTurma(),
+                            agenda.getTitle()
+                    );
+//                    System.out.println("Agenda" + a.getCliente());
+                    agendaService.salvarAgenda(a, atributes.addFlashAttribute("mensagem", "Agendado com sucesso."));
 
-            if (qtdSemana > 0) {
-                System.out.println("Entrou QtdSemana IF ");
-                LocalDateTime dataAux = agenda.getStart();
-                int count = 0;
-                for (int i = 1; i <= qtdSemana; i++) {
-                    for (DayOfWeek dia : proximoDia) {
-                        
-                        Agenda novaAgenda = new Agenda();
-                        novaAgenda.setCliente(agenda.getCliente());
-                        novaAgenda.setProfissional(agenda.getProfissional());
-                        novaAgenda.setServico(agenda.getServico());
-                        TemporalAdjuster ajustadorParaProximaData = TemporalAdjusters.next(dia);
-                        
-                        if (count == 0) {
-                            novaAgenda.setStart(dataAux.with(ajustadorParaProximaData));
-                            agendaService.salvarAgenda(novaAgenda, atributes);
-                            
-                        } else {
-                            dataAux = dataAux.with(ajustadorParaProximaData);
-                            novaAgenda.setStart(dataAux);
-                            agendaService.salvarAgenda(novaAgenda, atributes);
-                        }
-                        count++;
-                    }
-                }
-                proximoDia.clear();
+                });
+
             }
 
+//          Salvar Agenda
+//            agenda = agendaService.salvarAgenda(agenda, atributes);
+//            if (qtdSemana > 0) {
+//                System.out.println("Entrou QtdSemana IF ");
+//                LocalDateTime dataAux = agenda.getStart();
+//                int count = 0;
+//                for (int i = 1; i <= qtdSemana; i++) {
+//                    for (DayOfWeek dia : proximoDia) {
+//                        
+//                        Agenda novaAgenda = new Agenda();
+//                        novaAgenda.setCliente(agenda.getCliente());
+//                        novaAgenda.setProfissional(agenda.getProfissional());
+//                        novaAgenda.setServico(agenda.getServico());
+//                        TemporalAdjuster ajustadorParaProximaData = TemporalAdjusters.next(dia);
+//                        
+//                        if (count == 0) {
+//                            novaAgenda.setStart(dataAux.with(ajustadorParaProximaData));
+//                            agendaService.salvarAgenda(novaAgenda, atributes);
+//                            
+//                        } else {
+//                            dataAux = dataAux.with(ajustadorParaProximaData);
+//                            novaAgenda.setStart(dataAux);
+//                            agendaService.salvarAgenda(novaAgenda, atributes);
+//                        }
+//                        count++;
+//                    }
+//                }
+//                proximoDia.clear();
+//            }
             //            TemporalAdjuster ajustadorParaProximaSexta = TemporalAdjusters.next(DayOfWeek.FRIDAY);
 //            LocalDateTime proximaSexta = agenda.getStart().with(ajustadorParaProximaSexta);
 //            System.out.println("Data Atual = " + agenda.getStart());
@@ -315,7 +308,6 @@ public class AgendaController {
 //            } else {
 //                agenda.setColor("");
 //            }
-            
             return mv;
 //           
         } catch (Exception e) {
@@ -423,6 +415,23 @@ public class AgendaController {
         Map map = graficoService.montarGraficos();
 
         return map;
+    }
+
+    public void carregarObjView(ModelAndView mv , boolean abrirModal) {
+        Agenda agenda = new Agenda();
+        mv.addObject("agenda", agenda);
+        List<Agenda> agendas = agendaService.repo.findAll();
+        mv.addObject("listaProfissional", profissionalService.listaProfissionalAtivo());
+        mv.addObject("listaCliente", clienteService.listaClientesAtivos());
+        mv.addObject("listaServico", servicoService.listaServicosAtivos());
+        mv.addObject("listaTurma", turmaService.listaTurma(true, false));
+
+        mv.addObject("linkMontarAgenda", "./agenda/all");
+        mv.addObject("linkEditarAgenda", "./agenda/editar/");
+        mv.addObject("todasAgendas", agendas);
+        mv.addObject("abrirModal", abrirModal);
+        
+
     }
 
 }

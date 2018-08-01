@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.pilates.academiaPilates.service;
 
 import br.com.pilates.academiaPilates.models.Agenda;
@@ -50,7 +45,11 @@ public class GraficoService {
             Integer[] dataAgendados = new Integer[2];
             Integer[] dataCancelados = new Integer[2];
 
-            dataFinal = HOJE.getYear() + "-" + mes + "-" + i;
+           if(i < 10){
+                dataFinal = HOJE.getYear() + "-" + mes + "-0" + i;
+            }else{
+                dataFinal = HOJE.getYear() + "-" + mes + "-" + i;
+            }
             Long agendado = repo.countByDataInicioBetweenAndCanceladoFalse(dataFinal, dataFinal);
             dataAgendados[0] = i;
             dataAgendados[1] = Integer.parseInt(Long.toString(agendado));

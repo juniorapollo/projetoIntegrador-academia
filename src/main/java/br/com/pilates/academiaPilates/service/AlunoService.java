@@ -10,7 +10,7 @@ package br.com.pilates.academiaPilates.service;
  * @author daniel
  */
 
-public class AlunoService {
+public class AlunoService { 
     
 
     
